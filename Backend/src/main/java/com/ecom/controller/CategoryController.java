@@ -5,6 +5,7 @@ import com.ecom.service.CategoryServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -21,8 +22,9 @@ public class CategoryController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createCategory(@RequestBody Category category) {
-        Category response = categoryServices.createCategory(category);
+    public ResponseEntity<?> createCategory(@RequestParam("categoryname") String categoryname,
+                                            @RequestParam("categoryimage") MultipartFile categoryimage) {
+        Category response = categoryServices.createCategory(categoryname,categoryimage);
         return ResponseEntity.ok(response);
     }
 
@@ -37,8 +39,9 @@ public class CategoryController {
     }
 
     @PutMapping("/update/{cid}")
-    public ResponseEntity<?> updateCategoryName(@PathVariable String cid, @RequestBody String name) {
-        return ResponseEntity.ok(categoryServices.updateCategory(cid, name));
+    public ResponseEntity<?> updateCategoryName(@PathVariable String cid,@RequestParam("categoryname") String categoryname,
+                                                @RequestParam("categoryimage") MultipartFile categoryimage) {
+        return ResponseEntity.ok(categoryServices.updateCategory(cid, categoryname,categoryimage));
     }
 
     @DeleteMapping("/delete/{cid}")

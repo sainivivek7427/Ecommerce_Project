@@ -11,9 +11,9 @@ public class CartItem {
     @Id
     private String id;
 
-    @ManyToOne
-    @JoinColumn(name = "cart_id")
-    private Cart cart;
+    
+    @Column(name = "cart_id")
+    private String cartId;
 
     @Column(name = "product_id")
     private String productId;

@@ -6,7 +6,9 @@ import com.ecom.repository.ProductRepository;
 import com.ecom.service.CategoryServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,13 +22,21 @@ public class CategoryServiceImpl  implements CategoryServices {
     private ProductRepository productRepository;
 
     @Override
-    public Category createCategory(Category category) {
-        String id = UUID.randomUUID().toString();
-        category.setId(id);
+    public Category createCategory(String categoryname, MultipartFile categoryimage) {
+        try {
+            Category category=new Category();
+            String id = UUID.randomUUID().toString();
+            category.setId(id);
+            category.setName(categoryname);
+            category.setImageName(categoryimage.getOriginalFilename());
+            category.setImage(categoryimage.getBytes());
+            category.setCreatedDate(System.currentTimeMillis());
+            category.setUpdatedDate(System.currentTimeMillis());
+            return categoryRepository.save(category);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
-        //set cerated date as current epock time
-        category.setCreatedDate(System.currentTimeMillis());
-        return categoryRepository.save(category);
 
     }
 
@@ -42,10 +52,21 @@ public class CategoryServiceImpl  implements CategoryServices {
     }
 
     @Override
-    public Category updateCategory(String id, String name) {
-        Category category = getCategoryById(id);
-        category.setName(name);
-        return categoryRepository.save(category);
+    public Category updateCategory(String cid, String categoryname,MultipartFile categoryimage) {
+        try{
+            Category category = getCategoryById(cid);
+            category.setId(cid);
+            category.setName(categoryname);
+            category.setImage(categoryimage.getBytes());
+            category.setImageName(categoryimage.getOriginalFilename());
+            category.setUpdatedDate(System.currentTimeMillis());
+            category.setCreatedDate(category.getCreatedDate());
+            return categoryRepository.save(category);
+        }
+        catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
          //return   "Category updated successfully";
     }
 
