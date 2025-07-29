@@ -2,11 +2,9 @@ package com.ecom.serviceimpl;
 
 import com.ecom.entity.Cart;
 import com.ecom.entity.CartItem;
-import com.ecom.entity.CartItemRequestDTO;
-import com.ecom.entity.Product;
+import com.ecom.dto.CartItemRequestDTO;
 import com.ecom.repository.CartItemRepository;
 import com.ecom.repository.CartRepository;
-import com.ecom.repository.ProductRepository;
 import com.ecom.service.CartItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,10 +29,11 @@ public class CartItemServiceImpl implements CartItemService
 
         CartItem cartItem = new CartItem();
         cartItem.setId(UUID.randomUUID().toString());
-        cartItem.setCart(cart);
+        cartItem.setCartId(cart.getId());
         cartItem.setProductId(request.getProductId());
         cartItem.setQuantity(request.getQuantity());
         cartItem.setCreatedDate(System.currentTimeMillis());
+        cartItem.setUserId(userId);
 
         cartItemRepository.save(cartItem);
     }

@@ -24,6 +24,8 @@ public class CartItem {
     @Column(name = "created_date")
     private Long createdDate;
 
+    @Column(name = "user_id")
+    private String userId;
     // Getters and Setters
 
 
@@ -31,9 +33,7 @@ public class CartItem {
         return id;
     }
 
-    public Cart getCart() {
-        return cart;
-    }
+    
 
     public String getProductId() {
         return productId;
@@ -51,10 +51,6 @@ public class CartItem {
         this.id = id;
     }
 
-    public void setCart(Cart cart) {
-        this.cart = cart;
-    }
-
     public void setProductId(String productId) {
         this.productId = productId;
     }
@@ -65,5 +61,19 @@ public class CartItem {
 
     public void setCreatedDate(Long createdDate) {
         this.createdDate = createdDate;
+    }
+    public String getCartId() {
+        return cartId;
+    }   
+    public void setCartId(String cartId) {
+        this.cartId = cartId;   
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

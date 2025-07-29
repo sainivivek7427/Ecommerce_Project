@@ -1,7 +1,7 @@
 package com.ecom.service;
 
 import com.ecom.entity.CartItem;
-import com.ecom.entity.CartItemRequestDTO;
+import com.ecom.dto.CartItemRequestDTO;
 
 import java.util.List;
 

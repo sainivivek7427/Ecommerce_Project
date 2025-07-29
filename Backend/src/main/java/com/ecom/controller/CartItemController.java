@@ -1,7 +1,7 @@
 package com.ecom.controller;
 
 import com.ecom.entity.CartItem;
-import com.ecom.entity.CartItemRequestDTO;
+import com.ecom.dto.CartItemRequestDTO;
 import com.ecom.service.CartItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -93,7 +93,7 @@ public class ProductController {
 
 
     @PostMapping(value = "/add")
-    public ResponseEntity<String> addUser(
+    public ResponseEntity<String> addProduct(
             @RequestPart("productdata") String productdata,
             @RequestPart("prodcutimage") MultipartFile file) {
 
@@ -207,6 +207,50 @@ public class ProductController {
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
+    }
+
+        // 🔸 1. Get products by discount %
+    @GetMapping("/by-discount")
+    public List<Product> getProductsByDiscount(@RequestParam Double discountPercent) {
+        return productService.getProductsByDiscount(discountPercent);
+    }
+
+    // 🔸 2. Get products by category name
+    @GetMapping("/by-category")
+    public List<Product> getProductsByCategoryName(@RequestParam String categoryName) {
+        return productService.getProductsByCategoryName(categoryName);
+    }
+
+    // 🔸 3. Get new arrival products based on epoch date
+    @GetMapping("/new-arrivals")
+    public List<Product> getNewArrivals(@RequestParam Long fromEpoch) {
+        return productService.getNewArrivalProducts(fromEpoch);
+    }
+
+    //  Get Today's Hot Products
+    @GetMapping("/today-hot")
+    public ResponseEntity<List<Product>> getTodayHotProducts() {
+        List<Product> products = productService.getTodayHotProducts();
+        return ResponseEntity.ok(products);
+    }
+
+    // 🔸 For 40% discount
+    @GetMapping("/discount/40")
+    public ResponseEntity<List<Product>> get40PercentProducts() {
+        return ResponseEntity.ok(productService.getProductsByDiscountRange(40.0, 50.0));
+    }
+
+
+        // 🔸 For 50% discount
+    @GetMapping("/discount/50")
+    public ResponseEntity<List<Product>> get50PercentProducts() {
+        return ResponseEntity.ok(productService.getProductsByDiscountRange(50.0, 60.0));
+    }
+
+    // 🔸 For 60% discount
+    @GetMapping("/discount/60")
+    public ResponseEntity<List<Product>> get60PercentProducts() {
+        return ResponseEntity.ok(productService.getProductsByDiscountRange(60.0, 70.0));
     }
 
 

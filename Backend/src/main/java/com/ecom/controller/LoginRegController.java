@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -89,6 +90,30 @@ public class LoginRegController {
         }
         return ResponseEntity.ok("Logged out successfully");
     }
+
+    //    //Add Gmail Verify
+    // @PostMapping("/verify-otp")
+    // public ResponseEntity<?> verifyOtp(@RequestParam String email, @RequestParam String otp) {
+    //     Customer customer = loginRegService.getCustomerByEmail(email);
+    //     if (customer == null) {
+    //         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid email");
+    //     }
+
+    //     if (!otp.equals(customer.getOtp())) {
+    //         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid OTP");
+    //     }
+
+    //     long currentTime = System.currentTimeMillis();
+    //     if (currentTime - customer.getOtpGeneratedTime() > 5 * 60 * 1000) {
+    //         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("OTP expired");
+    //     }
+
+    //     customer.setEnabled(true);
+    //     customer.setOtp(null); // Clear OTP
+    //     loginRegService.saveCustomer(customer);
+
+    //     return ResponseEntity.ok("Email verified successfully");
+    // }
 
 
     @GetMapping("/homepage")

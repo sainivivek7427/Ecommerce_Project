@@ -42,5 +42,10 @@ public class UserDetail implements UserDetails {
         return true;
     }
 
+    //  //add gmail verify
+    // public boolean isEnabledCustomer() {
+    //     return customer.isEnabled();
+    // }
+
 
 }
