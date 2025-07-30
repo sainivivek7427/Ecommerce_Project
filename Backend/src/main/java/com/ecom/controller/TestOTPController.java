@@ -1,4 +1,5 @@
 package com.ecom.controller;
+import com.ecom.dto.ForgotPasswordDto;
 import com.ecom.dto.OtpResponseDto;
 import com.ecom.dto.VerifyRequestDto;
 import com.ecom.service.OTPService;
@@ -85,6 +86,15 @@ public class TestOTPController {
         }
     }
 
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestBody ForgotPasswordDto dto) {
+        try {
+            String result = otpService.forgotPassword(dto);
+            return ResponseEntity.ok(result);
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+        }
+    }
 
 
 

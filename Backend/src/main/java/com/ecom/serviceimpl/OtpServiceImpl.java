@@ -1,6 +1,9 @@
 package com.ecom.serviceimpl;
 
+import com.ecom.dto.ForgotPasswordDto;
 import com.ecom.dto.OtpEntryDto;
+import com.ecom.entity.Customer;
+import com.ecom.repository.CustomerRepository;
 import com.ecom.service.OTPService;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +13,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 
 import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,7 +22,15 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+@Service
 public class OtpServiceImpl implements OTPService {
+
+    @Autowired
+    private CustomerRepository customerRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Autowired
     private JavaMailSender mailSender;
     private final ConcurrentHashMap<String, OtpEntryDto> smsOtpMap = new ConcurrentHashMap<>();
@@ -143,4 +156,33 @@ public class OtpServiceImpl implements OTPService {
     private String randomOtp() {
         return String.valueOf((int) (Math.random() * 900_000) + 100_000);
     }
+
+    // Forgot Password Functionolity
+    @Override
+    public String forgotPassword(ForgotPasswordDto dto) {
+        String username = dto.getUsername();
+        String inputOtp = dto.getOtp();
+        String newPassword = dto.getNewPassword();
+
+        // 1. Check if OTP is valid
+        OtpEntryDto entry = smsOtpMap.get(username);  // assuming username was used as OTP key
+
+        if (entry == null || !entry.getOtp().equals(inputOtp)) {
+            throw new RuntimeException("❌ OTP is invalid or expired.");
+        }
+
+        // 2. Find user by username
+        Customer customer = customerRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("❌ User not found"));
+
+        // 3. Update password (encode it!)
+        customer.setPassword(passwordEncoder.encode(newPassword));
+        customerRepository.save(customer);
+
+        // 4. Remove OTP entry
+        smsOtpMap.remove(username);
+
+        return "✅ Password updated successfully.";
+    }
+
 }
