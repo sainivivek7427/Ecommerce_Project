@@ -4,8 +4,12 @@ import com.ecom.dto.OtpEntryDto;
 import com.ecom.service.OTPService;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+
+import com.twilio.Twilio;
+import com.twilio.rest.api.v2010.account.Message;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -20,6 +24,15 @@ public class OtpServiceImpl implements OTPService {
     private final ConcurrentHashMap<String, OtpEntryDto> emailOtpMap = new ConcurrentHashMap<>();
 
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
+    @Value("${twilio.account.sid}")
+    private String accountSid;
+
+    @Value("${twilio.auth.token}")
+    private String authToken;
+
+    @Value("${twilio.phone.number}")
+    private String twilioPhoneNumber;
 
     private static final long SMS_OTP_EXPIRY = 30 * 1000;    // 30 seconds
     private static final long EMAIL_OTP_EXPIRY = 2 * 60 * 1000; // 2 minutes
@@ -47,9 +60,19 @@ public class OtpServiceImpl implements OTPService {
         String otp = randomOtp();
         smsOtpMap.put(phoneNumber, new OtpEntryDto(otp, now));
         System.out.println("📲 SMS OTP for " + phoneNumber + ": " + otp);
-        // TODO: send via Twilio or Msg91
+        // send via Twilio
+        sendOtpSms(phoneNumber,otp);
         System.out.println("📲 OTP for " + phoneNumber + " on device " + deviceId + ": " + otp);
         return otp;
+    }
+    public void sendOtpSms(String phoneNumber, String otp) {
+        Twilio.init(accountSid, authToken);
+        String phnoeNumberr =  "+"+phoneNumber;
+        Message.creator(
+                new com.twilio.type.PhoneNumber(phnoeNumberr),
+                new com.twilio.type.PhoneNumber(twilioPhoneNumber),
+                "Your OTP code is Generated successfully and your 6 digit code is "+otp+"\n valid for 10 minutes"
+        ).create();
     }
 
     public synchronized String generateEmailOtp(String email, String deviceId) {

@@ -31,7 +31,7 @@ public class TestOTPController {
             String result = otpService.generateEmailOtp(otpRequestDto.getTypeValue(), otpRequestDto.getDeviceId());
 
             System.out.println("OTP sent successfully to " + result);
-            otpResponseDto = new OtpResponseDto("Otp sent succesfully to email " + result, HttpStatus.ACCEPTED);
+            otpResponseDto = new OtpResponseDto("Otp sent succesfully to email and code is  " + result, HttpStatus.ACCEPTED);
             return ResponseEntity.ok(otpResponseDto);
 
         } catch (Exception ex) {
@@ -62,7 +62,7 @@ public class TestOTPController {
 
             System.out.println("OTP sent successfully to " + result);
 
-            otpResponsePhoneDto=new OtpResponseDto("Otp sent succesfully to phone ", HttpStatus.ACCEPTED);
+            otpResponsePhoneDto=new OtpResponseDto("Otp sent succesfully to phone and otp is  "+result, HttpStatus.ACCEPTED);
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(otpResponsePhoneDto);
 
         }
