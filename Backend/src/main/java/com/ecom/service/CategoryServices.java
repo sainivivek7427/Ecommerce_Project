@@ -1,13 +1,14 @@
 package com.ecom.service;
 
 
-import com.ecom.entity.Category;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
+import com.ecom.entity.Category;
 
-
+@Service
 public interface CategoryServices {
     Category createCategory(String categoryname, MultipartFile categoryimage);
     List<Category> getAllCategories();

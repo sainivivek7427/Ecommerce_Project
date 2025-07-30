@@ -1,7 +1,6 @@
 package com.ecom.service;
 
-import com.ecom.dto.ForgotPasswordDto;
-import org.springframework.stereotype.Service;
+import com.ecom.dto.ForgotRequestOtpDto;
 
 
 public interface OTPService {
@@ -14,5 +13,6 @@ public interface OTPService {
 
     public boolean verifySmsOtp(String phoneNumber,String deviceId, String inputOtp);
 
-    String forgotPassword(ForgotPasswordDto dto);
+    public boolean forgotPassword(ForgotRequestOtpDto forgotRequestOtpDto,String otp);
+    public boolean forgotPasswordVerifyUpdate(ForgotRequestOtpDto forgotRequestOtpDto,String otp);
 }
