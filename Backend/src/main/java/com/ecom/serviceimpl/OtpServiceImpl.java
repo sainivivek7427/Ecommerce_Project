@@ -94,7 +94,10 @@ public class OtpServiceImpl implements OTPService {
         System.out.println("Sucessfully sent OTP to " + phoneNumber);
     }
 
-    public synchronized String generateEmailOtp(String email, String deviceId) {
+    public synchronized String generateEmailOtp(String username, String deviceId) {
+        
+        Customer customer=customerRepository.findByUsername(username).orElseThrow(()->new NullPointerException("User not found with username: " + username));
+        String email=customer.getEmail();
         String emailWithDeviceId = email + "_" + deviceId;
         long now = System.currentTimeMillis();
         OtpEntryDto existing = emailOtpMap.get(emailWithDeviceId);
@@ -127,7 +130,9 @@ public class OtpServiceImpl implements OTPService {
         return verifyOtp(smsOtpMap, smsWithDeviceId, inputOtp, SMS_OTP_EXPIRY);
     }
 
-    public boolean verifyEmailOtp(String email, String deviceId, String inputOtp) {
+    public boolean verifyEmailOtp(String username, String deviceId, String inputOtp) {
+        Customer customer=customerRepository.findByUsername(username).orElseThrow(()->new NullPointerException("User not found with username: " + username));
+        String email=customer.getEmail();
         String emailWithDeviceId = email+ "_" + deviceId;
 
         return verifyOtp(emailOtpMap, emailWithDeviceId, inputOtp, EMAIL_OTP_EXPIRY);

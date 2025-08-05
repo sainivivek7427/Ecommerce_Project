@@ -2,13 +2,6 @@ package com.ecom.controller;
 
 import java.util.Map;
 
-
-import com.ecom.config.JwtAuthenticationFilter;
-import com.ecom.config.JwtUtil;
-import com.ecom.config.UserDetailServiceimpl;
-import com.ecom.dto.AuthRequest;
-import com.ecom.entity.Customer;
-import com.ecom.service.LoginRegService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +15,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.ecom.config.JwtAuthenticationFilter;
+import com.ecom.config.JwtUtil;
+import com.ecom.config.UserDetailServiceimpl;
+import com.ecom.dto.AuthRequest;
+import com.ecom.entity.Customer;
+import com.ecom.repository.CustomerRepository;
+import com.ecom.service.LoginRegService;
 
 
 @RestController
@@ -38,6 +38,9 @@ public class LoginRegController {
 
     @Autowired
     LoginRegService loginRegService;
+
+    @Autowired
+    private CustomerRepository customerRepository;
 
     @PostMapping("/reg")
     public ResponseEntity<?> addCustomer(@RequestBody Customer customer){
@@ -91,6 +94,15 @@ public class LoginRegController {
         return ResponseEntity.ok("Logged out successfully");
     }
 
+    @GetMapping("/getallCustomer")
+    public ResponseEntity<?> getAllCustomer(){
+        try{
+            return ResponseEntity.ok(customerRepository.findAll());
+        }
+        catch (Exception ex){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Exception "+ex.getMessage());
+        }
+    }
     //    //Add Gmail Verify
     // @PostMapping("/verify-otp")
     // public ResponseEntity<?> verifyOtp(@RequestParam String email, @RequestParam String otp) {

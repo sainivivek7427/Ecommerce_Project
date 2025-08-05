@@ -1,0 +1,1 @@
+const Cart={ id, productname, price, quantity, amount }
