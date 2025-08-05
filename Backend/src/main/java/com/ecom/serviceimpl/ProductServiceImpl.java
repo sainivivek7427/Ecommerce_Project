@@ -60,7 +60,19 @@ public class ProductServiceImpl implements ProductService {
         productRepository.delete(product);
     }
 
-      @Override
+    @Override
+    public List<Product> getProductsByCategoryId(String categoryId) {
+
+            return productRepository.findByCategoryId(categoryId);
+
+    }
+
+    @Override
+    public List<Product> getProductsBySubCategoryId(String subCategoryId) {
+        return productRepository.findBySubcategoryId(subCategoryId);
+    }
+
+    @Override
     public List<Product> getProductsByDiscount(Double discountPercent) {
         return productRepository.findByDiscountPercent(discountPercent);
     }
@@ -89,6 +101,10 @@ public class ProductServiceImpl implements ProductService {
     public List<Product> getProductsByDiscountRange(double min, double max) {
         return productRepository.findByDiscountRange(min, max);
     }
+
+
+
+
 
 
 }

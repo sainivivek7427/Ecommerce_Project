@@ -1,5 +1,6 @@
 package com.ecom.serviceimpl;
 
+import com.ecom.dto.SubCategoryResponse;
 import com.ecom.entity.SubCategory;
 import com.ecom.repository.SubCategoryRepository;
 import com.ecom.service.SubCategoryService;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class SubCategoryServiceImpl  implements SubCategoryService {
@@ -65,5 +67,12 @@ public class SubCategoryServiceImpl  implements SubCategoryService {
         SubCategory subCategory=subCategoryRepository.findById(subid).orElseThrow(()->new NullPointerException("Null data found"));
         subCategoryRepository.delete(subCategory);
         return "Delete successfully subcategory";
+    }
+
+    public List<SubCategoryResponse> getSubcategoriesByCategory(String categoryid) {
+        List<SubCategory> subcategories = subCategoryRepository.findByCategoryid(categoryid);
+        return subcategories.stream()
+                .map(sub -> new SubCategoryResponse(sub.getId(), sub.getScategory()))
+                .collect(Collectors.toList());
     }
 }

@@ -5,6 +5,7 @@ import com.ecom.entity.Category;
 import com.ecom.entity.Product;
 import com.ecom.repository.CategoryRepository;
 import com.ecom.repository.ProductRepository;
+import com.ecom.repository.SubCategoryRepository;
 import com.ecom.service.ProductService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,8 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private SubCategoryRepository subCategoryRepository;
 
     //add Data in db bulk using the CSV file
 //    @PostMapping("/upload-csv")
@@ -93,7 +96,7 @@ public class ProductController {
 
 
     @PostMapping(value = "/add")
-    public ResponseEntity<String> addProduct(
+    public ResponseEntity<?> addProduct(
             @RequestPart("productdata") String productdata,
             @RequestPart("prodcutimage") MultipartFile file) {
 
@@ -109,6 +112,7 @@ public class ProductController {
             product.setImageName(file.getOriginalFilename());
             product.setDescription(productRequest.getDescription()); //pr
             product.setCategoryId(categoryRepository.findByName(productRequest.getCategoryname()).get().getId());
+            product.setSubcategoryId(subCategoryRepository.findByScategory(productRequest.getSubcategoryname()).get().getId());
             product.setName(productRequest.getName()); //pr
             product.setCreatedDate(System.currentTimeMillis());
             product.setDiscountPercent(productRequest.getDiscountPercent()); //pr
@@ -118,7 +122,7 @@ public class ProductController {
             product.setDiscountPrice(productRequest.getPrice()-(productRequest.getPrice()*productRequest.getDiscountPercent())/100);
             Product prodResponse=productRepository.save(product);
 //            System.out.println(prodResponse);
-            return ResponseEntity.ok("Product saved successfully");
+            return ResponseEntity.ok(prodResponse);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
@@ -209,7 +213,27 @@ public class ProductController {
         }
     }
 
-        // 🔸 1. Get products by discount %
+    //Api create
+    //1) Get  all Product by categoryId
+    //List<Product>
+    @GetMapping("/categoryid")
+    public ResponseEntity<List<Product>> getProductsByCategoryId(@RequestParam String categoryid) {
+        List<Product> products = productService.getProductsByCategoryId(categoryid);
+        return new ResponseEntity<>(products, HttpStatus.OK);
+    }
+
+
+
+    //2)Get all product by subcategoryId
+    //List<Product>
+    @GetMapping("/by-subcategory")
+    public List<Product> getProductsBySubcategory(@RequestParam String subcategoryId) {
+        return productService.getProductsBySubCategoryId(subcategoryId);
+    }
+
+
+
+    // 🔸 1. Get products by discount %
     @GetMapping("/by-discount")
     public List<Product> getProductsByDiscount(@RequestParam Double discountPercent) {
         return productService.getProductsByDiscount(discountPercent);

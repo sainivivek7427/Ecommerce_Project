@@ -1,5 +1,6 @@
 package com.ecom.controller;
 
+import com.ecom.dto.SubCategoryResponse;
 import com.ecom.entity.SubCategory;
 import com.ecom.service.SubCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,17 @@ public class SubCategoryController {
         String deleteSubCategoryResponse=subCategoryService.deleteSubCategory(subid);
         return ResponseEntity.ok(deleteSubCategoryResponse);
     }
+
+    //Get subcategory name,subcategoryid  by categoryid
+    @GetMapping("/subcategories/by-category")
+    public List<SubCategoryResponse> getSubcategoriesByCategory(@RequestParam String categoryId) {
+        return subCategoryService.getSubcategoriesByCategory(categoryId);
+    }
+
+
+    //First categoryid pass in request param
+    //secodn create dto classs=> subcategoryResposneDto private String subctrname,subid
+    //return dtoResponseclass in this api
 
 
 

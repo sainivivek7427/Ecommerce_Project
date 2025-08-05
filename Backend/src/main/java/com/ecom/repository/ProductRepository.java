@@ -30,6 +30,8 @@ public interface ProductRepository extends JpaRepository<Product, String> {
     @Query("SELECT p FROM Product p WHERE p.discountPercent >= :min AND p.discountPercent < :max")
     List<Product> findByDiscountRange(@Param("min") double min, @Param("max") double max);
 
+    List<Product> findBySubcategoryId(String subcategoryid);
+
 
 }
 

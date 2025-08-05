@@ -11,6 +11,15 @@ public class ProductRequest {
     private String brand;
     private Integer stockQuantity;
     private String  categoryname;
+    private String subcategoryname;
+
+    public void setSubcategoryname(String subcategoryname) {
+        this.subcategoryname = subcategoryname;
+    }
+
+    public String getSubcategoryname() {
+        return subcategoryname;
+    }
 
     public ProductRequest(String name, String description, Double price, Double discountPercent, String brand, Integer stockQuantity, String categoryname) {
         this.name = name;

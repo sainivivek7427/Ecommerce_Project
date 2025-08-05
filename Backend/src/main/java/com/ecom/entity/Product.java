@@ -50,6 +50,17 @@ public class Product {
     @Column(name = "category_id")
     private String categoryId; // Only category ID stored
 
+    public void setSubcategoryId(String subcategoryId) {
+        this.subcategoryId = subcategoryId;
+    }
+
+    public String getSubcategoryId() {
+        return subcategoryId;
+    }
+
+    @Column(name = "subcategory_id")
+    private String subcategoryId; // Only category ID stored
+
     @Column(name = "is_active")
     private Boolean isActive = true;
 
@@ -58,6 +69,7 @@ public class Product {
 
     @Column(name = "updated_date")
     private Long updatedDate;
+
 
     // === Getters & Setters ===
 

@@ -1,5 +1,6 @@
 package com.ecom.service;
 
+import com.ecom.dto.SubCategoryResponse;
 import com.ecom.entity.SubCategory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,4 +16,6 @@ public interface SubCategoryService {
     public SubCategory updateSubCategorybyId(String subid,String subcategoryname,MultipartFile file);
 
     public String deleteSubCategory(String subid);
+
+    public List<SubCategoryResponse> getSubcategoriesByCategory(String categoryid);
 }
