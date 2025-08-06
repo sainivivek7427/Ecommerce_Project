@@ -1,6 +1,7 @@
 package com.ecom.service;
 
 import com.ecom.dto.ForgotRequestOtpDto;
+import com.ecom.dto.OtpRequestDto;
 
 
 public interface OTPService {
@@ -15,4 +16,6 @@ public interface OTPService {
 
     public boolean forgotPassword(ForgotRequestOtpDto forgotRequestOtpDto,String otp);
     public boolean forgotPasswordVerifyUpdate(ForgotRequestOtpDto forgotRequestOtpDto,String otp);
+
+    public String generateOtpbyEmailOrPhone(OtpRequestDto otpRequestDto);
 }

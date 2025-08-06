@@ -1,4 +1,5 @@
 package com.ecom.controller;
+import com.ecom.entity.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,15 +27,15 @@ public class TestOTPController {
 
 
     // Endpoint to send OTP email
-    @PostMapping("/generate-by-email")
+    @PostMapping("/generate")
     public ResponseEntity<?> sendOtpbyEmail(@RequestBody OtpRequestDto otpRequestDto) {
         OtpResponseDto otpResponseDto = null;
         try {
 
-            String result = otpService.generateEmailOtp(otpRequestDto.getTypeValue(), otpRequestDto.getDeviceId());
+            String result = otpService.generateOtpbyEmailOrPhone(otpRequestDto);
 
-            System.out.println("OTP sent successfully to " + result);
-            otpResponseDto = new OtpResponseDto("Otp sent succesfully to email and code is  " + result, HttpStatus.ACCEPTED);
+            System.out.println("Res:  " + result);
+            otpResponseDto = new OtpResponseDto( result, HttpStatus.ACCEPTED);
             return ResponseEntity.ok(otpResponseDto);
 
         } catch (Exception ex) {
@@ -73,34 +74,35 @@ public class TestOTPController {
         }
     }
 
-    @PostMapping("/generate-by-phone")
-    public ResponseEntity<?> sendOtpbyPhone(@RequestBody OtpRequestDto otpRequestDto) {
-//        String otp = generateOtp();
-//        otpRequest.setOtp(otp); // Set the generated OTP in the request DTO
-        OtpResponseDto otpResponsePhoneDto=null;
-        try{
-
-            String result=otpService.generateSmsOtp(otpRequestDto.getTypeValue(),otpRequestDto.getDeviceId());
-
-            System.out.println("OTP sent successfully to " + result);
-
-            otpResponsePhoneDto=new OtpResponseDto("Otp sent succesfully to phone and otp is  "+result, HttpStatus.ACCEPTED);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(otpResponsePhoneDto);
-
-        }
-
-        catch (Exception ex){
-            otpResponsePhoneDto=new OtpResponseDto("Error to send email ",HttpStatus.BAD_REQUEST);
-
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(otpResponsePhoneDto);
-//        return ResponseEntity.ok(emailService.sendOtp(otpRequest.getUserId(),otpRequest.getType(),otpRequest.getTypevalue(),otp));
-    }
+//    @PostMapping("/generate-by-phone")
+//    public ResponseEntity<?> sendOtpbyPhone(@RequestBody OtpRequestDto otpRequestDto) {
+////        String otp = generateOtp();
+////        otpRequest.setOtp(otp); // Set the generated OTP in the request DTO
+//        OtpResponseDto otpResponsePhoneDto=null;
+//        try{
+//            String phoneno="91"+otpRequestDto.getTypeValue();
+//            String result=otpService.generateSmsOtp(phoneno,otpRequestDto.getDeviceId());
+//
+//            System.out.println("OTP sent successfully to " + result);
+//
+//            otpResponsePhoneDto=new OtpResponseDto("Otp sent succesfully to phone and otp is  "+result, HttpStatus.ACCEPTED);
+//            return ResponseEntity.status(HttpStatus.ACCEPTED).body(otpResponsePhoneDto);
+//
+//        }
+//
+//        catch (Exception ex){
+//            otpResponsePhoneDto=new OtpResponseDto("Error to send email ",HttpStatus.BAD_REQUEST);
+//
+//        }
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(otpResponsePhoneDto);
+////        return ResponseEntity.ok(emailService.sendOtp(otpRequest.getUserId(),otpRequest.getType(),otpRequest.getTypevalue(),otp));
+//    }
 
     @PostMapping("/verify-sms")
     public ResponseEntity<?> verifyOtpSms(@RequestBody VerifyRequestDto verifyRequestDto) {
         try{
-            boolean isValid = otpService.verifySmsOtp(verifyRequestDto.getTypevalue(), verifyRequestDto.getDeviceId(), verifyRequestDto.getOtp());
+            String phoneno="91"+verifyRequestDto.getTypevalue();
+            boolean isValid = otpService.verifySmsOtp(phoneno, verifyRequestDto.getDeviceId(), verifyRequestDto.getOtp());
         if (isValid) {
             MessageResponseDto messageResponseDto = new MessageResponseDto();
             messageResponseDto.setSuccess(true);

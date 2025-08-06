@@ -6,6 +6,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import com.ecom.dto.OtpRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -56,9 +57,28 @@ public class OtpServiceImpl implements OTPService {
 
     @PostConstruct
     public void init() {
-        scheduler.scheduleAtFixedRate(this::cleanupExpiredOtps, 10, 10, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(this::cleanupExpiredOtps, 30, 30, TimeUnit.SECONDS);
     }
     // ========== GENERATE ==========
+    public String generateOtpbyEmailOrPhone(OtpRequestDto otpRequestDto){
+        Customer customer=null;
+        if(otpRequestDto.getTypeFormat().equals("sms")){
+            Long phoneno=Long.parseLong(otpRequestDto.getTypeValue());
+            customer=customerRepository.findByMobileNoAndPassword(phoneno,otpRequestDto.getPassword());
+            if(customer!=null){
+                String phonoValue="91"+otpRequestDto.getTypeValue();
+                return generateSmsOtp(phonoValue,otpRequestDto.getDeviceId());
+            }
+        }
+        else if(otpRequestDto.getTypeFormat().equals("email")){
+            customer=customerRepository.findByUsernameAndPassword(otpRequestDto.getTypeValue(),otpRequestDto.getPassword());
+            if(customer!=null){
+                return generateEmailOtp(customer.getEmail(),otpRequestDto.getDeviceId());
+            }
+        }
+        throw new NullPointerException("Invalid User Name and Password ...");
+
+    }
     public synchronized String generateSmsOtp(String phoneNumber, String deviceId) {
         String phoneNumberWithDeviceId = phoneNumber + "_" + deviceId;
         long now = System.currentTimeMillis();
@@ -80,7 +100,7 @@ public class OtpServiceImpl implements OTPService {
         // send via Twilio
         sendOtpSms(phoneNumber,otp);
         System.out.println("📲 OTP for " + phoneNumber + " on device " + deviceId + ": " + otp);
-        return otp;
+        return "Successfully sent otp in your mobile "+phoneNumber;
     }
     public void sendOtpSms(String phoneNumber, String otp) {
         Twilio.init(accountSid, authToken);
@@ -94,10 +114,8 @@ public class OtpServiceImpl implements OTPService {
         System.out.println("Sucessfully sent OTP to " + phoneNumber);
     }
 
-    public synchronized String generateEmailOtp(String username, String deviceId) {
+    public synchronized String generateEmailOtp(String email, String deviceId) {
         
-        Customer customer=customerRepository.findByUsername(username).orElseThrow(()->new NullPointerException("User not found with username: " + username));
-        String email=customer.getEmail();
         String emailWithDeviceId = email + "_" + deviceId;
         long now = System.currentTimeMillis();
         OtpEntryDto existing = emailOtpMap.get(emailWithDeviceId);
@@ -121,7 +139,7 @@ public class OtpServiceImpl implements OTPService {
         mailSender.send(message);
         emailOtpMap.put(emailWithDeviceId, new OtpEntryDto(otp, now));
         System.out.println("📧 Email OTP for " + email + ": " + otp);
-        return otp;
+        return "Successfully sent otp in your email "+email;
     }
 
     // ========== VERIFY ==========

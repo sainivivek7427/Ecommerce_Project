@@ -15,7 +15,7 @@ import HomeScreen from './components/HomeScreen'; // Assuming HomeScreen is expo
 
 import Header from './components/Header'; // Assuming CartScreen is exported from this file
 import LoginScreen from './components/LoginScreen'; // Assuming LoginScreen is exported from this file
-
+import Toast from "react-native-toast-message";
 
 function BottomBar() {
   return (
@@ -109,8 +109,10 @@ export default function App() {
         <Tab.Screen name="Cart" component={CartScreen} />
         <Tab.Screen name="Login" component={LoginScreen} />
       </Tab.Navigator>
+        <Toast />
       <StatusBar style="auto" />
     </NavigationContainer>
+
   );
 }
 

@@ -6,7 +6,8 @@ import { Ionicons, MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Header from './Header'; // Assuming HomeScreen is exported from this file
-import BottomBar from '../App'; 
+import BottomBar from '../App';
+import Toast from "react-native-toast-message";
 
 const products = [
   { id: 1, name: 'Apple', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVnFoJGb5GxF6lyge8lahGyv_nlQrXameFLsgUJAHrwCS1hDR2WdGZ6Es&s' },
@@ -188,7 +189,7 @@ const handlequantity = (product, action) => {
         </TouchableOpacity>
       </View>
     </View>
-    
+
   </View>
   {/* Name and price row below image */}
   <View style={{display: 'flex', flexDirection: 'column', width: '100%', marginTop: 8 }}>
@@ -264,6 +265,7 @@ const handlequantity = (product, action) => {
       </Modal>
 
       {/* <BottomBar /> */}
+        <Toast />
       <StatusBar style="auto" />
     </SafeAreaView>
   );

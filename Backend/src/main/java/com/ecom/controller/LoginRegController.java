@@ -2,6 +2,7 @@ package com.ecom.controller;
 
 import java.util.Map;
 
+import com.ecom.dto.MessageResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,9 +53,18 @@ public class LoginRegController {
     public ResponseEntity<?> login(@RequestBody AuthRequest request) {
         try {
             System.out.println("jkala");
+            Customer customer=null;
+            if(request.getTypeFormat().equals("sms")){
+                Long phoneno=Long.parseLong(request.getTypeValue());
+                customer=customerRepository.findByPhoneno(phoneno).orElseThrow(()->new NullPointerException("User not Found by using phoneno"));
+            }
+            else if(request.getTypeFormat().equals("email")){
+                customer=customerRepository.findByUsername(request.getTypeValue()).orElseThrow(()->new NullPointerException("User not Found by using Username"));
+            }
+            System.out.println("Username "+customer.getUsername()+" Password "+request.getPassword());
             //authentaication manager call the userdetaiservice class to load the database and match the detail if correct or not
             Authentication auth =  authManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
+                    new UsernamePasswordAuthenticationToken(customer.getUsername(), request.getPassword())
             );
             System.out.println("Authentication "+auth.getDetails());
             UserDetails user = (UserDetails) auth.getPrincipal();
@@ -64,6 +74,29 @@ public class LoginRegController {
                     "token", accessToken,
                     "refreshToken", refreshToken
             ));
+        } catch (AuthenticationException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials "+e.getMessage() );
+        }
+    }
+
+    @PostMapping("/login-check")
+    public ResponseEntity<?> loginCheck(@RequestBody AuthRequest request) {
+        try {
+            System.out.println("jkala");
+            Customer customer=null;
+            if(request.getTypeFormat().equals("sms")){
+                Long phoneno=Long.parseLong(request.getTypeValue());
+                customer=customerRepository.findByPhoneno(phoneno).orElseThrow(()->new NullPointerException("User not Found by using phoneno"));
+            }
+            else if(request.getTypeFormat().equals("email")){
+                customer=customerRepository.findByUsername(request.getTypeValue()).orElseThrow(()->new NullPointerException("User not Found by using Username"));
+            }
+            System.out.println("Username "+customer.getUsername()+" Password "+request.getPassword());
+            MessageResponseDto messageResponseDto = new MessageResponseDto();
+            messageResponseDto.setSuccess(true);
+            messageResponseDto.setStatus(HttpStatus.OK);
+            System.out.println("Correct fields");
+            return ResponseEntity.ok(messageResponseDto);
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials "+e.getMessage() );
         }
