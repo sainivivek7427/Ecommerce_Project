@@ -1,23 +1,14 @@
-// import { StatusBar } from 'expo-status-bar';
-// import React, { useState } from 'react';
-// import { SafeAreaView, StyleSheet, Text, View, Modal, TouchableOpacity, Button,Alert } from 'react-native';
 
 import { StatusBar } from 'expo-status-bar';
 import React, { useState ,useEffect} from 'react';
 import { SafeAreaView, StyleSheet, Text, View, Modal, TouchableOpacity, ScrollView, Image ,Alert} from 'react-native';
 import { Ionicons, MaterialIcons, FontAwesome } from '@expo/vector-icons';
-// import {Cart} from './Cart';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import HomeScreen from './components/HomeScreen'; // Assuming HomeScreen is exported from this file
-// import { Ionicons, MaterialIcons, FontAwesome } from '@expo/vector-icons';
-// import { addOrUpdateCart } from './CartUtil'; // Assuming you have a utility function to handle cart updates
 
-import Header from './components/Header'; // Assuming CartScreen is exported from this file
-import LoginScreen from './components/LoginScreen'; // Assuming LoginScreen is exported from this file
 import Toast from "react-native-toast-message";
-import {CartProvider,useCart} from "./Context/CartProvider";
-
+import { CartProvider } from './Context/CartProvider';
+import TabNavigator from './components/TabNavigator'; // Assuming TabNavigator is exported from this file
 function BottomBar() {
   return (
     <View style={styles.bottomBar}>
@@ -41,79 +32,14 @@ function BottomBar() {
   );
 }
 
-// function HomeScreen() {
-//    }
-function CategoriesScreen() {
-  return (
-    <SafeAreaView style={styles.screenContainer}>
-      <Text style={styles.screenText}>Categories Screen</Text>
-    </SafeAreaView>
-  );
-}
-function CartScreen() {
-    const { cart, addToCart, getCartItemCount } = useCart();
-    // const total = cart.reduce((sum, item) => sum + item.amount, 0);
-  return (
-    <SafeAreaView style={styles.screenContainer}>
-      <Text style={styles.screenText}>Cart Screen</Text>
-      <ScrollView>
-        {cart.length === 0 ? (
-          <Text>No items in cart.</Text>
-        ) : (
-          cart.map(item => (
-            <View  style={{ marginBottom: 10 }}>
-              {/*<Text>{item.name} - Qty: {item.quantity} - ₹{item.price} each</Text>*/}
-              <Text>Total: Cart Items: {getCartItemCount()}</Text>
-            </View>
-          ))
-        )}
-        {/*<Text style={{ fontWeight: 'bold', marginTop: 20 }}>Grand Total: ₹{total}</Text>*/}
-      </ScrollView>
-    </SafeAreaView>
-  );
-}
-// function LoginScreen() {
-//   return (
-//     <SafeAreaView style={styles.screenContainer}>
-//       <Text style={styles.screenText}>Login Screen</Text>
-//     </SafeAreaView>
-//   );
-// }
-const Tab=createBottomTabNavigator();
+
 
 export default function App() {
  
-
   return (
       <CartProvider>
     <NavigationContainer>
-      
-      <Tab.Navigator
-        screenOptions={({ route }) => ({
-          headerShown: false,
-          tabBarStyle: styles.bottomBar,
-          tabBarIcon: ({ color, size }) => {
-            if (route.name === 'Home') {
-              return <Ionicons name="home" size={size} color={color} />;
-            } else if (route.name === 'Categories') {
-              return <MaterialIcons name="category" size={size} color={color} />;
-            } else if (route.name === 'Cart') {
-              return <FontAwesome name="shopping-cart" size={size} color={color} />;
-            } else if (route.name === 'Login') {
-              return <Ionicons name="person-circle" size={size} color={color} />;
-            }
-          },
-          tabBarActiveTintColor: 'white',
-          tabBarInactiveTintColor: '#e0e0e0',
-        })}
-      >
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Categories" component={CategoriesScreen} />
-        <Tab.Screen name="Cart" component={CartScreen} options={{
-            tabBarBadge:3
-        }}   />
-        <Tab.Screen name="Login" component={LoginScreen} />
-      </Tab.Navigator>
+      <TabNavigator />
         <Toast />
       <StatusBar style="auto" />
     </NavigationContainer>
@@ -121,12 +47,6 @@ export default function App() {
 
   );
 }
-// // Cart Badge component to display the number of items in the cart
-// const CartBadge = () => {
-//     const { getCartItemCount } = useCart();
-//     const itemCount = getCartItemCount();
-//     return itemCount > 0 ? itemCount : 0;
-// };
 
 const styles = StyleSheet.create({
   container: {

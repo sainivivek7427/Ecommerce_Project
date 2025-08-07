@@ -8,20 +8,10 @@ export const CartProvider = ({ children }) => {
     const [cart, setCart] = useState([]);
 
     // Add product to cart
-    const addToCart = ( product, quantity) => {
+    const addToCart = ( product, quantity,price) => {
+        console.log(`Adding product ${product.id} with quantity ${quantity} with addto cart provider`);
+                    // console.log("Cart after adding product: ", cart);
         setCart((prevCart) => {
-            // const existingProduct = prevCart.find(item => item.productId === product.productId);
-            // if (existingProduct) {
-            //     return prevCart.map(item =>
-            //         item.productId === product.productId
-            //             ? { ...item, quantity: item.quantity + 1 }
-            //             : item
-            //     );
-            // } else {
-            //     return [...prevCart, { ...product, quantity: 1 }];
-            // }
-
-            const price = 99; // Replace with product.price if available
             const existing = prevCart.find(item => item.id === product.id);
             if (quantity === 0) {
                 // Remove from cart if quantity is 0
@@ -46,6 +36,7 @@ export const CartProvider = ({ children }) => {
                     },
                 ];
             }
+
             // console.log(cart[0]);
             // console.log("Hello cart "+cart)
         });

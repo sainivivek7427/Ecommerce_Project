@@ -29,19 +29,22 @@ const products = [
   { id: 16, name: 'Tomato', image: 'https://via.placeholder.com/100?text=Tomato' },
   // Add more products as needed
 ];
+ 
  const  HomeScreen=()=> {
+  const { addToCart } = useCart();
   const [modalVisible, setModalVisible] = useState(false);
   const [wishlist, setWishlist] = useState([]);
   const [quantities, setQuantities] = useState({});
-    // const [cart, setCart] = useState([]);
-    const { addToCart } = useCart();
+
     // State for product quantities (initially 0)
-    const [productQuantities, setProductQuantities] = useState(
-        products.reduce((acc, product) => {
-            acc[product.id] = 0;  // Start all quantities at 0
-            return acc;
-        }, {})
-    );
+  const [productQuantities, setProductQuantities] = useState(
+      products.reduce((acc, product) => {
+          acc[product.id] = 0;  // Start all quantities at 0
+          return acc;
+      }, {})
+  );
+  const [pendingProduct, setPendingProduct] = useState(null); // to store product temporarily
+
 
 
   useEffect(() => {
@@ -66,40 +69,10 @@ const products = [
         Alert.alert('You pressed Yes!');
     };
 
-    //update cart
-    // const addOrUpdateCart=(cart, product, quantity)=> {
-    //     const price = 99; // Replace with product.price if available
-    //     const existing = cart.find(item => item.id === product.id);
-    //     if (quantity === 0) {
-    //         // Remove from cart if quantity is 0
-    //         return cart.filter(item => item.id !== product.id);
-    //     } else if (existing) {
-    //         // Update quantity and amount
-    //         return cart.map(item =>
-    //             item.id === product.id
-    //                 ? { ...item, quantity, amount: price * quantity }
-    //                 : item
-    //         );
-    //     } else {
-    //         // Add new item
-    //         return [
-    //             ...cart,
-    //             {
-    //                 id: product.id,
-    //                 name: product.name,
-    //                 price: price,
-    //                 quantity: quantity,
-    //                 amount: price * quantity,
-    //             },
-    //         ];
-    //     }
-    //     // console.log(cart[0]);
-    //     // console.log("Hello cart "+cart)
-    // }
-
-    //add or remove items in cart and add item in cart
+   //add or remove items in cart and add item in cart
     const handlequantity = (product, action) => {
-      console.log(`Product ${product.id} action: ${action}`);
+      // console.log(`Product ${product.id} action: ${action}`);
+      const price =90;
         setProductQuantities(prevQuantities => {
             const currentQty = prevQuantities[product.id] || 0;
             let newQty = currentQty;
@@ -108,32 +81,33 @@ const products = [
             } else if (action === 'minus' && currentQty > 0) {
                 newQty = currentQty - 1;
             }
+            setPendingProduct({ product, quantity: newQty });
             return { ...prevQuantities, [product.id]: newQty };
         });
 
-      setQuantities(prev => {
-        const currentQty = prev[product.id] || 0;
-        console.log("Current quantity:  of prod "+product.id+" qty currentQty"+currentQty);
-        let newQty = currentQty;
+      // setQuantities(prev => {
+      //   const currentQty = prev[product.id] || 0;
+      //   // console.log("Current quantity:  of prod "+product.id+" qty currentQty"+currentQty);
+       
+      //   let newQty = action === 'add' ? currentQty + 1 : Math.max(0, currentQty - 1);
+      //     // console.log("Current quantity:  of prod "+product.id+" qty update currentQty"+newQty);
+      //   // addToCart(product,newQty);
+      //   setPendingProduct({ product, quantity: newQty });
 
-        if (action === 'add') {
-            newQty = currentQty + 1;
-
-
-        } else if (action === 'minus') {
-          newQty = Math.max(0, currentQty - 1);
-
-
-        }
-          console.log("Current quantity:  of prod "+product.id+" qty update currentQty"+newQty);
-        addToCart(product,newQty);
-          // setCart(prevCart => addOrUpdateCart(prevCart, product, newQty));
-          // console.log(...prev)
-        return { ...prev, [product.id]: newQty };
-      });
+      // return { ...prev, [product.id]: newQty };
+      // });
+    
 
   // console.log(" Quantities "+quantities.id+" name "+quantities.name)
 };
+  useEffect(() => {
+        console.log(`Pending product for update: ${pendingProduct ? pendingProduct.product.id : 'None'}`);
+    if (pendingProduct) {
+      const { product, quantity } = pendingProduct;
+      addToCart(product, quantity,90);
+      setPendingProduct(null); // reset after update
+    }
+  }, [pendingProduct]);
   return (
     // <SafeAreaView style={styles.screenContainer}>
     //   <Text style={styles.screenText}>Home Screen</Text>
@@ -208,26 +182,7 @@ const products = [
                           </View>
                       )}
                   </View>
-                {/*  */}
-                {/*<View style={styles.topRightIcons}>*/}
-                {/*  <TouchableOpacity onPress={() => handleWishlist(product.id, product.name)} style={styles.heartIcon}>*/}
-                {/*    <Ionicons*/}
-                {/*      name={wishlist.includes(product.id) ? "heart" : "heart-outline"}*/}
-                {/*      size={22}*/}
-                {/*      color={wishlist.includes(product.id) ? "red" : "gray"}*/}
-                {/*    />*/}
-                {/*  </TouchableOpacity>*/}
-                {/*        <View style={styles.cartSectionSmall}>*/}
-                {/*    <TouchableOpacity style={styles.qtyBtnSmall} onPress={() => handlequantity(product, 'minus')}>*/}
-                {/*      <Text style={styles.qtyBtnText}>-</Text>*/}
-                {/*    </TouchableOpacity>*/}
-                {/*    <Text style={styles.qtyTextSmall}>{quantities[product.id] || 0}</Text>*/}
-                {/*    <TouchableOpacity style={styles.qtyBtnSmall} onPress={() => handlequantity(product, 'add')}>*/}
-                {/*      <Text style={styles.qtyBtnText}>+</Text>*/}
-                {/*    </TouchableOpacity>*/}
-                {/*  </View>*/}
-                {/*</View>*/}
-
+               
               </View>
                 <View style={{ flex: 1 ,flexDirection: 'row', justifyContent: 'space-between',marginBottom: 4,paddingHorizontal:10}}>
                     <Text style={styles.productName}>{product.name}</Text>
