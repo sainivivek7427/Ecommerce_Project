@@ -341,7 +341,9 @@ export default function LoginScreen() {
                         ) : <Text style={{color: "green"}}>Username looks good</Text>}
                     </>
                 )}
-                <Text style={styles.label}>Phone Number</Text>
+                <Text style={{ fontWeight: 'bold',
+                    fontSize: 13,textAlign:'center',marginVertical:10,color: (username!=='' && phoneno!=='') ? 'red':'green'}}>Please fill single field either username or phoneno</Text>
+                <Text style={{}}>Phone Number</Text>
                 <TextInput
                     style={styles.input}
                     placeholder="1234567890"
