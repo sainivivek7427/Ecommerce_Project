@@ -1,9 +1,21 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState ,useEffect} from 'react';
-import { SafeAreaView, StyleSheet, Text, View, Modal, TouchableOpacity, ScrollView, Image ,Alert} from 'react-native';
+import React, { useState ,useEffect, useRef,} from 'react';
+import {
+    SafeAreaView, StyleSheet, Text, View, Modal, TouchableOpacity, Dimensions,
+    ScrollView, Image, Alert, FlatList
+} from 'react-native';
 import { Ionicons, MaterialIcons, FontAwesome } from '@expo/vector-icons';
+import CategoryGrid  from "./CategoryGrid";
+// import {
+//     View,
+//     ScrollView,
+//     Image,
+//     StyleSheet,
+//     TouchableOpacity,
+//     Dimensions,
+// } from 'react-native';
 // import {Cart} from './Cart';
-import { NavigationContainer } from '@react-navigation/native';
+import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Header from './Header'; // Assuming HomeScreen is exported from this file
 import BottomBar from '../App';
@@ -12,9 +24,9 @@ import {useCart} from "../Context/CartProvider";
 // import { FontAwesome, MaterialIcons  } from '@expo/vector-icons';
 const products = [
   { id: 1, name: 'Apple', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVnFoJGb5GxF6lyge8lahGyv_nlQrXameFLsgUJAHrwCS1hDR2WdGZ6Es&s' },
-  { id: 2, name: 'Banana', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTg9dWtB64x2W-vjDvbOa14wop1AXDqvwvArg&s' },
+  { id: 2, name: 'Banana', image: 'https://upload.wikimedia.org/wikipedia/commons/8/8a/Banana-Single.jpg' },
   { id: 3, name: 'Carrot', image: 'https://i0.wp.com/post.healthline.com/wp-content/uploads/2020/10/carrot-juice-1296x728-header.jpg?w=1155&h=1528' },
-  { id: 4, name: 'Tomato', image: 'https://via.placeholder.com/100?text=Tomato' },
+  { id: 4, name: 'Tomato', image: 'https://upload.wikimedia.org/wikipedia/commons/1/15/Red_Apple.jpg' },
     { id: 5, name: 'Apple', image: 'https://via.placeholder.com/100?text=Apple' },
   { id: 6, name: 'Banana', image: 'https://via.placeholder.com/100?text=Banana' },
   { id: 7, name: 'Carrot', image: 'https://via.placeholder.com/100?text=Carrot' },
@@ -29,7 +41,11 @@ const products = [
   { id: 16, name: 'Tomato', image: 'https://via.placeholder.com/100?text=Tomato' },
   // Add more products as needed
 ];
- 
+
+const LOGO_WIDTH = 100;
+const LOGO_MARGIN_RIGHT = 12;
+const SCROLL_STEP = (LOGO_WIDTH + LOGO_MARGIN_RIGHT) * 3;
+
  const  HomeScreen=()=> {
   const { addToCart } = useCart();
   const [modalVisible, setModalVisible] = useState(false);
@@ -108,7 +124,70 @@ const products = [
       setPendingProduct(null); // reset after update
     }
   }, [pendingProduct]);
-  return (
+     const scrollViewRef = useRef(null);
+     const [currentScrollX, setCurrentScrollX] = useState(0);
+     const [maxScrollX, setMaxScrollX] = useState(0);
+
+     const onScroll = (e) => {
+         setCurrentScrollX(e.nativeEvent.contentOffset.x);
+     };
+
+     // We capture max scrollable width on content size change
+     const onContentSizeChange = (contentWidth, contentHeight) => {
+         const screenWidth = Dimensions.get('window').width;
+         setMaxScrollX(contentWidth - screenWidth + 32);
+         // +32 is padding left + right on container (if you keep 16 each side),
+         // adjust accordingly depending on your actual container padding
+     };
+     const scrollRight = () => {
+         if (scrollViewRef.current) {
+             let newX = currentScrollX + SCROLL_STEP;
+             if (newX > maxScrollX) {
+                 newX = maxScrollX;
+             }
+             scrollViewRef.current.scrollTo({ x: newX, animated: true });
+             setCurrentScrollX(newX);
+         }
+     };
+     const navigation = useNavigation();
+     const onSeeAlldiscount50 = () => {
+         // alert('See All clicked!');
+         navigation.navigate('SeeAllProducts', { productsdiscount: products });
+     };
+
+     const onSeeAll=()=>{
+         alert('See All clicked!');
+     }
+     const SCREEN_WIDTH = Dimensions.get('window').width;
+
+// Adjust number of columns here: 2 or 3
+     const NUM_COLUMNS = 2;
+
+// Calculate item width based on number of columns and margin/padding
+     const ITEM_MARGIN = 12;
+     const ITEM_WIDTH = (SCREEN_WIDTH - ITEM_MARGIN * (NUM_COLUMNS + 1)) / NUM_COLUMNS;
+     // Show only first 2*NUM_COLUMNS products (2 rows)
+     const limitedProducts = products.slice(0, NUM_COLUMNS * 3);
+
+     const renderProductItem = ({ item }) => (
+         <View style={[styles.productCardDiscount, { width: ITEM_WIDTH }]}>
+             {/* Product image */}
+             <Image source={{ uri: item.image }} style={styles.productImageDiscount} />
+             {/* Name and price below image */}
+             <View style={{display: 'flex', flexDirection: 'row',justifyContent: 'space-between',marginVertical:2,paddingVertical:2,paddingHorizontal:7}}>
+                 <Text style={styles.productNameDiscount} numberOfLines={1}>
+                     {item.name}
+                 </Text>
+                 <View style={{display:'flex', flexDirection: 'row', gap:'0',paddingHorizontal:6}}>
+                     <Text style={styles.originalPrice}>Rs.90</Text>
+                     <Text style={styles.discountedPrice}>Rs.45</Text>
+                 </View>
+             </View>
+
+         </View>
+     );
+
+     return (
     // <SafeAreaView style={styles.screenContainer}>
     //   <Text style={styles.screenText}>Home Screen</Text>
     // </SafeAreaView>
@@ -139,7 +218,136 @@ const products = [
             Success page
           </Text>
         </View>
+
+          <View style={styles.headerContainer}>
+              <Text style={styles.headerTitle}>Top Picks</Text>
+              <TouchableOpacity onPress={onSeeAll}>
+                  <Text style={styles.seeAllText}>See All</Text>
+              </TouchableOpacity>
+          </View>
+          <View style={styles.logoScrollWrapper}>
+              <ScrollView
+                  ref={scrollViewRef}
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={styles.logoScrollContainer}
+                  onScroll={onScroll}
+                  scrollEventThrottle={16}
+                  onContentSizeChange={onContentSizeChange}
+              >
+                  {products.map((product) => (
+                      <View key={product.id} style={styles.logoWrapper}>
+                          <Image source={{ uri: product.image }} style={styles.logoImage} />
+                          <Text style={{fontSize:12,fontWeight:600,textAlign:'center'}}>{product.name}</Text>
+                      </View>
+                  ))}
+              </ScrollView>
+
+              <TouchableOpacity
+                  style={styles.rightIconWrapper}
+                  onPress={scrollRight}
+                  activeOpacity={0.7}
+              >
+                  <FontAwesome name="angle-right" size={30} color="#999" />
+              </TouchableOpacity>
+          </View>
+          {/*50% discount*/}
+          {/*<View style={styles.headerContainer}>*/}
+          {/*    <Text style={styles.headerTitle}>Discount 50% Products </Text>*/}
+          {/*    <TouchableOpacity onPress={onSeeAll}>*/}
+          {/*        <Text style={styles.seeAllText}>See All</Text>*/}
+          {/*    </TouchableOpacity>*/}
+          {/*</View>*/}
+          {/*<View style={styles.logoScrollWrapper}>*/}
+          {/*    <ScrollView*/}
+          {/*        ref={scrollViewRef}*/}
+          {/*        horizontal*/}
+          {/*        showsHorizontalScrollIndicator={false}*/}
+          {/*        contentContainerStyle={styles.logoScrollContainer}*/}
+          {/*        onScroll={onScroll}*/}
+          {/*        scrollEventThrottle={16}*/}
+          {/*        onContentSizeChange={onContentSizeChange}*/}
+          {/*    >*/}
+          {/*        {products.map((product) => (*/}
+          {/*            <View key={product.id} style={styles.logoWrapper}>*/}
+          {/*                <Image source={{ uri: product.image }} style={styles.logoImage} />*/}
+          {/*            </View>*/}
+          {/*        ))}*/}
+          {/*    </ScrollView>*/}
+
+          {/*    <TouchableOpacity*/}
+          {/*        style={styles.rightIconWrapper}*/}
+          {/*        onPress={scrollRight}*/}
+          {/*        activeOpacity={0.7}*/}
+          {/*    >*/}
+          {/*        <FontAwesome name="angle-right" size={30} color="#999" />*/}
+          {/*    </TouchableOpacity>*/}
+          {/*</View>*/}
+          {/*Discount 40% Product*/}
+          <View>
+              {/* Header */}
+              <View style={styles.headerContainer}>
+                  <Text style={styles.headerTitle}>Discount 40% Products</Text>
+                  <TouchableOpacity onPress={onSeeAlldiscount50}>
+                      <Text style={styles.seeAllText}>See All</Text>
+                  </TouchableOpacity>
+              </View>
+
+              {/* Grid of products */}
+              <FlatList
+                  data={limitedProducts}
+                  keyExtractor={(item) => item.id}
+                  renderItem={renderProductItem}
+                  numColumns={NUM_COLUMNS}
+                  scrollEnabled={false} // disable inner scroll, show all items in two rows
+                  contentContainerStyle={styles.flatListContainer}
+              />
+          </View>
+          <View>
+              {/* Header */}
+              <View style={styles.headerContainer}>
+                  <Text style={styles.headerTitle}>Discount 50% Products</Text>
+                  <TouchableOpacity onPress={onSeeAll}>
+                      <Text style={styles.seeAllText}>See All</Text>
+                  </TouchableOpacity>
+              </View>
+
+              {/* Grid of products */}
+              <FlatList
+                  data={limitedProducts}
+                  keyExtractor={(item) => item.id}
+                  renderItem={renderProductItem}
+                  numColumns={NUM_COLUMNS}
+                  scrollEnabled={false} // disable inner scroll, show all items in two rows
+                  contentContainerStyle={styles.flatListContainer}
+              />
+          </View>
+          {/*60% product*/}
+          <View>
+              {/* Header */}
+              <View style={styles.headerContainer}>
+                  <Text style={styles.headerTitle}>Discount 60% Products</Text>
+                  <TouchableOpacity onPress={onSeeAll}>
+                      <Text style={styles.seeAllText}>See All</Text>
+                  </TouchableOpacity>
+              </View>
+
+              {/* Grid of products */}
+              <FlatList
+                  data={limitedProducts}
+                  keyExtractor={(item) => item.id}
+                  renderItem={renderProductItem}
+                  numColumns={NUM_COLUMNS}
+                  scrollEnabled={false} // disable inner scroll, show all items in two rows
+                  contentContainerStyle={styles.flatListContainer}
+              />
+          </View>
+          {/*Category Grid*/}
+          <CategoryGrid  />
         {/* Products grid */}
+          <View style={styles.headerContainer}>
+              <Text style={styles.headerTitle}>All Products</Text>
+          </View>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
           {products.map((product) => {
               const quantity = productQuantities[product.id];
@@ -544,7 +752,119 @@ ratingHeartRow: {
 
         // Shadow for Android
         elevation: 9,
-    }
+    },
+
+    //Toop picks
+    headerContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 15,
+        backgroundColor:"#FF6363",
+        padding:5,
+        borderRadius:20,
+        paddingHorizontal:15,
+        paddingVertical:15,
+    },
+    headerTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color:'white'
+    },
+    seeAllText: {
+        fontSize: 16,
+        color: '#007bff',
+    },
+    logoScrollWrapper: {
+        position: 'relative',
+    },
+    logoScrollContainer: {
+        paddingVertical: 10,
+    },
+    logoWrapper: {
+        marginRight: LOGO_MARGIN_RIGHT,
+        borderRadius: LOGO_WIDTH / 2.5,
+        overflow: 'hidden',
+        borderWidth: 1,
+        borderColor: '#ccc',
+        backgroundColor: '#fff',
+        shadowColor: '#121',
+        shadowOffset: { width: 9, height: 1 },
+        shadowOpacity: 0.1,
+        shadowRadius: 5,
+
+        // Optional elevation (Android)
+        elevation: 5,
+    },
+    logoImage: {
+        width: LOGO_WIDTH,
+        height: LOGO_WIDTH,
+        borderRadius: LOGO_WIDTH / 3,
+    },
+    rightIconWrapper: {
+        position: 'absolute',
+        right: 0,
+        top: '50%',
+        marginTop: -15, // half icon size for vertical center
+        backgroundColor: 'rgba(255, 255, 255, 0.7)',
+        paddingHorizontal: 5,
+        paddingVertical: 2,
+        borderRadius: 15,
+        zIndex: 1,
+        elevation: 5,
+    },
+    // 500% discount style
+    flatListContainer: {
+      // backgroundColor:"red",
+        paddingHorizontal: "auto",
+    },
+    productCardDiscount: {
+        marginLeft: 'auto',
+        marginBottom: 20,
+        backgroundColor: '#fff',
+        borderRadius: 8,
+        overflow: 'hidden',
+
+        // Optional shadow (iOS)
+        shadowColor: '#121',
+        shadowOffset: { width: 9, height: 1 },
+        shadowOpacity: 0.1,
+        shadowRadius: 5,
+
+        // Optional elevation (Android)
+        elevation: 5,
+    },
+    productImageDiscount: {
+        width: '100%',
+        height: 90,
+        resizeMode: 'cover',
+    },
+    productNameDiscount: {
+        fontWeight: '600',
+        fontSize: 14,
+        // marginTop: 8,
+        // paddingHorizontal: 8,
+    },
+    productPrice: {
+        fontSize: 14,
+        color: '#333',
+        fontWeight: '700',
+        // paddingHorizontal: 8,
+        // marginBottom: 8,
+        // marginTop: 2,
+    },
+    originalPrice: {
+        textDecorationLine: 'line-through',
+        color: '#999',
+        fontSize: 13,
+        marginRight: 4,
+        fontWeight: '400',
+    },
+    discountedPrice: {
+        color: '#FF4D4D', // or your discount color
+        fontSize: 13,
+        fontWeight: '600',
+    },
 });
 export default HomeScreen;
 

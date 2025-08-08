@@ -16,7 +16,8 @@ import Toast from "react-native-toast-message";
 import {useCart} from "./../Context/CartProvider";
 import CartScreen from './CartScreen'; // Assuming CartScreen is exported from this file
 // import { CartProvider } from './../AppContext/CartProvider';
-import CategoriesScreen from './CategoriesScreen'; // Assuming CategoriesScreen is exported from this file
+import CategoriesScreen from './CategoriesScreen';
+import HomeStackNavigator from "../Navigator/HomeStackNavigator"; // Assuming CategoriesScreen is exported from this file
 const Tab=createBottomTabNavigator();
 const TabNavigator = () => {
   const { getCartItemCount } = useCart(); // ✅ Safe here
@@ -42,7 +43,7 @@ const TabNavigator = () => {
           tabBarInactiveTintColor: '#e0e0e0',
         })}
       >
-        <Tab.Screen name="Home" component={HomeScreen} />
+        <Tab.Screen name="Home" component={HomeStackNavigator} />
         <Tab.Screen name="Categories" component={CategoriesScreen} />
         <Tab.Screen name="Cart" component={CartScreen} options={{
             tabBarBadge:cartCount > 0 ? cartCount : null // Display cart item count as badge

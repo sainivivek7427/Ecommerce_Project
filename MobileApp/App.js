@@ -9,28 +9,28 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Toast from "react-native-toast-message";
 import { CartProvider } from './Context/CartProvider';
 import TabNavigator from './components/TabNavigator'; // Assuming TabNavigator is exported from this file
-function BottomBar() {
-  return (
-    <View style={styles.bottomBar}>
-      <View style={styles.bottomItem}>
-        <Ionicons name="home" size={24} color="white" />
-        <Text style={styles.bottomText}>Home</Text>
-      </View>
-      <View style={styles.bottomItem}>
-        <MaterialIcons name="category" size={24} color="white" />
-        <Text style={styles.bottomText}>Categories</Text>
-      </View>
-      <View style={styles.bottomItem}>
-        <FontAwesome name="user" size={24} color="white" />
-        <Text style={styles.bottomText}>Login</Text>
-      </View>
-      <View style={styles.bottomItem}>
-        <Ionicons name="person-circle" size={24} color="white" />
-        <Text style={styles.bottomText}>Profile</Text>
-      </View>
-    </View>
-  );
-}
+// function BottomBar() {
+//   return (
+//     <View style={styles.bottomBar}>
+//       <View style={styles.bottomItem}>
+//         <Ionicons name="home" size={24} color="white" />
+//         <Text style={styles.bottomText}>Home</Text>
+//       </View>
+//       <View style={styles.bottomItem}>
+//         <MaterialIcons name="category" size={24} color="white" />
+//         <Text style={styles.bottomText}>Categories</Text>
+//       </View>
+//       <View style={styles.bottomItem}>
+//         <FontAwesome name="user" size={24} color="white" />
+//         <Text style={styles.bottomText}>Login</Text>
+//       </View>
+//       <View style={styles.bottomItem}>
+//         <Ionicons name="person-circle" size={24} color="white" />
+//         <Text style={styles.bottomText}>Profile</Text>
+//       </View>
+//     </View>
+//   );
+// }
 
 
 
