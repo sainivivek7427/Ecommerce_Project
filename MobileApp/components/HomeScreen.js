@@ -23,23 +23,43 @@ import Toast from "react-native-toast-message";
 import {useCart} from "../Context/CartProvider";
 // import { FontAwesome, MaterialIcons  } from '@expo/vector-icons';
 const products = [
-  { id: 1, name: 'Apple', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVnFoJGb5GxF6lyge8lahGyv_nlQrXameFLsgUJAHrwCS1hDR2WdGZ6Es&s' },
-  { id: 2, name: 'Banana', image: 'https://upload.wikimedia.org/wikipedia/commons/8/8a/Banana-Single.jpg' },
-  { id: 3, name: 'Carrot', image: 'https://i0.wp.com/post.healthline.com/wp-content/uploads/2020/10/carrot-juice-1296x728-header.jpg?w=1155&h=1528' },
-  { id: 4, name: 'Tomato', image: 'https://upload.wikimedia.org/wikipedia/commons/1/15/Red_Apple.jpg' },
-    { id: 5, name: 'Apple', image: 'https://via.placeholder.com/100?text=Apple' },
-  { id: 6, name: 'Banana', image: 'https://via.placeholder.com/100?text=Banana' },
-  { id: 7, name: 'Carrot', image: 'https://via.placeholder.com/100?text=Carrot' },
-  { id: 8, name: 'Tomato', image: 'https://via.placeholder.com/100?text=Tomato' },
-    { id: 9, name: 'Apple', image: 'https://via.placeholder.com/100?text=Apple' },
-  { id: 10, name: 'Banana', image: 'https://via.placeholder.com/100?text=Banana' },
-  { id: 11, name: 'Carrot', image: 'https://via.placeholder.com/100?text=Carrot' },
-  { id: 12, name: 'Tomato', image: 'https://via.placeholder.com/100?text=Tomato' },
-    { id: 13, name: 'Apple', image: 'https://via.placeholder.com/100?text=Apple' },
-  { id: 14, name: 'Banana', image: 'https://via.placeholder.com/100?text=Banana' },
-  { id: 15, name: 'Carrot', image: 'https://via.placeholder.com/100?text=Carrot' },
-  { id: 16, name: 'Tomato', image: 'https://via.placeholder.com/100?text=Tomato' },
+  { id: 1, name: 'Apple', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVnFoJGb5GxF6lyge8lahGyv_nlQrXameFLsgUJAHrwCS1hDR2WdGZ6Es&s',price:'90' },
+  { id: 2, name: 'Banana', image: 'https://upload.wikimedia.org/wikipedia/commons/8/8a/Banana-Single.jpg',price:'90' },
+  { id: 3, name: 'Carrot', image: 'https://i0.wp.com/post.healthline.com/wp-content/uploads/2020/10/carrot-juice-1296x728-header.jpg?w=1155&h=1528',price:'90' },
+  { id: 4, name: 'Tomato', image: 'https://upload.wikimedia.org/wikipedia/commons/1/15/Red_Apple.jpg',price:'90' },
+    { id: 5, name: 'Apple', image: 'https://via.placeholder.com/100?text=Apple',price:'90' },
+  { id: 6, name: 'Banana', image: 'https://via.placeholder.com/100?text=Banana' ,price:'90'},
+  { id: 7, name: 'Carrot', image: 'https://via.placeholder.com/100?text=Carrot' ,price:'90'},
+  { id: 8, name: 'Tomato', image: 'https://via.placeholder.com/100?text=Tomato' ,price:'90'},
+    { id: 9, name: 'Apple', image: 'https://via.placeholder.com/100?text=Apple' ,price:'90'},
+  { id: 10, name: 'Banana', image: 'https://via.placeholder.com/100?text=Banana' ,price:'90'},
+  { id: 11, name: 'Carrot', image: 'https://via.placeholder.com/100?text=Carrot' ,price:'90'},
+  { id: 12, name: 'Tomato', image: 'https://via.placeholder.com/100?text=Tomato' ,price:'90'},
+    { id: 13, name: 'Apple', image: 'https://via.placeholder.com/100?text=Apple' ,price:'90'},
+  { id: 14, name: 'Banana', image: 'https://via.placeholder.com/100?text=Banana' ,price:'90'},
+  { id: 15, name: 'Carrot', image: 'https://via.placeholder.com/100?text=Carrot' ,price:'90'},
+  { id: 16, name: 'Tomato', image: 'https://via.placeholder.com/100?text=Tomato' ,price:'90'},
   // Add more products as needed
+];
+
+const toppick = [
+    { id: 1, name: 'Apple', images: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVnFoJGb5GxF6lyge8lahGyv_nlQrXameFLsgUJAHrwCS1hDR2WdGZ6Es&s',price:'90' },
+    { id: 2, name: 'Banana', images: 'https://upload.wikimedia.org/wikipedia/commons/8/8a/Banana-Single.jpg' ,price:'90'},
+    { id: 3, name: 'Carrot', images: 'https://i0.wp.com/post.healthline.com/wp-content/uploads/2020/10/carrot-juice-1296x728-header.jpg?w=1155&h=1528',price:'90' },
+    { id: 4, name: 'Tomato', images: 'https://upload.wikimedia.org/wikipedia/commons/1/15/Red_Apple.jpg' ,price:'90'},
+    { id: 5, name: 'Apple', images: 'https://via.placeholder.com/100?text=Apple' ,price:'90'},
+    { id: 6, name: 'Banana', images: 'https://via.placeholder.com/100?text=Banana' ,price:'90'},
+    { id: 7, name: 'Carrot', images: 'https://via.placeholder.com/100?text=Carrot' ,price:'90'},
+    { id: 8, name: 'Tomato', images: 'https://via.placeholder.com/100?text=Tomato' ,price:'90'},
+    { id: 9, name: 'Apple', images: 'https://via.placeholder.com/100?text=Apple',price:'90' },
+    { id: 10, name: 'Banana', images: 'https://via.placeholder.com/100?text=Banana' ,price:'90'},
+    { id: 11, name: 'Carrot', images: 'https://via.placeholder.com/100?text=Carrot' ,price:'90'},
+    { id: 12, name: 'Tomato', image: 'https://via.placeholder.com/100?text=Tomato' ,price:'90'},
+    { id: 13, name: 'Apple', images: 'https://via.placeholder.com/100?text=Apple' ,price:'90'},
+    { id: 14, name: 'Banana', images: 'https://via.placeholder.com/100?text=Banana' ,price:'90'},
+    // { id: 15, name: 'Carrot', image: 'https://via.placeholder.com/100?text=Carrot' },
+    // { id: 16, name: 'Tomato', image: 'https://via.placeholder.com/100?text=Tomato' },
+    // // Add more products as needed
 ];
 
 const LOGO_WIDTH = 100;
@@ -47,7 +67,7 @@ const LOGO_MARGIN_RIGHT = 12;
 const SCROLL_STEP = (LOGO_WIDTH + LOGO_MARGIN_RIGHT) * 3;
 
  const  HomeScreen=()=> {
-  const { addToCart } = useCart();
+  const { addToCart ,cart,updateQuantity,removeFromCart} = useCart();
   const [modalVisible, setModalVisible] = useState(false);
   const [wishlist, setWishlist] = useState([]);
   const [quantities, setQuantities] = useState({});
@@ -85,43 +105,76 @@ const SCROLL_STEP = (LOGO_WIDTH + LOGO_MARGIN_RIGHT) * 3;
         Alert.alert('You pressed Yes!');
     };
 
-   //add or remove items in cart and add item in cart
-    const handlequantity = (product, action) => {
-      // console.log(`Product ${product.id} action: ${action}`);
-      const price =90;
-        setProductQuantities(prevQuantities => {
-            const currentQty = prevQuantities[product.id] || 0;
-            let newQty = currentQty;
-            if (action === 'add') {
-                newQty = currentQty + 1;
-            } else if (action === 'minus' && currentQty > 0) {
-                newQty = currentQty - 1;
-            }
-            setPendingProduct({ product, quantity: newQty });
-            return { ...prevQuantities, [product.id]: newQty };
-        });
+//    //add or remove items in cart and add item in cart
+//     const handlequantity = (product, action) => {
+//       console.log(`Product ${product.id} action: ${action}`);
+//       const price =90;
+//         setProductQuantities(prevQuantities => {
+//             const currentQty = prevQuantities[product.id] || 0;
+//             console.log("CUrrentqty "+currentQty);
+//             let newQty = currentQty;
+//             if (action === 'add') {
+//                 newQty = currentQty + 1;
+//             } else if (action === 'minus' && currentQty > 0) {
+//                 newQty = currentQty - 1;
+//             }
+//             console.log("qty "+newQty)
+//
+//             const newres= setPendingProduct({ product, quantity: newQty });
+//             console.log("qty "+newres);
+//             return { ...prevQuantities, [product.id]: newQty };
+//         });
+//
+//       // setQuantities(prev => {
+//       //   const currentQty = prev[product.id] || 0;
+//       //   // console.log("Current quantity:  of prod "+product.id+" qty currentQty"+currentQty);
+//
+//       //   let newQty = action === 'add' ? currentQty + 1 : Math.max(0, currentQty - 1);
+//       //     // console.log("Current quantity:  of prod "+product.id+" qty update currentQty"+newQty);
+//       //   // addToCart(product,newQty);
+//       //   setPendingProduct({ product, quantity: newQty });
+//
+//       // return { ...prev, [product.id]: newQty };
+//       // });
+//
+//
+//   // console.log(" Quantities "+quantities.id+" name "+quantities.name)
+// };
 
-      // setQuantities(prev => {
-      //   const currentQty = prev[product.id] || 0;
-      //   // console.log("Current quantity:  of prod "+product.id+" qty currentQty"+currentQty);
-       
-      //   let newQty = action === 'add' ? currentQty + 1 : Math.max(0, currentQty - 1);
-      //     // console.log("Current quantity:  of prod "+product.id+" qty update currentQty"+newQty);
-      //   // addToCart(product,newQty);
-      //   setPendingProduct({ product, quantity: newQty });
 
-      // return { ...prev, [product.id]: newQty };
-      // });
-    
+     // helper function to get product quantity from context
+     const getQuantity = (productId) => {
+         const item = cart.find((i) => i.id === productId);
+         return item ? item.quantity : 0;
+     };
 
-  // console.log(" Quantities "+quantities.id+" name "+quantities.name)
-};
+     const handlequantity = (product, action) => {
+         const qty = getQuantity(product.id);
+         let newQty = qty;
+
+         if (action === "add") {
+             newQty = qty + 1;
+             addToCart(product, newQty, product.price * newQty);
+         } else if (action === "minus") {
+             if (qty > 1) {
+                 updateQuantity(product, "minus");
+             } else {
+                 removeFromCart(product.id);
+             }
+         }
+     };
   useEffect(() => {
         console.log(`Pending product for update: ${pendingProduct ? pendingProduct.product.id : 'None'}`);
-    if (pendingProduct) {
+      console.log(`Pending product for image: ${pendingProduct ? pendingProduct.product.image : 'None'}`);
+        if (pendingProduct) {
+
       const { product, quantity } = pendingProduct;
-      addToCart(product, quantity,90);
-      setPendingProduct(null); // reset after update
+      console.log("product is "+product.id+" produc img "+product.images)
+      addToCart(product, quantity,product.price);
+            console.log("produc img "+product.images)
+      // setPendingProduct(null); // reset after update
+      //   const newPendingProduct = { product, quantity: newQty };
+        setPendingProduct(null);
     }
   }, [pendingProduct]);
      const scrollViewRef = useRef(null);
@@ -167,7 +220,7 @@ const SCROLL_STEP = (LOGO_WIDTH + LOGO_MARGIN_RIGHT) * 3;
      const ITEM_MARGIN = 12;
      const ITEM_WIDTH = (SCREEN_WIDTH - ITEM_MARGIN * (NUM_COLUMNS + 1)) / NUM_COLUMNS;
      // Show only first 2*NUM_COLUMNS products (2 rows)
-     const limitedProducts = products.slice(0, NUM_COLUMNS * 3);
+     const limitedProducts = toppick.slice(0, NUM_COLUMNS * 2);
 
      const renderProductItem = ({ item }) => (
          <View style={[styles.productCardDiscount, { width: ITEM_WIDTH }]}>
@@ -186,13 +239,82 @@ const SCROLL_STEP = (LOGO_WIDTH + LOGO_MARGIN_RIGHT) * 3;
 
          </View>
      );
+     // const limitedProducts = products.slice(0, 6);
 
-     return (
+     const renderItem = ({ item }) => {
+         // let item;
+         const qty = getQuantity(item.id);
+
+         return (
+             <View style={styles.productCard}>
+                 <View style={styles.imageContainer}>
+                     <Image source={{uri: item.image}} style={styles.productImage}/>
+
+                     {/* Wishlist icon */}
+                     <View style={styles.iconWrapperHeart}>
+                         <TouchableOpacity onPress={() => handleWishlist(item.id, item.name)}>
+                             <Ionicons
+                                 name={wishlist.includes(item.id) ? "heart" : "heart-outline"}
+                                 size={24}
+                                 color={wishlist.includes(item.id) ? "red" : "gray"}
+                             />
+                         </TouchableOpacity>
+                     </View>
+
+                     {/* Cart control */}
+                     <View style={styles.iconWrapper}>
+                         {qty === 0 ? (
+                             <TouchableOpacity
+                                 style={styles.addtoCart}
+                                 onPress={() => handlequantity(item, "add")}
+                             >
+                                 <MaterialIcons name="add" size={20} color="red"/>
+                                 <Text style={{color: "red"}}>Add</Text>
+                             </TouchableOpacity>
+                         ) : (
+                             <View style={styles.cartControl}>
+                                 <TouchableOpacity onPress={() => handlequantity(item, "minus")}>
+                                     <FontAwesome name="minus" size={18} color="white"/>
+                                 </TouchableOpacity>
+
+                                 <Text style={styles.qtyText}>{qty}</Text>
+
+                                 <TouchableOpacity onPress={() => handlequantity(item, "add")}>
+                                     <FontAwesome name="plus" size={18} color="white"/>
+                                 </TouchableOpacity>
+                             </View>
+                         )}
+                     </View>
+                 </View>
+
+                 {/* Name + Prices */}
+                 <View
+                     style={{
+                         flexDirection: "row",
+                         justifyContent: "space-between",
+                         marginVertical: 2,
+                         paddingVertical: 2,
+                         paddingHorizontal: 7,
+                     }}
+                 >
+                     <Text style={styles.productNameDiscount} numberOfLines={1}>
+                         {item.name}
+                     </Text>
+                     <View style={{flexDirection: "row", paddingHorizontal: 6}}>
+                         <Text style={styles.originalPrice}>Rs.90</Text>
+                         <Text style={styles.discountedPrice}>Rs.45</Text>
+                     </View>
+                 </View>
+             </View>
+         );
+     }
+
+         return (
     // <SafeAreaView style={styles.screenContainer}>
     //   <Text style={styles.screenText}>Home Screen</Text>
     // </SafeAreaView>
     <SafeAreaView style={styles.container}>
-      <Header />
+      <Header  title="Ecommerce App"/>
       <ScrollView style={styles.scrollSection} contentContainerStyle={{ paddingBottom: 80 }}>
         <View style={{ flexDirection: 'row', width: '100%', marginBottom: 10 }}>
           <TouchableOpacity style={{ flex: 1, marginRight: 5 }} onPress={() => setModalVisible(true)}>
@@ -235,12 +357,74 @@ const SCROLL_STEP = (LOGO_WIDTH + LOGO_MARGIN_RIGHT) * 3;
                   scrollEventThrottle={16}
                   onContentSizeChange={onContentSizeChange}
               >
-                  {products.map((product) => (
-                      <View key={product.id} style={styles.logoWrapper}>
-                          <Image source={{ uri: product.image }} style={styles.logoImage} />
-                          <Text style={{fontSize:12,fontWeight:600,textAlign:'center'}}>{product.name}</Text>
-                      </View>
-                  ))}
+                  {/*{products.map((product) => (*/}
+                  {/*    <View key={product.id} style={styles.logoWrapper}>*/}
+                  {/*        <Image source={{ uri: product.image }} style={styles.logoImage} />*/}
+                  {/*        <Text style={{fontSize:12,fontWeight:600,textAlign:'center'}}>{product.name}</Text>*/}
+                  {/*    </View>*/}
+                  {/*))}*/}
+                  {toppick.map((product) => {
+                      // const quantity = productQuantities[product.id];
+                      const qty = getQuantity(product.id);
+                      return(
+                          <View key={product.id} style={styles.productCardTopPicks}>
+                              <View style={styles.imageContainer}>
+                                  <Image source={{ uri: product.images}} style={styles.productImage1}  />
+                                  {/* Overlay heart and cart quantity controls in top right */}
+                                  {/* Icons over image */}
+
+                                  <View style={styles.iconWrappertoppicks}>
+                                      {qty === 0 ? (
+                                          <TouchableOpacity style={styles.addtoCart} onPress={() => handlequantity(product, 'add')}>
+                                              <MaterialIcons name="add" size={12} color="red" />
+                                              <Text style={{color:"red"}}>Add</Text>
+                                          </TouchableOpacity>
+                                      ) : (
+                                          <View style={styles.cartControlTopPicks}>
+                                              <TouchableOpacity onPress={() => handlequantity(product, 'minus')}>
+                                                  <FontAwesome name="minus" size={14} color="white"  />
+                                              </TouchableOpacity>
+
+                                              <Text style={{fontSize:14}}>{qty}</Text>
+
+                                              <TouchableOpacity onPress={() => handlequantity(product, 'add')}>
+                                                  <FontAwesome name="plus" size={14} color="white"  />
+                                              </TouchableOpacity>
+                                          </View>
+                                      )}
+                                  </View>
+
+                              </View>
+                              {/* Name and price below image */}
+                              <View style={{display: 'flex', flexDirection: 'column',justifyContent: 'space-between',marginVertical:2,paddingVertical:2,paddingHorizontal:7}}>
+                              <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+                                  <View>
+                                      <Text style={styles.productNameDiscount} numberOfLines={1}>
+                                      {product.name}
+                                    </Text>
+                                  </View>
+                                  <View >
+                                      {/*<TouchableOpacity style={styles.iconButton}>*/}
+                                      {/*    <FontAwesome name="heart" size={20} color="red" />*/}
+                                      {/*</TouchableOpacity>*/}
+                                      <TouchableOpacity onPress={() => handleWishlist(product.id, product.name)}>
+                                          <Ionicons
+                                              name={wishlist.includes(product.id) ? "heart" : "heart-outline"}
+                                              size={22}
+                                              color={wishlist.includes(product.id) ? "red" : "gray"}
+                                          />
+                                      </TouchableOpacity>
+                                  </View>
+                              </View>
+                                  <View style={{display:'flex', flexDirection: 'row', gap:'0',}}>
+                                      <Text style={styles.originalPrice}>Rs.90</Text>
+                                      <Text style={styles.discountedPrice}>Rs.45</Text>
+                                  </View>
+                              </View>
+
+                          </View>
+                      );
+                  })}
               </ScrollView>
 
               <TouchableOpacity
@@ -251,41 +435,8 @@ const SCROLL_STEP = (LOGO_WIDTH + LOGO_MARGIN_RIGHT) * 3;
                   <FontAwesome name="angle-right" size={30} color="#999" />
               </TouchableOpacity>
           </View>
-          {/*50% discount*/}
-          {/*<View style={styles.headerContainer}>*/}
-          {/*    <Text style={styles.headerTitle}>Discount 50% Products </Text>*/}
-          {/*    <TouchableOpacity onPress={onSeeAll}>*/}
-          {/*        <Text style={styles.seeAllText}>See All</Text>*/}
-          {/*    </TouchableOpacity>*/}
-          {/*</View>*/}
-          {/*<View style={styles.logoScrollWrapper}>*/}
-          {/*    <ScrollView*/}
-          {/*        ref={scrollViewRef}*/}
-          {/*        horizontal*/}
-          {/*        showsHorizontalScrollIndicator={false}*/}
-          {/*        contentContainerStyle={styles.logoScrollContainer}*/}
-          {/*        onScroll={onScroll}*/}
-          {/*        scrollEventThrottle={16}*/}
-          {/*        onContentSizeChange={onContentSizeChange}*/}
-          {/*    >*/}
-          {/*        {products.map((product) => (*/}
-          {/*            <View key={product.id} style={styles.logoWrapper}>*/}
-          {/*                <Image source={{ uri: product.image }} style={styles.logoImage} />*/}
-          {/*            </View>*/}
-          {/*        ))}*/}
-          {/*    </ScrollView>*/}
-
-          {/*    <TouchableOpacity*/}
-          {/*        style={styles.rightIconWrapper}*/}
-          {/*        onPress={scrollRight}*/}
-          {/*        activeOpacity={0.7}*/}
-          {/*    >*/}
-          {/*        <FontAwesome name="angle-right" size={30} color="#999" />*/}
-          {/*    </TouchableOpacity>*/}
-          {/*</View>*/}
-          {/*Discount 40% Product*/}
           <View>
-              {/* Header */}
+              {/*  Top 40% discount Header */}
               <View style={styles.headerContainer}>
                   <Text style={styles.headerTitle}>Discount 40% Products</Text>
                   <TouchableOpacity onPress={onSeeAlldiscount50}>
@@ -293,15 +444,76 @@ const SCROLL_STEP = (LOGO_WIDTH + LOGO_MARGIN_RIGHT) * 3;
                   </TouchableOpacity>
               </View>
 
-              {/* Grid of products */}
-              <FlatList
-                  data={limitedProducts}
-                  keyExtractor={(item) => item.id}
-                  renderItem={renderProductItem}
-                  numColumns={NUM_COLUMNS}
-                  scrollEnabled={false} // disable inner scroll, show all items in two rows
-                  contentContainerStyle={styles.flatListContainer}
-              />
+              {/*<View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>*/}
+                  <FlatList
+                      data={limitedProducts}
+                      keyExtractor={(item) => item.id.toString()}
+                      renderItem={renderItem}
+                      numColumns={NUM_COLUMNS}
+                      columnWrapperStyle={{ justifyContent: "space-between" }}
+                      contentContainerStyle={{ paddingBottom: 20 }}
+                  />
+                  {/*{products.map((product) => {*/}
+                  {/*    const quantity = productQuantities[product.id];*/}
+
+                  {/*    return(*/}
+                  {/*        <View key={product.id} style={styles.productCard}>*/}
+                  {/*            <View style={styles.imageContainer}>*/}
+                  {/*                <Image source={{ uri: product.image }} style={styles.productImage}  />*/}
+                  {/*                /!* Overlay heart and cart quantity controls in top right *!/*/}
+                  {/*                /!* Icons over image *!/*/}
+                  {/*                <View style={styles.iconWrapperHeart}>*/}
+                  {/*                    /!*<TouchableOpacity style={styles.iconButton}>*!/*/}
+                  {/*                    /!*    <FontAwesome name="heart" size={20} color="red" />*!/*/}
+                  {/*                    /!*</TouchableOpacity>*!/*/}
+                  {/*                    <TouchableOpacity onPress={() => handleWishlist(product.id, product.name)}>*/}
+                  {/*                        <Ionicons*/}
+                  {/*                            name={wishlist.includes(product.id) ? "heart" : "heart-outline"}*/}
+                  {/*                            size={24}*/}
+                  {/*                            color={wishlist.includes(product.id) ? "red" : "gray"}*/}
+                  {/*                        />*/}
+                  {/*                    </TouchableOpacity>*/}
+                  {/*                </View>*/}
+                  {/*                <View style={styles.iconWrapper}>*/}
+                  {/*                    {quantity === 0 ? (*/}
+                  {/*                        <TouchableOpacity style={styles.addtoCart} onPress={() => handlequantity(product, 'add')}>*/}
+                  {/*                            <MaterialIcons name="add" size={20} color="red" />*/}
+                  {/*                            <Text style={{color:"red"}}>Add</Text>*/}
+                  {/*                        </TouchableOpacity>*/}
+                  {/*                    ) : (*/}
+                  {/*                        <View style={styles.cartControl}>*/}
+                  {/*                            <TouchableOpacity onPress={() => handlequantity(product, 'minus')}>*/}
+                  {/*                                <FontAwesome name="minus" size={18} color="white"  />*/}
+                  {/*                            </TouchableOpacity>*/}
+
+                  {/*                            <Text style={styles.qtyText}>{quantity}</Text>*/}
+
+                  {/*                            <TouchableOpacity onPress={() => handlequantity(product, 'add')}>*/}
+                  {/*                                <FontAwesome name="plus" size={18} color="white"  />*/}
+                  {/*                            </TouchableOpacity>*/}
+                  {/*                        </View>*/}
+                  {/*                    )}*/}
+                  {/*                </View>*/}
+
+                  {/*            </View>*/}
+                  {/*            /!*<View style={{ flex: 1 ,flexDirection: 'row', justifyContent: 'space-between',marginBottom: 4,paddingHorizontal:10}}>*!/*/}
+                  {/*            /!*    <Text style={styles.productName}>{product.name}</Text>*!/*/}
+                  {/*            /!*    <Text style={styles.priceText}>₹99</Text>*!/*/}
+                  {/*            /!*</View>*!/*/}
+                  {/*            /!* Name and price below image *!/*/}
+                  {/*            <View style={{display: 'flex', flexDirection: 'row',justifyContent: 'space-between',marginVertical:2,paddingVertical:2,paddingHorizontal:7}}>*/}
+                  {/*                <Text style={styles.productNameDiscount} numberOfLines={1}>*/}
+                  {/*                    {product.name}*/}
+                  {/*                </Text>*/}
+                  {/*                <View style={{display:'flex', flexDirection: 'row', gap:'0',paddingHorizontal:6}}>*/}
+                  {/*                    <Text style={styles.originalPrice}>Rs.90</Text>*/}
+                  {/*                    <Text style={styles.discountedPrice}>Rs.45</Text>*/}
+                  {/*                </View>*/}
+                  {/*            </View>*/}
+                  {/*        </View>*/}
+                  {/*    );*/}
+                  {/*})}*/}
+              {/*</View>*/}
           </View>
           <View>
               {/* Header */}
@@ -315,12 +527,20 @@ const SCROLL_STEP = (LOGO_WIDTH + LOGO_MARGIN_RIGHT) * 3;
               {/* Grid of products */}
               <FlatList
                   data={limitedProducts}
-                  keyExtractor={(item) => item.id}
-                  renderItem={renderProductItem}
+                  keyExtractor={(item) => item.id.toString()}
+                  renderItem={renderItem}
                   numColumns={NUM_COLUMNS}
-                  scrollEnabled={false} // disable inner scroll, show all items in two rows
-                  contentContainerStyle={styles.flatListContainer}
+                  columnWrapperStyle={{ justifyContent: "space-between" }}
+                  contentContainerStyle={{ paddingBottom: 20 }}
               />
+              {/*<FlatList*/}
+              {/*    data={limitedProducts}*/}
+              {/*    keyExtractor={(item) => item.id}*/}
+              {/*    renderItem={renderProductItem}*/}
+              {/*    numColumns={NUM_COLUMNS}*/}
+              {/*    scrollEnabled={false} // disable inner scroll, show all items in two rows*/}
+              {/*    contentContainerStyle={styles.flatListContainer}*/}
+              {/*/>*/}
           </View>
           {/*60% product*/}
           <View>
@@ -335,12 +555,20 @@ const SCROLL_STEP = (LOGO_WIDTH + LOGO_MARGIN_RIGHT) * 3;
               {/* Grid of products */}
               <FlatList
                   data={limitedProducts}
-                  keyExtractor={(item) => item.id}
-                  renderItem={renderProductItem}
+                  keyExtractor={(item) => item.id.toString()}
+                  renderItem={renderItem}
                   numColumns={NUM_COLUMNS}
-                  scrollEnabled={false} // disable inner scroll, show all items in two rows
-                  contentContainerStyle={styles.flatListContainer}
+                  columnWrapperStyle={{ justifyContent: "space-between" }}
+                  contentContainerStyle={{ paddingBottom: 20 }}
               />
+              {/*<FlatList*/}
+              {/*    data={limitedProducts}*/}
+              {/*    keyExtractor={(item) => item.id}*/}
+              {/*    renderItem={renderProductItem}*/}
+              {/*    numColumns={NUM_COLUMNS}*/}
+              {/*    scrollEnabled={false} // disable inner scroll, show all items in two rows*/}
+              {/*    contentContainerStyle={styles.flatListContainer}*/}
+              {/*/>*/}
           </View>
           {/*Category Grid*/}
           <CategoryGrid  />
@@ -358,7 +586,7 @@ const SCROLL_STEP = (LOGO_WIDTH + LOGO_MARGIN_RIGHT) * 3;
                 <Image source={{ uri: product.image }} style={styles.productImage}  />
                 {/* Overlay heart and cart quantity controls in top right */}
                   {/* Icons over image */}
-                  <View style={styles.iconWrapper}>
+                  <View style={styles.iconWrapperHeart}>
                       {/*<TouchableOpacity style={styles.iconButton}>*/}
                       {/*    <FontAwesome name="heart" size={20} color="red" />*/}
                       {/*</TouchableOpacity>*/}
@@ -370,7 +598,7 @@ const SCROLL_STEP = (LOGO_WIDTH + LOGO_MARGIN_RIGHT) * 3;
                           />
                       </TouchableOpacity>
                   </View>
-                  <View style={styles.iconWrapper1}>
+                  <View style={styles.iconWrapper}>
                       {quantity === 0 ? (
                           <TouchableOpacity style={styles.addtoCart} onPress={() => handlequantity(product, 'add')}>
                               <MaterialIcons name="add" size={20} color="red" />
@@ -505,14 +733,29 @@ const styles = StyleSheet.create({
     backgroundColor: '#f2f2f2',
     borderRadius: 10,
     marginBottom: 15,
+      // borderColor:'2px solid blue',
 
   },
+    productCardTopPicks: {
+        width: '10%',
+        backgroundColor: '#f2f2f2',
+        borderRadius: 10,
+        marginBottom: 15,
+
+    },
   productImage: {
     width: "100%",
     height: 120,
     borderRadius: 10,
     marginBottom: 8,
   },
+    productImage1: {
+        width: "100%",
+        height: 60,
+        objectFit:'fill',
+        borderRadius: 10,
+        marginBottom: 8,
+    },
   productName: {
     fontSize: 16,
     fontWeight: 'bold',
@@ -685,6 +928,12 @@ ratingHeartRow: {
         width: '100%',
         height: 150,
     },
+    images: {
+        width: '10%',
+        height: '50%',
+        borderColor:'red',
+        objectFit: 'fill',
+    },
     // iconWrapper: {
     //   position: 'absolute',
     //   right: 10,
@@ -703,13 +952,34 @@ ratingHeartRow: {
         fontSize: 16,
         fontWeight: '600',
     },
+    iconWrapperheartTopPicks: {
+        position: 'absolute',
+        right: 10,
+        top: 0,
+        alignItems: 'center',
+
+    },
+    iconWrapperHeart:{
+        position: 'absolute',
+        right: 10,
+        top: 3,
+        alignItems: 'center',
+    },
     iconWrapper: {
         position: 'absolute',
         right: 10,
-        top: 10,
+        bottom: 5,
         alignItems: 'center',
     },
-    iconWrapper1: {
+    iconWrappertoppicks: {
+        position: 'absolute',
+
+        top:0,
+        right:10,
+        alignItems: 'center',
+
+    },
+    iconWrappertop:{
         position: 'absolute',
 
         bottom:0,
@@ -723,6 +993,18 @@ ratingHeartRow: {
         marginBottom: 10,
         elevation: 2,
     },
+    cartControlTopPicks: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: 'red',
+        paddingHorizontal: 5,
+        paddingVertical: 7,
+        borderRadius: 10,
+        elevation: 2,
+        gap: 15,
+        marginBottom:5
+    },
+
     cartControl: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -740,7 +1022,7 @@ ratingHeartRow: {
         color:"white"
     },
     addtoCart : {
-        flexDirection:"row",backgroundColor:"white",paddingHorizontal:10,paddingVertical:5,alignItems:"center",marginBottom:7,borderWidth: 2,
+        flexDirection:"row",backgroundColor:"white",paddingHorizontal:7,paddingVertical:4,alignItems:"center",marginBottom:6,borderWidth: 2,
         borderColor: 'red', // Blue border outline
         borderRadius: 8,
 
@@ -783,7 +1065,7 @@ ratingHeartRow: {
     },
     logoWrapper: {
         marginRight: LOGO_MARGIN_RIGHT,
-        borderRadius: LOGO_WIDTH / 2.5,
+        borderRadius: LOGO_WIDTH / 2.7,
         overflow: 'hidden',
         borderWidth: 1,
         borderColor: '#ccc',
@@ -799,7 +1081,7 @@ ratingHeartRow: {
     logoImage: {
         width: LOGO_WIDTH,
         height: LOGO_WIDTH,
-        borderRadius: LOGO_WIDTH / 3,
+        borderRadius: LOGO_WIDTH / 4,
     },
     rightIconWrapper: {
         position: 'absolute',

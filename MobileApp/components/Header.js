@@ -6,14 +6,15 @@ import { Ionicons, MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // import Header from './Header'; // Assuming HomeScreen is exported from this file
-export default function Header() {
-    return (
+ const Header=({title})=> {
+
+     return (
         <View style={styles.header}>
-          <Text style={styles.headerText}>Ecommerce App</Text>
+          <Text style={styles.headerText}>{title}</Text>
         </View>
       );
-}
-
+};
+export default  Header;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -24,9 +25,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 30,
     backgroundColor: "lightgreen",
-    padding: 15,
+    paddingLeft: 20,
+      paddingTop:15,
+      paddingBottom:15,
+      paddingRight:15,
     borderRadius: 10,
-    marginBottom: 10,
+    // marginBottom: 10,
+    //   paddingLeft:'80 !important',
+      margin:4
   },
   headerText: {
     fontSize: 20,
