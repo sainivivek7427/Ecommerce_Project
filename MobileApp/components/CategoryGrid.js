@@ -1,32 +1,131 @@
 import React from 'react';
 import {View, Text, FlatList, Image, TouchableOpacity, Alert, StyleSheet, Dimensions} from 'react-native';
+import {useNavigation} from "@react-navigation/native";
 
-const categories = [
-    { id: 1, name: 'Apple', image: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?ixlib=rb-4.0.3&auto=format&fit=crop&w=90&h=90&q=80' },
-    { id: 2, name: 'Banana', image: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?ixlib=rb-4.0.3&auto=format&fit=crop&w=90&h=90&q=80' },
-    { id: 3, name: 'Carrot', image: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?ixlib=rb-4.0.3&auto=format&fit=crop&w=90&h=90&q=80' },
-    { id: 4, name: 'Tomato', image: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?ixlib=rb-4.0.3&auto=format&fit=crop&w=90&h=90&q=80' },
-    { id: 5, name: 'Apple', image: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?ixlib=rb-4.0.3&auto=format&fit=crop&w=90&h=90&q=80' },
-    { id: 6, name: 'Banana', image: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?ixlib=rb-4.0.3&auto=format&fit=crop&w=90&h=90&q=80' },
-    { id: 7, name: 'Carrot', image: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?ixlib=rb-4.0.3&auto=format&fit=crop&w=90&h=90&q=80' },
-    { id: 8, name: 'Tomato', image: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?ixlib=rb-4.0.3&auto=format&fit=crop&w=90&h=90&q=80' },
-    { id: 9, name: 'Apple', image: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?ixlib=rb-4.0.3&auto=format&fit=crop&w=90&h=90&q=80' },
-    { id: 10, name: 'Banana', image: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?ixlib=rb-4.0.3&auto=format&fit=crop&w=90&h=90&q=80' },
-    { id: 11, name: 'Carrot', image: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?ixlib=rb-4.0.3&auto=format&fit=crop&w=90&h=90&q=80' },
-    { id: 12, name: 'Tomato', image: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?ixlib=rb-4.0.3&auto=format&fit=crop&w=90&h=90&q=80' },
-    { id: 13, name: 'Apple', image: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?ixlib=rb-4.0.3&auto=format&fit=crop&w=90&h=90&q=80' },
-    { id: 14, name: 'Banana', image: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?ixlib=rb-4.0.3&auto=format&fit=crop&w=90&h=90&q=80' },
-    { id: 15, name: 'Carrot', image: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?ixlib=rb-4.0.3&auto=format&fit=crop&w=90&h=90&q=80' },
-    { id: 16, name: 'Tomato', image: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?ixlib=rb-4.0.3&auto=format&fit=crop&w=90&h=90&q=80' },
-    // ... more categories
+const categories =
+    [
+        {
+            "id": "groceries",
+            "name": "Groceries",
+            "imageurl": "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg",
+            "subcategories": [
+                {
+                    "id": "fruits_veggies",
+                    "name": "Fruits & Vegetables",
+                    "imageurl": "https://images.pexels.com/photos/102104/pexels-photo-102104.jpeg"
+                },
+                {
+                    "id": "dairy",
+                    "name": "Dairy Products",
+                    "imageurl": "https://images.pexels.com/photos/236701/pexels-photo-236701.jpeg"
+                },
+                {
+                    "id": "snacks",
+                    "name": "Snacks & Beverages",
+                    "imageurl": "https://images.pexels.com/photos/36567/pexels-photo.jpg"
+                }
+            ]
+        },
+        {
+            "id": "electronics",
+            "name": "Electronics",
+            "imageurl": "https://images.pexels.com/photos/374074/pexels-photo-374074.jpeg",
+            "subcategories": [
+                {
+                    "id": "mobiles",
+                    "name": "Mobile Phones",
+                    "imageurl": "https://images.pexels.com/photos/607812/pexels-photo-607812.jpeg"
+                },
+                {
+                    "id": "laptops",
+                    "name": "Laptops & Computers",
+                    "imageurl": "https://images.pexels.com/photos/18105/pexels-photo.jpg"
+                },
+                {
+                    "id": "cameras",
+                    "name": "Cameras",
+                    "imageurl": "https://images.pexels.com/photos/51383/camera-digital-camera-photo-photography-51383.jpeg"
+                }
+            ]
+        },
+        {
+            "id": "fashion",
+            "name": "Fashion",
+            "imageurl": "https://images.pexels.com/photos/377058/pexels-photo-377058.jpeg",
+            "subcategories": [
+                {
+                    "id": "mens_clothing",
+                    "name": "Men's Clothing",
+                    "imageurl": "https://images.pexels.com/photos/428338/pexels-photo-428338.jpeg"
+                },
+                {
+                    "id": "womens_clothing",
+                    "name": "Women's Clothing",
+                    "imageurl": "https://images.pexels.com/photos/428338/pexels-photo-428338.jpeg"
+                },
+                {
+                    "id": "accessories",
+                    "name": "Accessories",
+                    "imageurl": "https://images.pexels.com/photos/298863/pexels-photo-298863.jpeg"
+                }
+            ]
+        },
+        {
+            "id": "books",
+            "name": "Books",
+            "imageurl": "https://images.pexels.com/photos/159711/pexels-photo-159711.jpeg",
+            "subcategories": [
+                {
+                    "id": "fiction",
+                    "name": "Fiction",
+                    "imageurl": "https://images.pexels.com/photos/46274/pexels-photo-46274.jpeg"
+                },
+                {
+                    "id": "non_fiction",
+                    "name": "Non-Fiction",
+                    "imageurl": "https://images.pexels.com/photos/46274/pexels-photo-46274.jpeg"
+                },
+                {
+                    "id": "academic",
+                    "name": "Academic",
+                    "imageurl": "https://images.pexels.com/photos/356079/pexels-photo-356079.jpeg"
+                }
+            ]
+        },
+        {
+            "id": "home_appliances",
+            "name": "Home Appliances",
+            "imageurl": "https://images.pexels.com/photos/374074/pexels-photo-374074.jpeg",
+            "subcategories": [
+                {
+                    "id": "kitchen_appliances",
+                    "name": "Kitchen Appliances",
+                    "imageurl": "https://images.pexels.com/photos/276024/pexels-photo-276024.jpeg"
+                },
+                {
+                    "id": "cleaning_appliances",
+                    "name": "Cleaning Appliances",
+                    "imageurl": "https://images.pexels.com/photos/276024/pexels-photo-276024.jpeg"
+                },
+                {
+                    "id": "heating_cooling",
+                    "name": "Heating & Cooling",
+                    "imageurl": "https://images.pexels.com/photos/276024/pexels-photo-276024.jpeg"
+                }
+            ]
+        }
+
 ];
+
+
 const onSeeAll = () => {
     alert('See All clicked!');
+    console.log(categories);
 };
     const SCREEN_WIDTH = Dimensions.get('window').width;
 
     // Adjust number of columns here: 2 or 3
-    const NUM_COLUMNS = 3;
+    const NUM_COLUMNS = 2;
 
     // Calculate item width based on number of columns and margin/padding
     const ITEM_MARGIN = 12;
@@ -35,11 +134,14 @@ const onSeeAll = () => {
 const CategoryGrid = () => {
     const onCategoryPress = (name) => {
         Alert.alert('Category', `You clicked on ${name}`);
+
+        // navigation.navigate('CategoryDetail', { categoryId: item.id })
+
     };
 
     const renderCategoryItem = ({ item }) => (
         <TouchableOpacity style={styles.categoryItem} onPress={() => onCategoryPress(item.name)}>
-            <Image source={{ uri: item.image }} style={styles.categoryImage} />
+            <Image source={{ uri: item.imageurl }} style={styles.categoryImage} />
             <Text style={{fontSize:14,fontWeight:500,paddingVertical:6}}>{item.name}</Text>
         </TouchableOpacity>
     );
@@ -57,7 +159,7 @@ const CategoryGrid = () => {
                 keyExtractor={(item) => item.id}
                 renderItem={renderCategoryItem}
                 numColumns={3}
-                scrollEnabled={false}
+                scrollEnabled={true}
                 contentContainerStyle={{ padding: 13 }}
             />
         </View>

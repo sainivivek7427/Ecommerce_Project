@@ -64,13 +64,16 @@ export const CartProvider = ({ children }) => {
     // };
 
     const addToCart = (product, quantity, totalPrice) => {
+
+        console.log("add cart "+product, quantity, totalPrice);
         setCart(prev => {
             const existing = prev.find(item => item.id === product.id);
             if (existing) {
                 // update quantity
                 return prev.map(item =>
                     item.id === product.id
-                        ? { ...item, quantity, totalPrice }
+                        ?
+                        { ...item, quantity, totalPrice }
                         : item
                 );
             } else {
@@ -97,32 +100,35 @@ export const CartProvider = ({ children }) => {
     //     );
     // };
 
-
+/***************update quantity
+ // setCart(prev => {
+ //     const existing = prev[product.id];
+ //     if (!existing) return prev;
+ //
+ //     let newQty = existing.quantity;
+ //     if (action === 'add') newQty += 1;
+ //     else if (action === 'minus' && newQty > 1) newQty -= 1;
+ //     else if (action === 'minus' && newQty === 1) {
+ //         const updated = { ...prev };
+ //         delete updated[product.id];
+ //         return updated;
+ //     }
+ //
+ //     return {
+ //         ...prev,
+ //         [product.id]: { product, quantity: newQty, totalPrice: product.price * newQty }
+ //     };
+ // });
+   */
     const updateQuantity = (product, action) => {
-        // setCart(prev => {
-        //     const existing = prev[product.id];
-        //     if (!existing) return prev;
-        //
-        //     let newQty = existing.quantity;
-        //     if (action === 'add') newQty += 1;
-        //     else if (action === 'minus' && newQty > 1) newQty -= 1;
-        //     else if (action === 'minus' && newQty === 1) {
-        //         const updated = { ...prev };
-        //         delete updated[product.id];
-        //         return updated;
-        //     }
-        //
-        //     return {
-        //         ...prev,
-        //         [product.id]: { product, quantity: newQty, totalPrice: product.price * newQty }
-        //     };
-        // });
+
 
         setCart(prev => {
             const idx = prev.findIndex(i => i.id === product.id);
 
             // item exists
             if (idx !== -1) {
+                console.log("update quantity item exist ")
                 const copy = [...prev];
                 const item = copy[idx];
                 let newQty = item.quantity;
@@ -140,9 +146,10 @@ export const CartProvider = ({ children }) => {
             }
 
             // item doesn't exist, only handle add
-            if (action === 'add') {
-                return [...prev, { id: product.id, product, quantity: 1, totalPrice: product.price }];
-            }
+            // if (action === 'add') {
+            //     console.log("update quantity item not exist exist but add  ")
+            //     return [...prev, { id: product.id, product, quantity: 1, totalPrice: product.price }];
+            // }
 
             return prev;
         });

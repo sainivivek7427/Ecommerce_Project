@@ -13,6 +13,6 @@ export default function HomeStackNavigator() {
         <Stack.Navigator>
             <Stack.Screen name="HomeMain" component={HomeScreen} options={{ headerShown: false }} />
             <Stack.Screen name="SeeAllProducts" component={SeeAllProductsScreen} options={{ title: 'All Products' }} />
-        </Stack.Navigator>
+                    </Stack.Navigator>
     );
 }

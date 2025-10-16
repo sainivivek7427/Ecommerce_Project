@@ -2,19 +2,11 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useState ,useEffect, useRef,} from 'react';
 import {
     SafeAreaView, StyleSheet, Text, View, Modal, TouchableOpacity, Dimensions,
-    ScrollView, Image, Alert, FlatList
+    ScrollView, Image, Alert, FlatList, TextInput, Animated
 } from 'react-native';
 import { Ionicons, MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import CategoryGrid  from "./CategoryGrid";
-// import {
-//     View,
-//     ScrollView,
-//     Image,
-//     StyleSheet,
-//     TouchableOpacity,
-//     Dimensions,
-// } from 'react-native';
-// import {Cart} from './Cart';
+
 import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Header from './Header'; // Assuming HomeScreen is exported from this file
@@ -105,43 +97,6 @@ const SCROLL_STEP = (LOGO_WIDTH + LOGO_MARGIN_RIGHT) * 3;
         Alert.alert('You pressed Yes!');
     };
 
-//    //add or remove items in cart and add item in cart
-//     const handlequantity = (product, action) => {
-//       console.log(`Product ${product.id} action: ${action}`);
-//       const price =90;
-//         setProductQuantities(prevQuantities => {
-//             const currentQty = prevQuantities[product.id] || 0;
-//             console.log("CUrrentqty "+currentQty);
-//             let newQty = currentQty;
-//             if (action === 'add') {
-//                 newQty = currentQty + 1;
-//             } else if (action === 'minus' && currentQty > 0) {
-//                 newQty = currentQty - 1;
-//             }
-//             console.log("qty "+newQty)
-//
-//             const newres= setPendingProduct({ product, quantity: newQty });
-//             console.log("qty "+newres);
-//             return { ...prevQuantities, [product.id]: newQty };
-//         });
-//
-//       // setQuantities(prev => {
-//       //   const currentQty = prev[product.id] || 0;
-//       //   // console.log("Current quantity:  of prod "+product.id+" qty currentQty"+currentQty);
-//
-//       //   let newQty = action === 'add' ? currentQty + 1 : Math.max(0, currentQty - 1);
-//       //     // console.log("Current quantity:  of prod "+product.id+" qty update currentQty"+newQty);
-//       //   // addToCart(product,newQty);
-//       //   setPendingProduct({ product, quantity: newQty });
-//
-//       // return { ...prev, [product.id]: newQty };
-//       // });
-//
-//
-//   // console.log(" Quantities "+quantities.id+" name "+quantities.name)
-// };
-
-
      // helper function to get product quantity from context
      const getQuantity = (productId) => {
          const item = cart.find((i) => i.id === productId);
@@ -208,6 +163,8 @@ const SCROLL_STEP = (LOGO_WIDTH + LOGO_MARGIN_RIGHT) * 3;
          navigation.navigate('SeeAllProducts', { productsdiscount: products });
      };
 
+
+
      const onSeeAll=()=>{
          alert('See All clicked!');
      }
@@ -221,7 +178,8 @@ const SCROLL_STEP = (LOGO_WIDTH + LOGO_MARGIN_RIGHT) * 3;
      const ITEM_WIDTH = (SCREEN_WIDTH - ITEM_MARGIN * (NUM_COLUMNS + 1)) / NUM_COLUMNS;
      // Show only first 2*NUM_COLUMNS products (2 rows)
      const limitedProducts = toppick.slice(0, NUM_COLUMNS * 2);
-
+     const [searchText, setSearchText] = useState('');
+     const [profileVisible, setProfileVisible] = useState(false);
      const renderProductItem = ({ item }) => (
          <View style={[styles.productCardDiscount, { width: ITEM_WIDTH }]}>
              {/* Product image */}
@@ -315,6 +273,20 @@ const SCROLL_STEP = (LOGO_WIDTH + LOGO_MARGIN_RIGHT) * 3;
     // </SafeAreaView>
     <SafeAreaView style={styles.container}>
       <Header  title="Ecommerce App"/>
+        <View style={styles.searchSection}>
+
+
+            <TouchableOpacity style={styles.profileIcon} onPress={() => setProfileVisible(true)}>
+                <Ionicons name="person-circle-outline" size={36} color="#333" />
+            </TouchableOpacity>
+            <TextInput
+                style={styles.searchInput}
+                placeholder="Search products..."
+                placeholderTextColor="#777"
+                value={searchText}
+                onChangeText={setSearchText}
+            />
+        </View>
       <ScrollView style={styles.scrollSection} contentContainerStyle={{ paddingBottom: 80 }}>
         <View style={{ flexDirection: 'row', width: '100%', marginBottom: 10 }}>
           <TouchableOpacity style={{ flex: 1, marginRight: 5 }} onPress={() => setModalVisible(true)}>
@@ -453,67 +425,6 @@ const SCROLL_STEP = (LOGO_WIDTH + LOGO_MARGIN_RIGHT) * 3;
                       columnWrapperStyle={{ justifyContent: "space-between" }}
                       contentContainerStyle={{ paddingBottom: 20 }}
                   />
-                  {/*{products.map((product) => {*/}
-                  {/*    const quantity = productQuantities[product.id];*/}
-
-                  {/*    return(*/}
-                  {/*        <View key={product.id} style={styles.productCard}>*/}
-                  {/*            <View style={styles.imageContainer}>*/}
-                  {/*                <Image source={{ uri: product.image }} style={styles.productImage}  />*/}
-                  {/*                /!* Overlay heart and cart quantity controls in top right *!/*/}
-                  {/*                /!* Icons over image *!/*/}
-                  {/*                <View style={styles.iconWrapperHeart}>*/}
-                  {/*                    /!*<TouchableOpacity style={styles.iconButton}>*!/*/}
-                  {/*                    /!*    <FontAwesome name="heart" size={20} color="red" />*!/*/}
-                  {/*                    /!*</TouchableOpacity>*!/*/}
-                  {/*                    <TouchableOpacity onPress={() => handleWishlist(product.id, product.name)}>*/}
-                  {/*                        <Ionicons*/}
-                  {/*                            name={wishlist.includes(product.id) ? "heart" : "heart-outline"}*/}
-                  {/*                            size={24}*/}
-                  {/*                            color={wishlist.includes(product.id) ? "red" : "gray"}*/}
-                  {/*                        />*/}
-                  {/*                    </TouchableOpacity>*/}
-                  {/*                </View>*/}
-                  {/*                <View style={styles.iconWrapper}>*/}
-                  {/*                    {quantity === 0 ? (*/}
-                  {/*                        <TouchableOpacity style={styles.addtoCart} onPress={() => handlequantity(product, 'add')}>*/}
-                  {/*                            <MaterialIcons name="add" size={20} color="red" />*/}
-                  {/*                            <Text style={{color:"red"}}>Add</Text>*/}
-                  {/*                        </TouchableOpacity>*/}
-                  {/*                    ) : (*/}
-                  {/*                        <View style={styles.cartControl}>*/}
-                  {/*                            <TouchableOpacity onPress={() => handlequantity(product, 'minus')}>*/}
-                  {/*                                <FontAwesome name="minus" size={18} color="white"  />*/}
-                  {/*                            </TouchableOpacity>*/}
-
-                  {/*                            <Text style={styles.qtyText}>{quantity}</Text>*/}
-
-                  {/*                            <TouchableOpacity onPress={() => handlequantity(product, 'add')}>*/}
-                  {/*                                <FontAwesome name="plus" size={18} color="white"  />*/}
-                  {/*                            </TouchableOpacity>*/}
-                  {/*                        </View>*/}
-                  {/*                    )}*/}
-                  {/*                </View>*/}
-
-                  {/*            </View>*/}
-                  {/*            /!*<View style={{ flex: 1 ,flexDirection: 'row', justifyContent: 'space-between',marginBottom: 4,paddingHorizontal:10}}>*!/*/}
-                  {/*            /!*    <Text style={styles.productName}>{product.name}</Text>*!/*/}
-                  {/*            /!*    <Text style={styles.priceText}>₹99</Text>*!/*/}
-                  {/*            /!*</View>*!/*/}
-                  {/*            /!* Name and price below image *!/*/}
-                  {/*            <View style={{display: 'flex', flexDirection: 'row',justifyContent: 'space-between',marginVertical:2,paddingVertical:2,paddingHorizontal:7}}>*/}
-                  {/*                <Text style={styles.productNameDiscount} numberOfLines={1}>*/}
-                  {/*                    {product.name}*/}
-                  {/*                </Text>*/}
-                  {/*                <View style={{display:'flex', flexDirection: 'row', gap:'0',paddingHorizontal:6}}>*/}
-                  {/*                    <Text style={styles.originalPrice}>Rs.90</Text>*/}
-                  {/*                    <Text style={styles.discountedPrice}>Rs.45</Text>*/}
-                  {/*                </View>*/}
-                  {/*            </View>*/}
-                  {/*        </View>*/}
-                  {/*    );*/}
-                  {/*})}*/}
-              {/*</View>*/}
           </View>
           <View>
               {/* Header */}
@@ -533,14 +444,7 @@ const SCROLL_STEP = (LOGO_WIDTH + LOGO_MARGIN_RIGHT) * 3;
                   columnWrapperStyle={{ justifyContent: "space-between" }}
                   contentContainerStyle={{ paddingBottom: 20 }}
               />
-              {/*<FlatList*/}
-              {/*    data={limitedProducts}*/}
-              {/*    keyExtractor={(item) => item.id}*/}
-              {/*    renderItem={renderProductItem}*/}
-              {/*    numColumns={NUM_COLUMNS}*/}
-              {/*    scrollEnabled={false} // disable inner scroll, show all items in two rows*/}
-              {/*    contentContainerStyle={styles.flatListContainer}*/}
-              {/*/>*/}
+
           </View>
           {/*60% product*/}
           <View>
@@ -561,14 +465,7 @@ const SCROLL_STEP = (LOGO_WIDTH + LOGO_MARGIN_RIGHT) * 3;
                   columnWrapperStyle={{ justifyContent: "space-between" }}
                   contentContainerStyle={{ paddingBottom: 20 }}
               />
-              {/*<FlatList*/}
-              {/*    data={limitedProducts}*/}
-              {/*    keyExtractor={(item) => item.id}*/}
-              {/*    renderItem={renderProductItem}*/}
-              {/*    numColumns={NUM_COLUMNS}*/}
-              {/*    scrollEnabled={false} // disable inner scroll, show all items in two rows*/}
-              {/*    contentContainerStyle={styles.flatListContainer}*/}
-              {/*/>*/}
+
           </View>
           {/*Category Grid*/}
           <CategoryGrid  />
@@ -653,8 +550,45 @@ const SCROLL_STEP = (LOGO_WIDTH + LOGO_MARGIN_RIGHT) * 3;
           })}
         </View>
       </ScrollView>
+        <Modal
+            animationType="slide"
+            transparent={true}
+            visible={profileVisible}
+            onRequestClose={() => setProfileVisible(false)}
+        >
+            <TouchableOpacity
+                style={styles.drawerOverlay}
+                activeOpacity={1}
+                onPressOut={() => setProfileVisible(false)}
+            >
+                <Animated.View style={styles.drawerContainer}>
+                    <View style={styles.drawerHeader}>
+                        <Ionicons name="person-circle" size={60} color="gray" />
+                        <Text style={{ fontSize: 18, fontWeight: '600', marginTop: 5 }}>John Doe</Text>
+                        <Text style={{ fontSize: 14, color: 'gray' }}>johndoe@example.com</Text>
+                    </View>
 
-      {/* Modal */}
+                    <View style={styles.drawerBody}>
+                        <TouchableOpacity style={styles.drawerItem}>
+                            <Ionicons name="cart-outline" size={22} color="#333" />
+                            <Text style={styles.drawerText}>My Orders</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={styles.drawerItem}>
+                            <Ionicons name="heart-outline" size={22} color="#333" />
+                            <Text style={styles.drawerText}>Wishlist</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={styles.drawerItem}>
+                            <Ionicons name="log-out-outline" size={22} color="#333" />
+                            <Text style={styles.drawerText}>Logout</Text>
+                        </TouchableOpacity>
+                    </View>
+                </Animated.View>
+            </TouchableOpacity>
+        </Modal>
+
+        {/* Modal */}
       <Modal
         visible={modalVisible}
         transparent
@@ -705,6 +639,55 @@ const SCROLL_STEP = (LOGO_WIDTH + LOGO_MARGIN_RIGHT) * 3;
 }
 
 const styles = StyleSheet.create({
+    searchSection: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginVertical: 10,
+        marginHorizontal: 10,
+    },
+    searchInput: {
+        flex: 0.85,
+        backgroundColor: '#f2f2f2',
+        borderRadius: 25,
+        paddingHorizontal: 15,
+        height: 45,
+        fontSize: 16,
+    },
+    profileIcon: {
+        flex: 0.15,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    drawerOverlay: {
+        flex: 1,
+        backgroundColor: 'rgba(0,0,0,0.4)',
+        flexDirection: 'row',
+    },
+    drawerContainer: {
+        width: '75%',
+        backgroundColor: '#fff',
+        height: '100%',
+        paddingTop: 60,
+        paddingHorizontal: 20,
+        borderTopRightRadius: 20,
+        borderBottomRightRadius: 20,
+    },
+    drawerHeader: {
+        alignItems: 'center',
+        marginBottom: 30,
+    },
+    drawerBody: {
+        gap: 20,
+    },
+    drawerItem: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 15,
+    },
+    drawerText: {
+        fontSize: 16,
+        fontWeight: '500',
+    },
   container: {
     flex: 1,
     backgroundColor: '#fff',
@@ -739,8 +722,10 @@ const styles = StyleSheet.create({
     productCardTopPicks: {
         width: '10%',
         backgroundColor: '#f2f2f2',
-        borderRadius: 10,
+        borderRadius: 20,
         marginBottom: 15,
+        marginHorizontal:3
+
 
     },
   productImage: {
@@ -1065,7 +1050,7 @@ ratingHeartRow: {
     },
     logoWrapper: {
         marginRight: LOGO_MARGIN_RIGHT,
-        borderRadius: LOGO_WIDTH / 2.7,
+        borderRadius: LOGO_WIDTH / 2.3,
         overflow: 'hidden',
         borderWidth: 1,
         borderColor: '#ccc',
@@ -1149,4 +1134,47 @@ ratingHeartRow: {
     },
 });
 export default HomeScreen;
+
+
+
+
+
+
+
+//    //add or remove items in cart and add item in cart
+//     const handlequantity = (product, action) => {
+//       console.log(`Product ${product.id} action: ${action}`);
+//       const price =90;
+//         setProductQuantities(prevQuantities => {
+//             const currentQty = prevQuantities[product.id] || 0;
+//             console.log("CUrrentqty "+currentQty);
+//             let newQty = currentQty;
+//             if (action === 'add') {
+//                 newQty = currentQty + 1;
+//             } else if (action === 'minus' && currentQty > 0) {
+//                 newQty = currentQty - 1;
+//             }
+//             console.log("qty "+newQty)
+//
+//             const newres= setPendingProduct({ product, quantity: newQty });
+//             console.log("qty "+newres);
+//             return { ...prevQuantities, [product.id]: newQty };
+//         });
+//
+//       // setQuantities(prev => {
+//       //   const currentQty = prev[product.id] || 0;
+//       //   // console.log("Current quantity:  of prod "+product.id+" qty currentQty"+currentQty);
+//
+//       //   let newQty = action === 'add' ? currentQty + 1 : Math.max(0, currentQty - 1);
+//       //     // console.log("Current quantity:  of prod "+product.id+" qty update currentQty"+newQty);
+//       //   // addToCart(product,newQty);
+//       //   setPendingProduct({ product, quantity: newQty });
+//
+//       // return { ...prev, [product.id]: newQty };
+//       // });
+//
+//
+//   // console.log(" Quantities "+quantities.id+" name "+quantities.name)
+// };
+
 
