@@ -7,7 +7,7 @@ import {
 import { Ionicons, MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import CategoryGrid  from "./CategoryGrid";
 
-import Carousel, { Pagination } from 'react-native-snap-carousel';
+// import Carousel, { Pagination } from 'react-native-snap-carousel';
 import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Header from './Header'; // Assuming HomeScreen is exported from this file
@@ -321,25 +321,25 @@ const carouselItems = [
             />
         </View>
 
-        <Carousel
-            ref={carouselRef}
-            data={carouselItems}
-            renderItem={renderItem}
-            sliderWidth={screenWidth}
-            itemWidth={screenWidth - 60}
-            onSnapToItem={(index) => setActiveIndex(index)}
-            autoplay={true}
-            autoplayInterval={3000}
-            loop={true}
-        />
-        <Pagination
-            dotsLength={carouselItems.length}
-            activeDotIndex={activeIndex}
-            containerStyle={styles.paginationContainer}
-            dotStyle={styles.dotStyle}
-            inactiveDotOpacity={0.4}
-            inactiveDotScale={0.6}
-        />
+        {/*<Carousel*/}
+        {/*    ref={carouselRef}*/}
+        {/*    data={carouselItems}*/}
+        {/*    renderItem={renderItem}*/}
+        {/*    sliderWidth={screenWidth}*/}
+        {/*    itemWidth={screenWidth - 60}*/}
+        {/*    onSnapToItem={(index) => setActiveIndex(index)}*/}
+        {/*    autoplay={true}*/}
+        {/*    autoplayInterval={3000}*/}
+        {/*    loop={true}*/}
+        {/*/>*/}
+        {/*<Pagination*/}
+        {/*    dotsLength={carouselItems.length}*/}
+        {/*    activeDotIndex={activeIndex}*/}
+        {/*    containerStyle={styles.paginationContainer}*/}
+        {/*    dotStyle={styles.dotStyle}*/}
+        {/*    inactiveDotOpacity={0.4}*/}
+        {/*    inactiveDotScale={0.6}*/}
+        {/*/>*/}
       <ScrollView style={styles.scrollSection} contentContainerStyle={{ paddingBottom: 80 }}>
         <View style={{ flexDirection: 'row', width: '100%', marginBottom: 10 }}>
           <TouchableOpacity style={{ flex: 1, marginRight: 5 }} onPress={() => setModalVisible(true)}>
