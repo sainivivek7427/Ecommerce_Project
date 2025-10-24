@@ -131,16 +131,19 @@ const onSeeAll = () => {
     const ITEM_MARGIN = 12;
     const ITEM_WIDTH = (SCREEN_WIDTH - ITEM_MARGIN * (NUM_COLUMNS + 1)) / NUM_COLUMNS;
     const limitedCategories = categories.slice(0, NUM_COLUMNS * 3);
-const CategoryGrid = () => {
-    const onCategoryPress = (name) => {
-        Alert.alert('Category', `You clicked on ${name}`);
+
+    const CategoryGrid = () => {
+        const navigation = useNavigation();
+        const onCategoryPress = (item) => {
+        Alert.alert('Category', `You clicked on ${item.name}`);
+        navigation.navigate('CategoryDetail', {  category: item });
 
         // navigation.navigate('CategoryDetail', { categoryId: item.id })
 
     };
 
     const renderCategoryItem = ({ item }) => (
-        <TouchableOpacity style={styles.categoryItem} onPress={() => onCategoryPress(item.name)}>
+        <TouchableOpacity style={styles.categoryItem} onPress={() => onCategoryPress(item)}>
             <Image source={{ uri: item.imageurl }} style={styles.categoryImage} />
             <Text style={{fontSize:14,fontWeight:500,paddingVertical:6}}>{item.name}</Text>
         </TouchableOpacity>

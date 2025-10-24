@@ -115,6 +115,7 @@ export default function CategoriesScreen() {
                                 >
                                     <Text style={styles.subcategoryText}>{subcat.name}</Text>
                                 </TouchableOpacity>
+
                             );
                         })}
                     </View>

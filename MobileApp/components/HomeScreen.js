@@ -7,32 +7,34 @@ import {
 import { Ionicons, MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import CategoryGrid  from "./CategoryGrid";
 
+import Carousel, { Pagination } from 'react-native-snap-carousel';
 import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Header from './Header'; // Assuming HomeScreen is exported from this file
 import BottomBar from '../App';
 import Toast from "react-native-toast-message";
 import {useCart} from "../Context/CartProvider";
+import products from "../JsonData/Products";
 // import { FontAwesome, MaterialIcons  } from '@expo/vector-icons';
-const products = [
-  { id: 1, name: 'Apple', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVnFoJGb5GxF6lyge8lahGyv_nlQrXameFLsgUJAHrwCS1hDR2WdGZ6Es&s',price:'90' },
-  { id: 2, name: 'Banana', image: 'https://upload.wikimedia.org/wikipedia/commons/8/8a/Banana-Single.jpg',price:'90' },
-  { id: 3, name: 'Carrot', image: 'https://i0.wp.com/post.healthline.com/wp-content/uploads/2020/10/carrot-juice-1296x728-header.jpg?w=1155&h=1528',price:'90' },
-  { id: 4, name: 'Tomato', image: 'https://upload.wikimedia.org/wikipedia/commons/1/15/Red_Apple.jpg',price:'90' },
-    { id: 5, name: 'Apple', image: 'https://via.placeholder.com/100?text=Apple',price:'90' },
-  { id: 6, name: 'Banana', image: 'https://via.placeholder.com/100?text=Banana' ,price:'90'},
-  { id: 7, name: 'Carrot', image: 'https://via.placeholder.com/100?text=Carrot' ,price:'90'},
-  { id: 8, name: 'Tomato', image: 'https://via.placeholder.com/100?text=Tomato' ,price:'90'},
-    { id: 9, name: 'Apple', image: 'https://via.placeholder.com/100?text=Apple' ,price:'90'},
-  { id: 10, name: 'Banana', image: 'https://via.placeholder.com/100?text=Banana' ,price:'90'},
-  { id: 11, name: 'Carrot', image: 'https://via.placeholder.com/100?text=Carrot' ,price:'90'},
-  { id: 12, name: 'Tomato', image: 'https://via.placeholder.com/100?text=Tomato' ,price:'90'},
-    { id: 13, name: 'Apple', image: 'https://via.placeholder.com/100?text=Apple' ,price:'90'},
-  { id: 14, name: 'Banana', image: 'https://via.placeholder.com/100?text=Banana' ,price:'90'},
-  { id: 15, name: 'Carrot', image: 'https://via.placeholder.com/100?text=Carrot' ,price:'90'},
-  { id: 16, name: 'Tomato', image: 'https://via.placeholder.com/100?text=Tomato' ,price:'90'},
-  // Add more products as needed
-];
+// const products = [
+//   { id: 1, name: 'Apple', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVnFoJGb5GxF6lyge8lahGyv_nlQrXameFLsgUJAHrwCS1hDR2WdGZ6Es&s',price:'90' },
+//   { id: 2, name: 'Banana', image: 'https://upload.wikimedia.org/wikipedia/commons/8/8a/Banana-Single.jpg',price:'90' },
+//   { id: 3, name: 'Carrot', image: 'https://i0.wp.com/post.healthline.com/wp-content/uploads/2020/10/carrot-juice-1296x728-header.jpg?w=1155&h=1528',price:'90' },
+//   { id: 4, name: 'Tomato', image: 'https://upload.wikimedia.org/wikipedia/commons/1/15/Red_Apple.jpg',price:'90' },
+//     { id: 5, name: 'Apple', image: 'https://via.placeholder.com/100?text=Apple',price:'90' },
+//   { id: 6, name: 'Banana', image: 'https://via.placeholder.com/100?text=Banana' ,price:'90'},
+//   { id: 7, name: 'Carrot', image: 'https://via.placeholder.com/100?text=Carrot' ,price:'90'},
+//   { id: 8, name: 'Tomato', image: 'https://via.placeholder.com/100?text=Tomato' ,price:'90'},
+//     { id: 9, name: 'Apple', image: 'https://via.placeholder.com/100?text=Apple' ,price:'90'},
+//   { id: 10, name: 'Banana', image: 'https://via.placeholder.com/100?text=Banana' ,price:'90'},
+//   { id: 11, name: 'Carrot', image: 'https://via.placeholder.com/100?text=Carrot' ,price:'90'},
+//   { id: 12, name: 'Tomato', image: 'https://via.placeholder.com/100?text=Tomato' ,price:'90'},
+//     { id: 13, name: 'Apple', image: 'https://via.placeholder.com/100?text=Apple' ,price:'90'},
+//   { id: 14, name: 'Banana', image: 'https://via.placeholder.com/100?text=Banana' ,price:'90'},
+//   { id: 15, name: 'Carrot', image: 'https://via.placeholder.com/100?text=Carrot' ,price:'90'},
+//   { id: 16, name: 'Tomato', image: 'https://via.placeholder.com/100?text=Tomato' ,price:'90'},
+//   // Add more products as needed
+// ];
 
 const toppick = [
     { id: 1, name: 'Apple', images: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVnFoJGb5GxF6lyge8lahGyv_nlQrXameFLsgUJAHrwCS1hDR2WdGZ6Es&s',price:'90' },
@@ -57,13 +59,44 @@ const toppick = [
 const LOGO_WIDTH = 100;
 const LOGO_MARGIN_RIGHT = 12;
 const SCROLL_STEP = (LOGO_WIDTH + LOGO_MARGIN_RIGHT) * 3;
-
+const carouselItems = [
+    {
+        title: 'Item 1',
+        text: 'Text 1',
+        image: { uri: 'https://i.imgur.com/CzXTtJV.jpg' },
+    },
+    {
+        title: 'Item 2',
+        text: 'Text 2',
+        image: { uri: 'https://i.imgur.com/OB0y6MR.jpg' },
+    },
+    {
+        title: 'Item 3',
+        text: 'Text 3',
+        image: { uri: 'https://i.imgur.com/2nCt3Sbl.jpg' },
+    },
+    {
+        title: 'Item 4',
+        text: 'Text 4',
+        image: { uri: 'https://i.imgur.com/lceHsT6l.jpg' },
+    },
+];
  const  HomeScreen=()=> {
   const { addToCart ,cart,updateQuantity,removeFromCart} = useCart();
   const [modalVisible, setModalVisible] = useState(false);
   const [wishlist, setWishlist] = useState([]);
   const [quantities, setQuantities] = useState({});
-
+     const [activeIndex, setActiveIndex] = useState(0);
+     const carouselRef = useRef(null);
+     const renderItemCorousel = ({ item }) => {
+         return (
+             <View style={styles.slide}>
+                 <Image source={item.image} style={styles.image} />
+                 <Text style={styles.title}>{item.title}</Text>
+                 <Text>{item.text}</Text>
+             </View>
+         );
+     };
     // State for product quantities (initially 0)
   const [productQuantities, setProductQuantities] = useState(
       products.reduce((acc, product) => {
@@ -287,6 +320,26 @@ const SCROLL_STEP = (LOGO_WIDTH + LOGO_MARGIN_RIGHT) * 3;
                 onChangeText={setSearchText}
             />
         </View>
+
+        <Carousel
+            ref={carouselRef}
+            data={carouselItems}
+            renderItem={renderItem}
+            sliderWidth={screenWidth}
+            itemWidth={screenWidth - 60}
+            onSnapToItem={(index) => setActiveIndex(index)}
+            autoplay={true}
+            autoplayInterval={3000}
+            loop={true}
+        />
+        <Pagination
+            dotsLength={carouselItems.length}
+            activeDotIndex={activeIndex}
+            containerStyle={styles.paginationContainer}
+            dotStyle={styles.dotStyle}
+            inactiveDotOpacity={0.4}
+            inactiveDotScale={0.6}
+        />
       <ScrollView style={styles.scrollSection} contentContainerStyle={{ paddingBottom: 80 }}>
         <View style={{ flexDirection: 'row', width: '100%', marginBottom: 10 }}>
           <TouchableOpacity style={{ flex: 1, marginRight: 5 }} onPress={() => setModalVisible(true)}>
@@ -475,12 +528,12 @@ const SCROLL_STEP = (LOGO_WIDTH + LOGO_MARGIN_RIGHT) * 3;
           </View>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
           {products.map((product) => {
-              const quantity = productQuantities[product.id];
+              const qty = getQuantity(product.id);
 
               return(
               <View key={product.id} style={styles.productCard}>
               <View style={styles.imageContainer}>
-                <Image source={{ uri: product.image }} style={styles.productImage}  />
+                <Image source={{ uri: product.imageurl }} style={styles.productImage}  />
                 {/* Overlay heart and cart quantity controls in top right */}
                   {/* Icons over image */}
                   <View style={styles.iconWrapperHeart}>
@@ -496,7 +549,7 @@ const SCROLL_STEP = (LOGO_WIDTH + LOGO_MARGIN_RIGHT) * 3;
                       </TouchableOpacity>
                   </View>
                   <View style={styles.iconWrapper}>
-                      {quantity === 0 ? (
+                      {qty === 0 ? (
                           <TouchableOpacity style={styles.addtoCart} onPress={() => handlequantity(product, 'add')}>
                               <MaterialIcons name="add" size={20} color="red" />
                               <Text style={{color:"red"}}>Add</Text>
@@ -507,7 +560,7 @@ const SCROLL_STEP = (LOGO_WIDTH + LOGO_MARGIN_RIGHT) * 3;
                                   <FontAwesome name="minus" size={18} color="white"  />
                               </TouchableOpacity>
 
-                              <Text style={styles.qtyText}>{quantity}</Text>
+                              <Text style={styles.qtyText}>{qty}</Text>
 
                               <TouchableOpacity onPress={() => handlequantity(product, 'add')}>
                                   <FontAwesome name="plus" size={18} color="white"  />

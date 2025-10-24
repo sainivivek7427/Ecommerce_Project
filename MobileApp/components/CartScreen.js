@@ -94,12 +94,12 @@ const CartScreen = () => {
     const finalTotal = cartTotal + gstAmount + deliveryCharges - discount;
 
     const renderItem = ({ item }) => {
-        console.log("item. image is " + item.images)
+        console.log("item. image is " + item.imageurl)
         return (<View style={styles.cartItem}>
-            <Image source={{uri: item.images}} style={styles.productImageDiscounts}/>
+            <Image source={{uri: item.imageurl}} style={styles.productImageDiscounts}/>
             <View style={{display: "flex", flexDirection:'column',gap:4,justifyContent:'space-between'}}>
                 <View>
-                    <Text style={styles.name}>{item.name} Price - {item.price}</Text>
+                    <Text style={{fontSize:14}}>{item.name.length>=20?item.name.substring(0,26):item.name} </Text>
                 </View>
 
                 <View >
@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
     },
     name: { fontSize: 16 },
-    price: { fontSize: 16, fontWeight: "bold" },
+    price: { fontSize: 14, fontWeight: "bold" },
     removeBtn: {
         backgroundColor: "red",
         paddingHorizontal: 4,
