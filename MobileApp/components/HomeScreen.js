@@ -6,15 +6,16 @@ import {
 } from 'react-native';
 import { Ionicons, MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import CategoryGrid  from "./CategoryGrid";
-
-// import Carousel, { Pagination } from 'react-native-snap-carousel';
+import Carousel from 'react-native-reanimated-carousel';
 import {NavigationContainer, useNavigation} from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Header from './Header'; // Assuming HomeScreen is exported from this file
 import BottomBar from '../App';
 import Toast from "react-native-toast-message";
 import {useCart} from "../Context/CartProvider";
 import products from "../JsonData/Products";
+
+import {useWishlist} from "../Context/WishlistContext";
+import {add} from "react-native/Libraries/Animated/AnimatedExports";
 // import { FontAwesome, MaterialIcons  } from '@expo/vector-icons';
 // const products = [
 //   { id: 1, name: 'Apple', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVnFoJGb5GxF6lyge8lahGyv_nlQrXameFLsgUJAHrwCS1hDR2WdGZ6Es&s',price:'90' },
@@ -81,12 +82,19 @@ const carouselItems = [
         image: { uri: 'https://i.imgur.com/lceHsT6l.jpg' },
     },
 ];
+
+const screenWidth = Dimensions.get('window').width;
+
+
+
  const  HomeScreen=()=> {
-  const { addToCart ,cart,updateQuantity,removeFromCart} = useCart();
+const navigation=useNavigation();
+     const { addToWishlist, removeFromWishlist, isInWishlist,wishlist } = useWishlist();
+  const { addToCart ,cart,updateQuantity,removeFromCart,getWishlist,getQuantity} = useCart();
   const [modalVisible, setModalVisible] = useState(false);
-  const [wishlist, setWishlist] = useState([]);
+  // const [wishlist, setWishlist] = useState([]);
   const [quantities, setQuantities] = useState({});
-     const [activeIndex, setActiveIndex] = useState(0);
+     // const [activeIndex, setActiveIndex] = useState(0);
      const carouselRef = useRef(null);
      const renderItemCorousel = ({ item }) => {
          return (
@@ -97,6 +105,8 @@ const carouselItems = [
              </View>
          );
      };
+
+     const screenWidth = Dimensions.get('window').width;
     // State for product quantities (initially 0)
   const [productQuantities, setProductQuantities] = useState(
       products.reduce((acc, product) => {
@@ -108,22 +118,43 @@ const carouselItems = [
 
 
 
-  useEffect(() => {
-    console.log("wishlist updated: ", wishlist);
-  }, [wishlist]);
+  // useEffect(() => {
+  //   console.log("wishlist updated: ", wishlist);
+  // }, [wishlist]);
 
-  const handleWishlist = (productId,productName) => {
-    console.log(`Toggling wishlist for product ID: ${productId}, Name: ${productName}`);
-      setWishlist((prev) =>
-        prev.includes(productId)
-          ? prev.filter(id => id !== productId)
-          : [...prev, productId]
+     const [currentIndex, setCurrentIndex] = useState(0);
+  const handleWishlist = (product) => {
+    console.log(`Toggling wishlist for product ID: ${product.id}, Name: ${product.name}`);
+      // // setWishlist((prev) =>
+      // //   prev.includes(product.id)
+      // //     ? prev.filter(id => id !== product.id)
+      // //     : [...prev, product.id]
+      // //
+      // // );
+      //   addToWishlist(product);
+      // // if (isInWishlist(product.id)) {
+      // //     console.log("existing to wish lishslist")
+      // //     removeFromWishlist(product.id);
+      // // } else {
+      // //     console.log("wishlist exist found")
+      // //     addToWishlist(product);
+      // // }
 
-      );
+      if (isInWishlist(product.id)) {
+          removeFromWishlist(product.id);
+          console.log("Removed from wishlist ✅");
+      } else {
+          addToWishlist(product);
+          console.log("Added to wishlist ✅");
+      }
       //Api call
-      console.log(`Product ${productId} and product name ${productName} added to wishlist`);
+      console.log(`Product ${product.id} and product name ${product.name} added to wishlist`);
 
     };
+  const navigateWishlistPage=()=>{
+      console.log("Alert wishlist page clicked ");
+      navigation.navigate('Wishlist');
+  }
 
     const handleYes = () => {
         setModalVisible(false);
@@ -131,10 +162,10 @@ const carouselItems = [
     };
 
      // helper function to get product quantity from context
-     const getQuantity = (productId) => {
-         const item = cart.find((i) => i.id === productId);
-         return item ? item.quantity : 0;
-     };
+     // const getQuantity = (productId) => {
+     //     const item = cart.find((i) => i.id === productId);
+     //     return item ? item.quantity : 0;
+     // };
 
      const handlequantity = (product, action) => {
          const qty = getQuantity(product.id);
@@ -168,7 +199,7 @@ const carouselItems = [
      const scrollViewRef = useRef(null);
      const [currentScrollX, setCurrentScrollX] = useState(0);
      const [maxScrollX, setMaxScrollX] = useState(0);
-
+     const [activeIndex, setActiveIndex] = useState(0);
      const onScroll = (e) => {
          setCurrentScrollX(e.nativeEvent.contentOffset.x);
      };
@@ -190,7 +221,7 @@ const carouselItems = [
              setCurrentScrollX(newX);
          }
      };
-     const navigation = useNavigation();
+
      const onSeeAlldiscount50 = () => {
          // alert('See All clicked!');
          navigation.navigate('SeeAllProducts', { productsdiscount: products });
@@ -206,6 +237,7 @@ const carouselItems = [
 // Adjust number of columns here: 2 or 3
      const NUM_COLUMNS = 2;
 
+
 // Calculate item width based on number of columns and margin/padding
      const ITEM_MARGIN = 12;
      const ITEM_WIDTH = (SCREEN_WIDTH - ITEM_MARGIN * (NUM_COLUMNS + 1)) / NUM_COLUMNS;
@@ -213,6 +245,16 @@ const carouselItems = [
      const limitedProducts = toppick.slice(0, NUM_COLUMNS * 2);
      const [searchText, setSearchText] = useState('');
      const [profileVisible, setProfileVisible] = useState(false);
+
+
+
+
+     const images = [
+         { id: 1, url: 'https://images.pexels.com/photos/18105/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=800' },
+         { id: 2, url: 'https://images.pexels.com/photos/404280/pexels-photo-404280.jpeg?auto=compress&cs=tinysrgb&w=800' },
+         { id: 3, url: 'https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg?auto=compress&cs=tinysrgb&w=800' },
+         { id: 4, url: 'https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg?auto=compress&cs=tinysrgb&w=800' },
+     ];
      const renderProductItem = ({ item }) => (
          <View style={[styles.productCardDiscount, { width: ITEM_WIDTH }]}>
              {/* Product image */}
@@ -231,7 +273,7 @@ const carouselItems = [
          </View>
      );
      // const limitedProducts = products.slice(0, 6);
-
+     const data = ['A', 'B', 'C'];
      const renderItem = ({ item }) => {
          // let item;
          const qty = getQuantity(item.id);
@@ -243,11 +285,11 @@ const carouselItems = [
 
                      {/* Wishlist icon */}
                      <View style={styles.iconWrapperHeart}>
-                         <TouchableOpacity onPress={() => handleWishlist(item.id, item.name)}>
+                         <TouchableOpacity onPress={() => handleWishlist(item)}>
                              <Ionicons
-                                 name={wishlist.includes(item.id) ? "heart" : "heart-outline"}
+                                 name={wishlist.some(w => w.id === item.id)? "heart" : "heart-outline"}
                                  size={24}
-                                 color={wishlist.includes(item.id) ? "red" : "gray"}
+                                 color={wishlist.some(w => w.id === item.id) ? "red" : "gray"}
                              />
                          </TouchableOpacity>
                      </View>
@@ -320,27 +362,43 @@ const carouselItems = [
                 onChangeText={setSearchText}
             />
         </View>
+        <ScrollView style={styles.scrollSection} contentContainerStyle={{ paddingBottom: 80 }}>
+        <View style={styles.carouselWrapper}>
+            <Carousel
+                width={screenWidth}
+                height={220}
+                data={images}
+                loop
+                autoPlay
+                autoPlayInterval={2000}
+                scrollAnimationDuration={1000}
+                onSnapToItem={index => setCurrentIndex(index)}
+                pagingEnabled
+                mode="parallax"
+                modeConfig={{
+                    parallaxScrollingScale: 0.9,
+                    parallaxScrollingOffset: 60,
+                }}
+                renderItem={({ item }) => (
+                    <Image source={{ uri: item.url }} style={styles.imageCarousel} />
+                )}
+            />
 
-        {/*<Carousel*/}
-        {/*    ref={carouselRef}*/}
-        {/*    data={carouselItems}*/}
-        {/*    renderItem={renderItem}*/}
-        {/*    sliderWidth={screenWidth}*/}
-        {/*    itemWidth={screenWidth - 60}*/}
-        {/*    onSnapToItem={(index) => setActiveIndex(index)}*/}
-        {/*    autoplay={true}*/}
-        {/*    autoplayInterval={3000}*/}
-        {/*    loop={true}*/}
-        {/*/>*/}
-        {/*<Pagination*/}
-        {/*    dotsLength={carouselItems.length}*/}
-        {/*    activeDotIndex={activeIndex}*/}
-        {/*    containerStyle={styles.paginationContainer}*/}
-        {/*    dotStyle={styles.dotStyle}*/}
-        {/*    inactiveDotOpacity={0.4}*/}
-        {/*    inactiveDotScale={0.6}*/}
-        {/*/>*/}
-      <ScrollView style={styles.scrollSection} contentContainerStyle={{ paddingBottom: 80 }}>
+            {/* Pagination */}
+            <View style={styles.dotContainer}>
+                {images.map((_, index) => (
+                    <View
+                        key={index}
+                        style={[
+                            styles.dot,
+                            currentIndex === index && styles.activeDot,
+                        ]}
+                    />
+                ))}
+            </View>
+        </View>
+
+
         <View style={{ flexDirection: 'row', width: '100%', marginBottom: 10 }}>
           <TouchableOpacity style={{ flex: 1, marginRight: 5 }} onPress={() => setModalVisible(true)}>
             <Text style={{
@@ -432,11 +490,11 @@ const carouselItems = [
                                       {/*<TouchableOpacity style={styles.iconButton}>*/}
                                       {/*    <FontAwesome name="heart" size={20} color="red" />*/}
                                       {/*</TouchableOpacity>*/}
-                                      <TouchableOpacity onPress={() => handleWishlist(product.id, product.name)}>
+                                      <TouchableOpacity onPress={() => handleWishlist(product)}>
                                           <Ionicons
-                                              name={wishlist.includes(product.id) ? "heart" : "heart-outline"}
+                                              name={wishlist.some(w => w.id === product.id)? "heart" : "heart-outline"}
                                               size={22}
-                                              color={wishlist.includes(product.id) ? "red" : "gray"}
+                                              color={wishlist.some(w => w.id === product.id)? "red" : "gray"}
                                           />
                                       </TouchableOpacity>
                                   </View>
@@ -470,6 +528,7 @@ const carouselItems = [
               </View>
 
               {/*<View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>*/}
+
                   <FlatList
                       data={limitedProducts}
                       keyExtractor={(item) => item.id.toString()}
@@ -540,11 +599,11 @@ const carouselItems = [
                       {/*<TouchableOpacity style={styles.iconButton}>*/}
                       {/*    <FontAwesome name="heart" size={20} color="red" />*/}
                       {/*</TouchableOpacity>*/}
-                      <TouchableOpacity onPress={() => handleWishlist(product.id, product.name)}>
+                      <TouchableOpacity onPress={() => handleWishlist(product)}>
                           <Ionicons
-                              name={wishlist.includes(product.id) ? "heart" : "heart-outline"}
+                              name={wishlist.some(w => w.id === product.id)? "heart" : "heart-outline"}
                               size={24}
-                              color={wishlist.includes(product.id) ? "red" : "gray"}
+                              color={wishlist.some(w => w.id === product.id)? "red" : "gray"}
                           />
                       </TouchableOpacity>
                   </View>
@@ -627,7 +686,7 @@ const carouselItems = [
                             <Text style={styles.drawerText}>My Orders</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.drawerItem}>
+                        <TouchableOpacity style={styles.drawerItem} onPress={()=>navigateWishlistPage()}>
                             <Ionicons name="heart-outline" size={22} color="#333" />
                             <Text style={styles.drawerText}>Wishlist</Text>
                         </TouchableOpacity>
@@ -1184,6 +1243,56 @@ ratingHeartRow: {
         color: '#FF4D4D', // or your discount color
         fontSize: 13,
         fontWeight: '600',
+    },
+
+
+    dotStyle: {
+        width: 10,
+        height: 10,
+        borderRadius: 5,
+        backgroundColor: '#000',
+    },
+    imageCorousel:{
+        width: screenWidth - 40,
+        height: 220,
+        borderRadius: 12
+    },
+paginationContainer: {
+    flexDirection: 'row',
+        marginTop: 10,
+},
+
+
+    carouselWrapper: {
+        alignItems: 'center',
+        marginTop: 10,
+    },
+    imageCarousel: {
+        width: screenWidth - 20,
+        height: 220,
+        borderRadius: 14,
+        resizeMode: 'cover',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 6 },
+        shadowOpacity: 0.15,
+        backgroundColor: '#f2f2f2',
+    },
+    dotContainer: {
+        flexDirection: 'row',
+        marginTop: 10,
+        gap: 6,
+        justifyContent: 'center',
+    },
+    dot: {
+        width: 7,
+        height: 7,
+        backgroundColor: '#ccc',
+        borderRadius: 50,
+    },
+    activeDot: {
+        width: 8,
+        height: 8,
+        backgroundColor: '#111',
     },
 });
 export default HomeScreen;

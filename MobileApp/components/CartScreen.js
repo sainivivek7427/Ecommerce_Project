@@ -1,44 +1,23 @@
-// import { SafeAreaView, StyleSheet, Text, View, Modal, TouchableOpacity, ScrollView, Image ,Alert} from 'react-native';
-// import { useCart } from './../Context/CartProvider';
-// const CartScreen=()=> {
-//   const { cart, addToCart, getCartItemCount } = useCart();
-//   const total = cart.reduce((sum, item) => sum + item.amount, 0);
-//
-//   return (
-//     <SafeAreaView style={styles.screenContainer}>
-//       <Text style={styles.screenText}>Cart Screen</Text>
-//       <Text>Total Amount: ${total}</Text>
-//       {/* Render cart items here */}
-//     </SafeAreaView>
-//   );
-// }
-// export default CartScreen;
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#fff',
-//   },
-//    screenText: {
-//     fontSize: 24,
-//     fontWeight: 'bold',
-//   },
-//   screenContainer: {
-//     flex: 1,
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-// });
-
 import React, {useState} from "react";
-import {View, Text, FlatList, TouchableOpacity, StyleSheet, Image, SafeAreaView, ScrollView} from "react-native";
+import {
+    View,
+    Text,
+    FlatList,
+    TouchableOpacity,
+    StyleSheet,
+    Image,
+    SafeAreaView,
+    ScrollView,
+    Dimensions
+} from "react-native";
 import { useCart } from "../Context/CartProvider";
 import Header from "./Header";
 import {FontAwesome} from "@expo/vector-icons";
 import HomeScreen from "./HomeScreen";
-
+import {useRoute} from "@react-navigation/native";
+const screenWidth = Dimensions.get('window').width;
 const CartScreen = () => {
     const { getCartItemCount, removeFromCart, getCartTotal ,cart,addToCart,updateQuantity,getQuantity} = useCart();
-    const [quantities, setQuantities] = useState({});
 
     // State for product quantities (initially 0)
     // const [productQuantities, setProductQuantities] = useState(
@@ -92,14 +71,19 @@ const CartScreen = () => {
     const cartTotal = getCartTotal();
     const gstAmount = cartTotal * gstPercent;
     const finalTotal = cartTotal + gstAmount + deliveryCharges - discount;
-
+    const route = useRoute();
+    const { HeaderComp } = route.params||  true;
     const renderItem = ({ item }) => {
         console.log("item. image is " + item.imageurl)
         return (<View style={styles.cartItem}>
-            <Image source={{uri: item.imageurl}} style={styles.productImageDiscounts}/>
-            <View style={{display: "flex", flexDirection:'column',gap:4,justifyContent:'space-between'}}>
+            <View style={{width:'22%'}}>
+                <Image source={{uri: item.imageurl}} style={styles.productImageDiscounts}/>
+            </View>
+
+            <View style={{display: "flex", flexDirection:'column',gap:4,justifyContent:'space-between',width:'47%'}}>
                 <View>
-                    <Text style={{fontSize:14}}>{item.name.length>=20?item.name.substring(0,26):item.name} </Text>
+                    <Text style={{fontSize:14}}         numberOfLines={2}
+                          ellipsizeMode="tail">{item.name}</Text>
                 </View>
 
                 <View >
@@ -120,12 +104,15 @@ const CartScreen = () => {
                     <FontAwesome name="plus" size={18} color="white"/>
                 </TouchableOpacity>
             </View>
-            <TouchableOpacity
-                onPress={() => removeFromCart(item.id)}
-                style={styles.cancelButton}
-            >
-                <FontAwesome name="trash" size={20} color="red" />
-            </TouchableOpacity>
+            <View style={{alignItems:'center',justifyContent:'center',width:'5%',display:'flex'}}>
+                <TouchableOpacity
+                    onPress={() => removeFromCart(item.id)}
+                    style={styles.cancelButton}
+                >
+                    <FontAwesome name="trash" size={20} color="red" />
+                </TouchableOpacity>
+            </View>
+
         </View>);
 
 
@@ -133,7 +120,8 @@ const CartScreen = () => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Header title="Checkout Page"  />
+            {HeaderComp===false? null:<Header title="Checkout Page"  />}
+
             <ScrollView style={styles.scrollSection} contentContainerStyle={{ paddingBottom: 80 }}>
         <View >
             {cart.length === 0 ? (
@@ -213,7 +201,8 @@ const styles = StyleSheet.create({
         borderBottomWidth: 0.5,
         borderColor: "#ccc",
         paddingBottom: 10,
-    },
+        width:'100%'
+       },
     name: { fontSize: 16 },
     price: { fontSize: 14, fontWeight: "bold" },
     removeBtn: {
@@ -223,7 +212,7 @@ const styles = StyleSheet.create({
         borderRadius: 15,
     },
     productImageDiscounts: {
-        width: '70',
+        width: '100%',
         height: '60',
         resizeMode: 'contain',
         borderColor:'2px solid red',
@@ -263,7 +252,7 @@ const styles = StyleSheet.create({
         elevation: 2,
         gap: 10,
         marginBottom:5,
-        color:'red !important',
+        color:'red !important',width:'20%'
     },
     // totalText: {
     //     fontSize: 16,

@@ -13,6 +13,7 @@ import {
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {FontAwesome, Ionicons, MaterialIcons} from "@expo/vector-icons";
 import {useCart} from "../Context/CartProvider";
+import {useWishlist} from "../Context/WishlistContext";
 const categories = [
     {
         "id": "groceries",
@@ -132,10 +133,11 @@ const LOGO_WIDTH = 100;
 const LOGO_MARGIN_RIGHT = 12;
 const SCROLL_STEP = (LOGO_WIDTH + LOGO_MARGIN_RIGHT) * 3;
 const CategoryDetail = () => {
+    const { addToWishlist, removeFromWishlist, isInWishlist,wishlist } = useWishlist();
     const { addToCart ,cart,updateQuantity,removeFromCart} = useCart();
     const route = useRoute();
     const { category } = route.params;
-    const [wishlist, setWishlist] = useState([]);
+    // const [wishlist, setWishlist] = useState([]);
 
 
     const [productsPick,setProductsPick] = useState(products);
@@ -155,18 +157,35 @@ const CategoryDetail = () => {
     const onScroll = (e) => {
         setCurrentScrollX(e.nativeEvent.contentOffset.x);
     };
-    const handleWishlist = (productId,productName) => {
-        console.log(`Toggling wishlist for product ID: ${productId}, Name: ${productName}`);
-        setWishlist((prev) =>
-            prev.includes(productId)
-                ? prev.filter(id => id !== productId)
-                : [...prev, productId]
+    const handleWishlist = (product) => {
+        console.log(`Toggling wishlist for product ID: ${product.id}, Name: ${product.name}`);
+        // // setWishlist((prev) =>
+        // //   prev.includes(product.id)
+        // //     ? prev.filter(id => id !== product.id)
+        // //     : [...prev, product.id]
+        // //
+        // // );
+        //   addToWishlist(product);
+        // // if (isInWishlist(product.id)) {
+        // //     console.log("existing to wish lishslist")
+        // //     removeFromWishlist(product.id);
+        // // } else {
+        // //     console.log("wishlist exist found")
+        // //     addToWishlist(product);
+        // // }
 
-        );
+        if (isInWishlist(product.id)) {
+            removeFromWishlist(product.id);
+            console.log("Removed from wishlist ✅");
+        } else {
+            addToWishlist(product);
+            console.log("Added to wishlist ✅");
+        }
         //Api call
-        console.log(`Product ${productId} and product name ${productName} added to wishlist`);
+        console.log(`Product ${product.id} and product name ${product.name} added to wishlist`);
 
     };
+
 
     const navigation = useNavigation();
 
@@ -283,14 +302,14 @@ const CategoryDetail = () => {
 
                     <View style={{flexDirection: "row", paddingHorizontal: 6}}>
                         <Text style={styles.originalPrice}>Rs.90</Text>
-                        <Text style={styles.discountedPrice}>Rs.45</Text>
+                        <Text style={styles.discountedPrice}>{item.price}</Text>
                     </View>
                     <View style={styles.iconWrapperHeart}>
-                        <TouchableOpacity onPress={() => handleWishlist(item.id, item.name)}>
+                        <TouchableOpacity onPress={() => handleWishlist(item)}>
                             <Ionicons
-                                name={wishlist.includes(item.id) ? "heart" : "heart-outline"}
+                                name={wishlist.some(w => w.id === item.id) ? "heart" : "heart-outline"}
                                 size={24}
-                                color={wishlist.includes(item.id) ? "red" : "gray"}
+                                color={wishlist.some(w => w.id === item.id) ? "red" : "gray"}
                             />
                         </TouchableOpacity>
                     </View>
