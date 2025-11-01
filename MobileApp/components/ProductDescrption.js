@@ -228,19 +228,31 @@ const ProductDescrption = () => {
                     </View>
 
                 </View>
-                <View style={{width:'80%',margin:'auto'}}>
-                    {
-                        qty>0?(
-                            <TouchableOpacity
-                                style={styles.addtoCart}
-                                onPress={() => navigation.navigate("CartPage",{ HeaderComp: false })}
-                            >
-
-                                <Text style={{color: "red",fontSize:20,width:'100%',padding:12,display:'flex',justifyContent:'center',alignItems:'center',flexDirection:'row'}}>Move to Cart Page</Text>
-                            </TouchableOpacity>
-                        ):(<View></View>)
-                    }
+                <View style={styles.cartContainer}>
+                    {qty > 0 && (
+                        <TouchableOpacity
+                            style={styles.cartButton}
+                            onPress={() => navigation.navigate("CartPage", { HeaderComp: false })}
+                            activeOpacity={0.8}
+                        >
+                            <Ionicons name="cart" size={22} color="#fff" style={{ marginRight: 8 }} />
+                            <Text style={styles.cartButtonText}>Go to Cart</Text>
+                        </TouchableOpacity>
+                    )}
                 </View>
+                {/*<View style={{width:'80%',margin:'auto'}}>*/}
+                {/*    {*/}
+                {/*        qty>0?(*/}
+                {/*            <TouchableOpacity*/}
+                {/*                style={styles.addtoCart}*/}
+                {/*                onPress={() => navigation.navigate("CartPage",{ HeaderComp: false })}*/}
+                {/*            >*/}
+
+                {/*                <Text style={{color: "red",fontSize:20,width:'100%',padding:12,display:'flex',justifyContent:'center',alignItems:'center',flexDirection:'row'}}>Move to Cart Page</Text>*/}
+                {/*            </TouchableOpacity>*/}
+                {/*        ):(<View></View>)*/}
+                {/*    }*/}
+                {/*</View>*/}
             </View>
         </SafeAreaView>
     );
@@ -315,19 +327,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
         alignItems: 'center',
     },
-    cartButton: {
-        flex: 1,
-        paddingVertical: 12,
-        borderRadius: 8,
-        borderWidth: 1,
-        borderColor: '#333',
-        alignItems: 'center',
-        marginRight: 10,
-    },
-    cartButtonText: {
-        fontSize: 16,
-        fontWeight: '600',
-    },
+
     buyButton: {
         paddingVertical: 12,
         paddingHorizontal: 18,
@@ -374,5 +374,35 @@ const styles = StyleSheet.create({
         right:10,
         alignItems: 'center',
 
+    },
+
+
+    cartContainer: {
+        width: "100%",
+        alignItems: "center",
+        marginVertical: 20,
+    },
+
+    cartButton: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "#2874F0", // Flipkart blue
+        paddingVertical: 14,
+        paddingHorizontal: 24,
+        borderRadius: 30,
+        shadowColor: "#000",
+        shadowOpacity: 0.15,
+        shadowOffset: { width: 0, height: 2 },
+        shadowRadius: 4,
+        elevation: 4,
+        width: "90%",
+    },
+
+    cartButtonText: {
+        color: "#fff",
+        fontSize: 18,
+        fontWeight: "bold",
+        textAlign: "center",
     },
 });

@@ -14,7 +14,8 @@ import { useCart } from "../Context/CartProvider";
 import Header from "./Header";
 import {FontAwesome} from "@expo/vector-icons";
 import HomeScreen from "./HomeScreen";
-import {useRoute} from "@react-navigation/native";
+import {useNavigation, useRoute} from "@react-navigation/native";
+import TabNavigator from "./TabNavigator";
 const screenWidth = Dimensions.get('window').width;
 const CartScreen = () => {
     const { getCartItemCount, removeFromCart, getCartTotal ,cart,addToCart,updateQuantity,getQuantity} = useCart();
@@ -70,9 +71,13 @@ const CartScreen = () => {
 
     const cartTotal = getCartTotal();
     const gstAmount = cartTotal * gstPercent;
-    const finalTotal = cartTotal + gstAmount + deliveryCharges - discount;
+    const finalTotal = (cartTotal + gstAmount + deliveryCharges - discount).toFixed(2);
     const route = useRoute();
     const { HeaderComp } = route.params||  true;
+    const navigation = useNavigation();
+    const handleCheckout = () => {
+        navigation.navigate("AddressScreen",{finaltotal:finalTotal.toString(),HeaderComp:false});
+    }
     const renderItem = ({ item }) => {
         console.log("item. image is " + item.imageurl)
         return (<View style={styles.cartItem}>
@@ -137,49 +142,84 @@ const CartScreen = () => {
                         keyExtractor={(item) => item.id.toString()}
                     />
 
+                    {/*<View style={styles.totalBox}>*/}
+                    {/*    /!*<Text style={styles.totalText}>Total: ₹ {getCartTotal()}</Text>*!/*/}
+                    {/*    /!*<TouchableOpacity style={styles.checkoutBtn}>*!/*/}
+                    {/*    /!*    <Text style={{ color: "blue", fontSize: 20,fontWeight:'bold' }}>Checkout</Text>*!/*/}
+                    {/*    /!*</TouchableOpacity>*!/*/}
+
+                    {/*    <Text style={styles.totalText}>Subtotal: ₹ {cartTotal}</Text>*/}
+                    {/*    <Text style={styles.totalText}>Discount: ₹ {discount}</Text>*/}
+                    {/*    <Text style={styles.totalText}>GST (12%): ₹ {gstAmount.toFixed(2)}</Text>*/}
+                    {/*    <Text style={styles.totalText}>Delivery Charges: ₹ {deliveryCharges}</Text>*/}
+                    {/*    <View*/}
+                    {/*        style={{*/}
+                    {/*            borderTopWidth: 1,*/}
+                    {/*            borderColor: "#ccc",*/}
+                    {/*            marginVertical: 8,*/}
+                    {/*            paddingTop: 5,*/}
+                    {/*        }}*/}
+                    {/*    >*/}
+
+                    {/*    </View>*/}
+                    {/*    <View style={{display:'flex',justifyContent:'space-between',flexDirection:'row',gap:'5%'}}>*/}
+                    {/*        <View>*/}
+                    {/*            <Text style={{ fontSize: 18, fontWeight: "bold", }}>*/}
+                    {/*                Total Payable: ₹ {finalTotal.toFixed(2)}*/}
+                    {/*            </Text>*/}
+
+                    {/*        </View>*/}
+                    {/*        <View>*/}
+                    {/*            <TouchableOpacity style={styles.checkoutBtn}>*/}
+                    {/*                <Text style={{ color: "white", fontSize: 20, fontWeight: "bold" }}>*/}
+                    {/*                    Checkout*/}
+                    {/*                </Text>*/}
+                    {/*            </TouchableOpacity>*/}
+                    {/*        </View>*/}
+
+                    {/*    </View>*/}
+
+                    {/*</View>*/}
+
                     <View style={styles.totalBox}>
-                        {/*<Text style={styles.totalText}>Total: ₹ {getCartTotal()}</Text>*/}
-                        {/*<TouchableOpacity style={styles.checkoutBtn}>*/}
-                        {/*    <Text style={{ color: "blue", fontSize: 20,fontWeight:'bold' }}>Checkout</Text>*/}
-                        {/*</TouchableOpacity>*/}
+                        <Text style={styles.totalTitle}>Price Details</Text>
 
-                        <Text style={styles.totalText}>Subtotal: ₹ {cartTotal}</Text>
-                        <Text style={styles.totalText}>Discount: ₹ {discount}</Text>
-                        <Text style={styles.totalText}>GST (12%): ₹ {gstAmount.toFixed(2)}</Text>
-                        <Text style={styles.totalText}>Delivery Charges: ₹ {deliveryCharges}</Text>
-                        <View
-                            style={{
-                                borderTopWidth: 1,
-                                borderColor: "#ccc",
-                                marginVertical: 8,
-                                paddingTop: 5,
-                            }}
-                        >
-
-                        </View>
-                        <View style={{display:'flex',justifyContent:'space-between',flexDirection:'row',gap:'5%'}}>
-                            <View>
-                                <Text style={{ fontSize: 18, fontWeight: "bold", }}>
-                                    Total Payable: ₹ {finalTotal.toFixed(2)}
-                                </Text>
-
-                            </View>
-                            <View>
-                                <TouchableOpacity style={styles.checkoutBtn}>
-                                    <Text style={{ color: "white", fontSize: 20, fontWeight: "bold" }}>
-                                        Checkout
-                                    </Text>
-                                </TouchableOpacity>
-                            </View>
-
+                        <View style={styles.priceRow}>
+                            <Text style={styles.label}>Subtotal</Text>
+                            <Text style={styles.value}>₹ {cartTotal}</Text>
                         </View>
 
+                        <View style={styles.priceRow}>
+                            <Text style={styles.label}>Discount</Text>
+                            <Text style={[styles.value, { color: "green" }]}>− ₹ {discount}</Text>
+                        </View>
+
+                        <View style={styles.priceRow}>
+                            <Text style={styles.label}>GST (12%)</Text>
+                            <Text style={styles.value}>₹ {gstAmount.toFixed(2)}</Text>
+                        </View>
+
+                        <View style={styles.priceRow}>
+                            <Text style={styles.label}>Delivery Charges</Text>
+                            <Text style={styles.value}>₹ {deliveryCharges}</Text>
+                        </View>
+
+                        <View style={styles.divider} />
+
+                        <View style={styles.priceRow}>
+                            <Text style={styles.totalLabel}>Total Payable</Text>
+                            <Text style={styles.totalValue}>₹ {finalTotal}</Text>
+                        </View>
+
+                        <TouchableOpacity style={styles.checkoutBtn} onPress={()=>navigation.navigate("AddressScreen", { finaltotalPrice:finalTotal,HeaderComp:false })}>
+                            <Text style={styles.checkoutText}>Proceed to Checkout</Text>
+                        </TouchableOpacity>
                     </View>
-
                 </>
             )}
         </View>
             </ScrollView>
+            {/*<TabNavigator/>*/}
         </SafeAreaView>
     );
 };
@@ -197,11 +237,16 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
-        marginBottom: 15,
+        marginBottom: 5,
         borderBottomWidth: 0.5,
         borderColor: "#ccc",
         paddingBottom: 10,
-        width:'100%'
+        width:'100%',
+        borderWidth:1,
+        marginVertical: 5,
+        borderRadius: 10,
+        paddingVertical:7,
+        paddingHorizontal:4
        },
     name: { fontSize: 16 },
     price: { fontSize: 14, fontWeight: "bold" },
@@ -219,29 +264,9 @@ const styles = StyleSheet.create({
         borderTopWidth:3,
         borderRadius:20
     },
-    totalBox: {
-        borderTopWidth: 1,
-        borderColor: "#ddd",
-        paddingVertical: 20,
-        display:'flex',
-        justifyContent:'start',
-        alignItems:'flex-end',
-        flexDirection:'column',
-        // marginTop: 10,
-        marginBottom:'0',
-        bottom:0,
-        backgroundColor:'#F0F8FF'
-    },
+
     totalText: { fontSize: 16, fontWeight: "bold", textAlign: "center" },
-    checkoutBtn: {
-        backgroundColor: "black",
-        // marginTop: 15,
-        alignSelf: "flex-end",
-        // padding: 10,
-        borderRadius: 15,
-        paddingVertical:10,
-        paddingHorizontal:20
-    },
+
     cartControl: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -258,4 +283,81 @@ const styles = StyleSheet.create({
     //     fontSize: 16,
     //     marginVertical: 2,
     // },
+
+
+
+
+    totalBox: {
+        backgroundColor: "#fff",
+        padding: 16,
+        borderRadius: 10,
+        marginVertical: 12,
+        marginHorizontal: 0,
+        elevation: 3,
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
+        width:'100%',
+    },
+
+    totalTitle: {
+        fontSize: 18,
+        fontWeight: "bold",
+        color: "#333",
+        marginBottom: 12,
+        borderBottomWidth: 1,
+        borderBottomColor: "#ddd",
+        paddingBottom: 6,
+    },
+
+    priceRow: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        marginVertical: 6,
+    },
+
+    label: {
+        fontSize: 16,
+        color: "#555",
+    },
+
+    value: {
+        fontSize: 16,
+        fontWeight: "500",
+        color: "#333",
+    },
+
+    divider: {
+        borderTopWidth: 1,
+        borderColor: "#ddd",
+        marginVertical: 10,
+    },
+
+    totalLabel: {
+        fontSize: 17,
+        fontWeight: "bold",
+        color: "#111",
+    },
+
+    totalValue: {
+        fontSize: 17,
+        fontWeight: "bold",
+        color: "#111",
+    },
+
+    checkoutBtn: {
+        backgroundColor: "#2874F0", // Flipkart blue
+        paddingVertical: 12,
+        borderRadius: 8,
+        alignItems: "center",
+        marginTop: 18,
+    },
+
+    checkoutText: {
+        color: "#fff",
+        fontSize: 18,
+        fontWeight: "bold",
+        textTransform: "uppercase",
+    },
 });

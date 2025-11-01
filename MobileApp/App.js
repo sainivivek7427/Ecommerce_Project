@@ -9,7 +9,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Toast from "react-native-toast-message";
 import { CartProvider } from './Context/CartProvider';
 import TabNavigator from './components/TabNavigator';
-import {WishlistProvider} from "./Context/WishlistContext"; // Assuming TabNavigator is exported from this file
+import {WishlistProvider} from "./Context/WishlistContext";
+import HomeStackNavigator from "./Navigator/HomeStackNavigator"; // Assuming TabNavigator is exported from this file
 // function BottomBar() {
 //   return (
 //     <View style={styles.bottomBar}>
@@ -41,7 +42,7 @@ export default function App() {
       <CartProvider>
           <WishlistProvider>
     <NavigationContainer>
-      <TabNavigator />
+      <HomeStackNavigator />
         <Toast />
       <StatusBar style="auto" />
     </NavigationContainer>

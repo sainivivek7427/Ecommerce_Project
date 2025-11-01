@@ -1,27 +1,55 @@
 
-import {Animated, FlatList, SafeAreaView, Text, TouchableOpacity, View,Image} from "react-native";
+import {Animated, FlatList, SafeAreaView, Text, TouchableOpacity, View, Image, Alert,useNa} from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import {useWishlist} from "../Context/WishlistContext";
 import Header from "./Header";
+// import {NavigationContainer, useNavigation} from '@react-navigation/native';
+import { StyleSheet } from "react-native";
+import React from "react";
+import {useNavigation, useRoute} from "@react-navigation/native";
 
 const WishlistScreen = () => {
     const {wishlist, removeFromWishlist} = useWishlist();
-
-
+    const navigation=useNavigation();
+    const route = useRoute();
+    const { HeaderComp } = route.params || true;
+    const  navigateProduct=(item)=>{
+        navigation.navigate("ProductDescription",{ productBasedCategories: item });
+    }
     const renderItem = ({item}) => {
 
-    console.log(item);
-    return (
-        <Animated.View style={styles.cartItem}>
-            <Image source={{uri: item.images}} style={styles.productImageDiscounts}/>
+    console.log(item.imageurl);
 
-            <View style={{flex: 1, marginLeft: 10}}>
-                <Text style={{fontSize: 14}} numberOfLines={2} ellipsizeMode="tail">
-                    {item.name}
-                </Text>
-                <Text style={styles.price}>₹{item.price}</Text>
-            </View>
+
+    return (
+        <TouchableOpacity onPress={() => navigateProduct(item)}>
+        <Animated.View style={styles.cartItem}>
+
+                <Image source={{uri: item.imageurl}} style={styles.productImageDiscounts}/>
+                <View style={{display: "flex", flexDirection:'column',flex:1}}>
+
+
+                    <View style={{flex: 1, marginLeft: 10}}>
+                        <Text style={{fontSize: 14}} numberOfLines={2} ellipsizeMode="tail">
+                            {item.name}
+                        </Text>
+
+                    </View>
+                    <View style={{marginLeft:10,justifyContent:'space-between',display:'flex',alignItems:'center',flexDirection:'row'}}>
+                        <Text style={styles.price}>₹{item.price}</Text>
+                        {/*<Text style={styles.price}>₹{item.price}</Text>*/}
+                        <TouchableOpacity
+                            onPress={() => removeFromWishlist(item.id)}
+                            style={styles.cancelButton}
+                        >
+                            <FontAwesome name="trash" size={20} color="red" />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+
+
         </Animated.View>
+        </TouchableOpacity>
     )
     // <Swipeable renderRightActions={() => renderRightActions(item.id)}>
 
@@ -30,8 +58,8 @@ const WishlistScreen = () => {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-
-            <Header title="Wishlist" />
+            {HeaderComp===false? null:<Header title="Wishlist"  />}
+            {/*<Header title="Wishlist" />*/}
             {wishlist.length === 0 ? (
                 <Text style={styles.emptyText}>❤️ Wishlist is empty</Text>
             ) : (
@@ -46,7 +74,7 @@ const WishlistScreen = () => {
     );
 };
 export default WishlistScreen;
-import { StyleSheet } from "react-native";
+
 
 const styles = StyleSheet.create({
     container: {
@@ -73,7 +101,7 @@ const styles = StyleSheet.create({
         padding: 12,
         marginHorizontal: 10,
         marginVertical: 6,
-        borderRadius: 10,
+        borderRadius: 20,
         elevation: 2,
     },
 

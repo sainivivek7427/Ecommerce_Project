@@ -153,7 +153,7 @@ const navigation=useNavigation();
     };
   const navigateWishlistPage=()=>{
       console.log("Alert wishlist page clicked ");
-      navigation.navigate('Wishlist');
+      navigation.navigate('Wishlist',{HeaderComp:false});
   }
 
     const handleYes = () => {
@@ -586,80 +586,139 @@ const navigation=useNavigation();
               <Text style={styles.headerTitle}>All Products</Text>
           </View>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
-          {products.map((product) => {
-              const qty = getQuantity(product.id);
+          {/*{products.map((product) => {*/}
+          {/*    const qty = getQuantity(product.id);*/}
 
-              return(
-              <View key={product.id} style={styles.productCard}>
-              <View style={styles.imageContainer}>
-                <Image source={{ uri: product.imageurl }} style={styles.productImage}  />
-                {/* Overlay heart and cart quantity controls in top right */}
-                  {/* Icons over image */}
-                  <View style={styles.iconWrapperHeart}>
-                      {/*<TouchableOpacity style={styles.iconButton}>*/}
-                      {/*    <FontAwesome name="heart" size={20} color="red" />*/}
-                      {/*</TouchableOpacity>*/}
-                      <TouchableOpacity onPress={() => handleWishlist(product)}>
-                          <Ionicons
-                              name={wishlist.some(w => w.id === product.id)? "heart" : "heart-outline"}
-                              size={24}
-                              color={wishlist.some(w => w.id === product.id)? "red" : "gray"}
-                          />
-                      </TouchableOpacity>
-                  </View>
-                  <View style={styles.iconWrapper}>
-                      {qty === 0 ? (
-                          <TouchableOpacity style={styles.addtoCart} onPress={() => handlequantity(product, 'add')}>
-                              <MaterialIcons name="add" size={20} color="red" />
-                              <Text style={{color:"red"}}>Add</Text>
-                          </TouchableOpacity>
-                      ) : (
-                          <View style={styles.cartControl}>
-                              <TouchableOpacity onPress={() => handlequantity(product, 'minus')}>
-                                  <FontAwesome name="minus" size={18} color="white"  />
-                              </TouchableOpacity>
+          {/*    return(*/}
+          {/*    <View key={product.id} style={styles.productCard}>*/}
+          {/*    <View style={styles.imageContainer}>*/}
+          {/*      <Image source={{ uri: product.imageurl }} style={styles.productImage}  />*/}
+          {/*      /!* Overlay heart and cart quantity controls in top right *!/*/}
+          {/*        /!* Icons over image *!/*/}
+          {/*        <View style={styles.iconWrapperHeart}>*/}
+          {/*            /!*<TouchableOpacity style={styles.iconButton}>*!/*/}
+          {/*            /!*    <FontAwesome name="heart" size={20} color="red" />*!/*/}
+          {/*            /!*</TouchableOpacity>*!/*/}
+          {/*            <TouchableOpacity onPress={() => handleWishlist(product)}>*/}
+          {/*                <Ionicons*/}
+          {/*                    name={wishlist.some(w => w.id === product.id)? "heart" : "heart-outline"}*/}
+          {/*                    size={24}*/}
+          {/*                    color={wishlist.some(w => w.id === product.id)? "red" : "gray"}*/}
+          {/*                />*/}
+          {/*            </TouchableOpacity>*/}
+          {/*        </View>*/}
+          {/*        <View style={styles.iconWrapper}>*/}
+          {/*            {qty === 0 ? (*/}
+          {/*                <TouchableOpacity style={styles.addtoCart} onPress={() => handlequantity(product, 'add')}>*/}
+          {/*                    <MaterialIcons name="add" size={20} color="red" />*/}
+          {/*                    <Text style={{color:"red"}}>Add</Text>*/}
+          {/*                </TouchableOpacity>*/}
+          {/*            ) : (*/}
+          {/*                <View style={styles.cartControl}>*/}
+          {/*                    <TouchableOpacity onPress={() => handlequantity(product, 'minus')}>*/}
+          {/*                        <FontAwesome name="minus" size={18} color="white"  />*/}
+          {/*                    </TouchableOpacity>*/}
 
-                              <Text style={styles.qtyText}>{qty}</Text>
+          {/*                    <Text style={styles.qtyText}>{qty}</Text>*/}
 
-                              <TouchableOpacity onPress={() => handlequantity(product, 'add')}>
-                                  <FontAwesome name="plus" size={18} color="white"  />
-                              </TouchableOpacity>
-                          </View>
-                      )}
-                  </View>
-               
-              </View>
-                <View style={{ flex: 1 ,flexDirection: 'row', justifyContent: 'space-between',marginBottom: 4,paddingHorizontal:10}}>
-                    <Text style={styles.productName}>{product.name}</Text>
-                    <Text style={styles.priceText}>₹99</Text>
-                </View>
-                {/*<Text style={styles.title}>title</Text>*/}
+          {/*                    <TouchableOpacity onPress={() => handlequantity(product, 'add')}>*/}
+          {/*                        <FontAwesome name="plus" size={18} color="white"  />*/}
+          {/*                    </TouchableOpacity>*/}
+          {/*                </View>*/}
+          {/*            )}*/}
+          {/*        </View>*/}
+          {/*     */}
+          {/*    </View>*/}
+          {/*      <View style={{ flex: 1 ,flexDirection: 'row', justifyContent: 'space-between',marginBottom: 4,paddingHorizontal:10}}>*/}
+          {/*          <Text style={styles.productName}>{product.name}</Text>*/}
+          {/*          <Text style={styles.priceText}>₹99</Text>*/}
+          {/*      </View>*/}
+          {/*      /!*<Text style={styles.title}>title</Text>*!/*/}
               {/*/!* Name and price row below image *!/*/}
-              {/*<View style={{display: 'flex', flexDirection: 'column', width: '100%', marginTop: 8 }}>*/}
-                {/* <Text style={styles.productName}>{product.name}</Text>
-                <Text style={styles.priceText}>₹99</Text>
-                 */}
+          {/*    /!*<View style={{display: 'flex', flexDirection: 'column', width: '100%', marginTop: 8 }}>*!/*/}
+          {/*      /!* <Text style={styles.productName}>{product.name}</Text>*/}
+          {/*      <Text style={styles.priceText}>₹99</Text>*/}
+          {/*       *!/*/}
 
-              {/*  <View style={{flexDirection: 'row', alignItems: 'center',justifyContent: 'space-between'}}>*/}
-              {/*    /!* Example rating: 4 stars *!/*/}
-              {/*    <View style={{ flexDirection: 'row', alignItems: 'center', marginRight: 6 }}>*/}
-              {/*      {[...Array(5)].map((_, i) => (*/}
-              {/*        <Ionicons key={i} name="star" size={16} color="#FFD700" />*/}
-              {/*      ))}*/}
-              {/*    </View>*/}
-              {/*    /!* Heart icon for wishlist (optional, if you want another here) *!/*/}
-              {/*    <TouchableOpacity onPress={() => handleWishlist(product.id, product.name)}>*/}
-              {/*      <Ionicons*/}
-              {/*        name={wishlist.includes(product.id) ? "heart" : "heart-outline"}*/}
-              {/*        size={24}*/}
-              {/*        color={wishlist.includes(product.id) ? "red" : "gray"}*/}
-              {/*      />*/}
-              {/*    </TouchableOpacity>*/}
-              {/*  </View>*/}
-              {/*</View>*/}
-            </View>
-              );
-          })}
+          {/*    /!*  <View style={{flexDirection: 'row', alignItems: 'center',justifyContent: 'space-between'}}>*!/*/}
+          {/*    /!*    /!* Example rating: 4 stars *!/*!/*/}
+          {/*    /!*    <View style={{ flexDirection: 'row', alignItems: 'center', marginRight: 6 }}>*!/*/}
+          {/*    /!*      {[...Array(5)].map((_, i) => (*!/*/}
+          {/*    /!*        <Ionicons key={i} name="star" size={16} color="#FFD700" />*!/*/}
+          {/*    /!*      ))}*!/*/}
+          {/*    /!*    </View>*!/*/}
+          {/*    /!*    /!* Heart icon for wishlist (optional, if you want another here) *!/*!/*/}
+          {/*    /!*    <TouchableOpacity onPress={() => handleWishlist(product.id, product.name)}>*!/*/}
+          {/*    /!*      <Ionicons*!/*/}
+          {/*    /!*        name={wishlist.includes(product.id) ? "heart" : "heart-outline"}*!/*/}
+          {/*    /!*        size={24}*!/*/}
+          {/*    /!*        color={wishlist.includes(product.id) ? "red" : "gray"}*!/*/}
+          {/*    /!*      />*!/*/}
+          {/*    /!*    </TouchableOpacity>*!/*/}
+          {/*    /!*  </View>*!/*/}
+          {/*    /!*</View>*!/*/}
+          {/*  </View>*/}
+          {/*    );*/}
+            {products.map((product) => {
+                const qty = getQuantity(product.id);
+
+                return (
+                    <View key={product.id} style={styles.productCard}>
+                        {/* --- Product Image + Overlay Icons --- */}
+                        <View style={styles.imageContainer}>
+                            <Image source={{ uri: product.imageurl }} style={styles.productImage} />
+
+                            {/* Heart Icon (Wishlist) */}
+                            <TouchableOpacity
+                                style={styles.iconHeart}
+                                onPress={() => handleWishlist(product)}
+                            >
+                                <Ionicons
+                                    name={
+                                        wishlist.some(w => w.id === product.id)
+                                            ? "heart"
+                                            : "heart-outline"
+                                    }
+                                    size={22}
+                                    color={wishlist.some(w => w.id === product.id) ? "red" : "#555"}
+                                />
+                            </TouchableOpacity>
+
+                            {/* Cart Quantity Controls */}
+                            <View style={styles.cartControls}>
+                                {qty === 0 ? (
+                                    <TouchableOpacity
+                                        style={styles.addButton}
+                                        onPress={() => handlequantity(product, "add")}
+                                    >
+                                        <MaterialIcons name="add-shopping-cart" size={18} color="white" />
+                                        <Text style={styles.addText}>Add</Text>
+                                    </TouchableOpacity>
+                                ) : (
+                                    <View style={styles.qtyBox}>
+                                        <TouchableOpacity onPress={() => handlequantity(product, "minus")}>
+                                            <FontAwesome name="minus" size={14} color="white" />
+                                        </TouchableOpacity>
+                                        <Text style={styles.qtyText}>{qty}</Text>
+                                        <TouchableOpacity onPress={() => handlequantity(product, "add")}>
+                                            <FontAwesome name="plus" size={14} color="white" />
+                                        </TouchableOpacity>
+                                    </View>
+                                )}
+                            </View>
+                        </View>
+
+                        {/* --- Product Details --- */}
+                        <View style={styles.infoBox}>
+                            <Text style={styles.productName} numberOfLines={1}>
+                                {product.name}
+                            </Text>
+                            <Text style={styles.priceText}>₹ {product.price}</Text>
+                        </View>
+                    </View>
+                );
+
+            })}
         </View>
       </ScrollView>
         <Modal
@@ -823,14 +882,14 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: 10,
   },
-  productCard: {
-    width: '48%',
-    backgroundColor: '#f2f2f2',
-    borderRadius: 10,
-    marginBottom: 15,
-      // borderColor:'2px solid blue',
-
-  },
+  // productCard: {
+  //   width: '48%',
+  //   backgroundColor: '#f2f2f2',
+  //   borderRadius: 10,
+  //   marginBottom: 15,
+  //     // borderColor:'2px solid blue',
+  //
+  // },
     productCardTopPicks: {
         width: '10%',
         backgroundColor: '#f2f2f2',
@@ -840,12 +899,12 @@ const styles = StyleSheet.create({
 
 
     },
-  productImage: {
-    width: "100%",
-    height: 120,
-    borderRadius: 10,
-    marginBottom: 8,
-  },
+  // productImage: {
+  //   width: "100%",
+  //   height: 120,
+  //   borderRadius: 10,
+  //   marginBottom: 8,
+  // },
     productImage1: {
         width: "100%",
         height: 60,
@@ -853,11 +912,11 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         marginBottom: 8,
     },
-  productName: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
-  },
+  // productName: {
+  //   fontSize: 14,
+  //   elevation:3,
+  //   color: '#333',
+  // },
   productFooter: {
     width: '100%',
     flexDirection: 'row',
@@ -865,11 +924,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 8,
   },
-  priceText: {
-    fontWeight: 'bold',
-    color: '#388e3c',
-    fontSize: 16,
-  },
+  // priceText: {
+  //   // fontWeight: 'b',
+  //   color: '#388e3c',
+  //   fontSize: 14,
+  // },
   // cartSection: {
   //   flexDirection: 'row',
   //   alignItems: 'center',
@@ -1018,9 +1077,9 @@ ratingHeartRow: {
         overflow: 'hidden',
         elevation: 4,
     },
-    imageContainer: {
-        position: 'relative',
-    },
+    // imageContainer: {
+    //     position: 'relative',
+    // },
     image: {
         width: '100%',
         height: 150,
@@ -1113,11 +1172,11 @@ ratingHeartRow: {
         gap: 20,
         marginBottom:5
     },
-    qtyText: {
-        fontSize: 14,
-        fontWeight: 'bold',
-        color:"white"
-    },
+    // qtyText: {
+    //     fontSize: 14,
+    //     fontWeight: 'bold',
+    //     color:"white"
+    // },
     addtoCart : {
         flexDirection:"row",backgroundColor:"white",paddingHorizontal:7,paddingVertical:4,alignItems:"center",marginBottom:6,borderWidth: 2,
         borderColor: 'red', // Blue border outline
@@ -1293,6 +1352,111 @@ paginationContainer: {
         width: 8,
         height: 8,
         backgroundColor: '#111',
+    },
+
+
+
+
+
+
+
+
+    productCard: {
+        backgroundColor: "#fff",
+        borderRadius: 10,
+        margin: 8,
+        width: "45%", // for grid layout (2 per row)
+        shadowColor: "#000",
+        shadowOpacity: 0.1,
+        shadowOffset: { width: 0, height: 2 },
+        shadowRadius: 3,
+        elevation: 3,
+        overflow: "hidden",
+    },
+
+    imageContainer: {
+        position: "relative",
+        width: "100%",
+        height: 150,
+        backgroundColor: "#f9f9f9",
+    },
+
+    productImage: {
+        width: "100%",
+        height: "100%",
+        resizeMode: "cover",
+    },
+
+    // Wishlist heart (top-right)
+    iconHeart: {
+        position: "absolute",
+        top: 8,
+        right: 8,
+        backgroundColor: "rgba(255,255,255,0.8)",
+        borderRadius: 20,
+        padding: 4,
+    },
+
+    // Add / Qty control (bottom-right over image)
+    cartControls: {
+        position: "absolute",
+        bottom: 8,
+        right: 8,
+        alignItems: "flex-end",
+    },
+
+    addButton: {
+        flexDirection: "row",
+        alignItems: "center",
+        backgroundColor: "red",
+        borderWidth: 1,
+        borderColor: "#2874F0",
+        borderRadius: 20,
+        paddingVertical: 4,
+        paddingHorizontal: 10,
+    },
+
+    addText: {
+        color: "white",
+        fontWeight: "600",
+        marginLeft: 4,
+    },
+
+    qtyBox: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        backgroundColor: "red",
+        borderRadius: 20,
+        paddingHorizontal: 10,
+        paddingVertical: 4,
+        minWidth: 80,
+    },
+
+    qtyText: {
+        color: "white",
+        fontSize: 14,
+        fontWeight: "bold",
+        marginHorizontal: 6,
+    },
+
+    // Product info area
+    infoBox: {
+        paddingHorizontal: 10,
+        paddingVertical: 8,
+    },
+
+    productName: {
+        fontSize: 15,
+        fontWeight: "600",
+        color: "#333",
+        marginBottom: 4,
+    },
+
+    priceText: {
+        fontSize: 15,
+        fontWeight: "bold",
+        color: "#111",
     },
 });
 export default HomeScreen;
