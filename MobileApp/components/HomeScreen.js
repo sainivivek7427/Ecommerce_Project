@@ -479,7 +479,7 @@ const navigation=useNavigation();
 
                               </View>
                               {/* Name and price below image */}
-                              <View style={{display: 'flex', flexDirection: 'column',justifyContent: 'space-between',marginVertical:2,paddingVertical:2,paddingHorizontal:7}}>
+                              <View style={{display: 'flex', flexDirection: 'column',justifyContent: 'space-between',marginVertical:2,paddingHorizontal:7}}>
                               <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
                                   <View>
                                       <Text style={styles.productNameDiscount} numberOfLines={1}>
@@ -894,8 +894,9 @@ const styles = StyleSheet.create({
         width: '10%',
         backgroundColor: '#f2f2f2',
         borderRadius: 20,
-        marginBottom: 15,
-        marginHorizontal:3
+        // marginBottom: 15,
+        marginHorizontal:4,
+        height:50
 
 
     },
@@ -907,10 +908,10 @@ const styles = StyleSheet.create({
   // },
     productImage1: {
         width: "100%",
-        height: 60,
+        height: '80%',
         objectFit:'fill',
         borderRadius: 10,
-        marginBottom: 8,
+
     },
   // productName: {
   //   fontSize: 14,
@@ -1198,16 +1199,20 @@ ratingHeartRow: {
         justifyContent: 'space-between',
         alignItems: 'center',
         marginBottom: 15,
-        backgroundColor:"#FF6363",
+        // backgroundColor:"#FF6363",
         padding:5,
         borderRadius:20,
         paddingHorizontal:15,
-        paddingVertical:15,
+        paddingVertical:6,
+        borderBottomWidth:1,
+        borderBottomColor: '#000',
     },
     headerTitle: {
         fontSize: 18,
-        fontWeight: 'bold',
-        color:'white'
+        fontStyle:'normal',
+        fontWeight:500,
+        // fontWeight: 'bold',
+        color:'black'
     },
     seeAllText: {
         fontSize: 16,

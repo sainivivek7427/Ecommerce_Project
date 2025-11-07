@@ -15,6 +15,9 @@ public class Cart {
     @Column(name = "user_id")
     private String userId; // ✅ Plain string, not object
 
+    @Column(name = "status") // ACTIVE, COMPLETED
+    private String status;
+
     @Column(name = "created_date")
     private Long createdDate;
 
@@ -41,5 +44,13 @@ public class Cart {
 
     public void setCreatedDate(Long createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
