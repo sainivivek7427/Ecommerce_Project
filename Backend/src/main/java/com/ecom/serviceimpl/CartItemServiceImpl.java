@@ -25,7 +25,15 @@ public class CartItemServiceImpl implements CartItemService
     @Override
     public void addCartItem(String userId, CartItemRequestDTO request) {
         Cart cart = cartRepository.findByUserId(userId)
-                .orElseThrow(() -> new RuntimeException("Cart not found for user: " + userId));
+                .orElseGet(()->{
+                    Cart cartNew=new Cart();
+                    cartNew.setId(UUID.randomUUID().toString());
+                    cartNew.setStatus("ACTIVE");
+                    cartNew.setCreatedDate(System.currentTimeMillis());
+                    cartNew.setUserId(userId);
+                    return cartRepository.save(cartNew);
+
+                });
 
         CartItem cartItem = new CartItem();
         cartItem.setId(UUID.randomUUID().toString());

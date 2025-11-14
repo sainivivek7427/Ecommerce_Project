@@ -12,11 +12,12 @@ import com.ecom.entity.Customer;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer,String>{
     Optional<Customer> findByUsername(String username);
-    Optional<Customer> findByPhoneno(Long phoneno);
+    Optional<Customer> findByUsernameAndPassword(String username,String password);
+    Optional<Customer> findByPhonenoAndPassword(Long phoneno,String password);
     @Query(value="SELECT * FROM customer WHERE customer.username = :userName AND customer.phoneno = :mobileNumber",nativeQuery=true)
     Customer findByUsernameAndMobileNo(@Param("userName") String userName,@Param("mobileNumber") String mobileNumber);
-    @Query("SELECT c FROM Customer c WHERE c.username = :username AND c.password = :password")
-    Customer findByUsernameAndPassword(@Param("username") String username, @Param("password") String password);
+//    @Query("SELECT c FROM Customer c WHERE c.username = :username AND c.password = :password")
+//    Customer findByUsernameAndPassword(@Param("username") String username, @Param("password") String password);
 
     @Query(value="SELECT * FROM customer WHERE customer.phoneno = :phoneno AND customer.password = :password",nativeQuery=true)
     Customer findByMobileNoAndPassword(@Param("phoneno") Long phoneno,@Param("password") String password);

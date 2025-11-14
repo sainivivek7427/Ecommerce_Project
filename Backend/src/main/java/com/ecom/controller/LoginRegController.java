@@ -3,6 +3,7 @@ package com.ecom.controller;
 import java.util.Map;
 
 import com.ecom.dto.MessageResponseDto;
+import com.ecom.service.CartMergeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +36,9 @@ public class LoginRegController {
     @Autowired private JwtUtil jwtUtil;
 
     @Autowired
+    private CartMergeService cartMergeService;
+
+    @Autowired
     JwtAuthenticationFilter authenticationFilter;
 
     @Autowired
@@ -56,10 +60,10 @@ public class LoginRegController {
             Customer customer=null;
             if(request.getTypeFormat().equals("sms")){
                 Long phoneno=Long.parseLong(request.getTypeValue());
-                customer=customerRepository.findByPhoneno(phoneno).orElseThrow(()->new NullPointerException("User not Found by using phoneno"));
+                customer=customerRepository.findByPhonenoAndPassword(phoneno, request.getPassword()).orElseThrow(()->new NullPointerException("User not Found by using phoneno"));
             }
             else if(request.getTypeFormat().equals("email")){
-                customer=customerRepository.findByUsername(request.getTypeValue()).orElseThrow(()->new NullPointerException("User not Found by using Username"));
+                customer=customerRepository.findByUsernameAndPassword(request.getTypeValue(),request.getPassword()).orElseThrow(()->new NullPointerException("User not Found by using Username"));
             }
             System.out.println("Username "+customer.getUsername()+" Password "+request.getPassword());
             //authentaication manager call the userdetaiservice class to load the database and match the detail if correct or not
@@ -70,9 +74,14 @@ public class LoginRegController {
             UserDetails user = (UserDetails) auth.getPrincipal();
             String accessToken = jwtUtil.generateAccessToken(user);
             String refreshToken = jwtUtil.generateRefreshToken(user);
+            CartMergeService.MergeResult mergeResult=cartMergeService.mergeGuestCartToUser(request.getGuestId(), customer.getCuuid());
             return ResponseEntity.ok(Map.of(
                     "token", accessToken,
-                    "refreshToken", refreshToken
+                    "refreshToken", refreshToken,
+                    "Merge successfully", mergeResult.isMerged(),
+                    "is already merge", mergeResult.isAlreadyMerged(),
+                    "cart item count after merge", mergeResult.getItemCount(),
+                    "message ", mergeResult.getMessage()
             ));
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials "+e.getMessage() );
@@ -86,10 +95,10 @@ public class LoginRegController {
             Customer customer=null;
             if(request.getTypeFormat().equals("sms")){
                 Long phoneno=Long.parseLong(request.getTypeValue());
-                customer=customerRepository.findByPhoneno(phoneno).orElseThrow(()->new NullPointerException("User not Found by using phoneno"));
+                customer=customerRepository.findByPhonenoAndPassword(phoneno, request.getPassword()).orElseThrow(()->new NullPointerException("User not Found by using phoneno"));
             }
             else if(request.getTypeFormat().equals("email")){
-                customer=customerRepository.findByUsername(request.getTypeValue()).orElseThrow(()->new NullPointerException("User not Found by using Username"));
+                customer=customerRepository.findByUsernameAndPassword(request.getTypeValue(),request.getPassword()).orElseThrow(()->new NullPointerException("User not Found by using Username"));
             }
             System.out.println("Username "+customer.getUsername()+" Password "+request.getPassword());
             MessageResponseDto messageResponseDto = new MessageResponseDto();

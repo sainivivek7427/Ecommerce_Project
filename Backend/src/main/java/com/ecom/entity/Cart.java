@@ -21,6 +21,16 @@ public class Cart {
     @Column(name = "created_date")
     private Long createdDate;
 
+    // Helper method to check if this is a guest cart
+    public boolean isGuestCart() {
+        return userId != null && userId.startsWith("guest_");
+    }
+
+    // Helper method to check if this is a user cart
+    public boolean isUserCart() {
+        return userId != null && !userId.startsWith("guest_");
+    }
+
     // Getters and setters
     public String getId() {
         return id;

@@ -17,6 +17,29 @@ public class CartItemController {
     @Autowired
     private CartItemService cartItemService;
 
+//    public ResponseEntity<CartResponse> addToCart(@RequestBody AddToCartRequest request) {
+//        Cart.OwnerType ownerType = request.getUserId() != null
+//                ? Cart.OwnerType.USER
+//                : Cart.OwnerType.GUEST;
+//
+//        String ownerId = request.getUserId() != null
+//                ? request.getUserId()
+//                : request.getGuestId();
+//
+//        Cart cart = cartService.addToCart(
+//                ownerId,
+//                ownerType,
+//                UUID.fromString(request.getProductId()),
+//                request.getQuantity(),
+//                request.getPrice()
+//        );
+//
+//        CartResponse response = new CartResponse();
+//        response.setCart(cart);
+//        response.setSuccess(true);
+//
+//        return ResponseEntity.ok(response);
+//    }
     @PostMapping
     public ResponseEntity<String> addCartItem(@RequestParam("user_id") String userId,
                                               @RequestBody CartItemRequestDTO request) {

@@ -30,6 +30,16 @@ public class Address {
     @Column(name = "houseno")
     private String houseno;
 
+    private Long createDate;
+
+    public Long getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Long createDate) {
+        this.createDate = createDate;
+    }
+
     public String getId() {
         return id;
     }

@@ -71,7 +71,7 @@ public class OtpServiceImpl implements OTPService {
             }
         }
         else if(otpRequestDto.getTypeFormat().equals("email")){
-            customer=customerRepository.findByUsernameAndPassword(otpRequestDto.getTypeValue(),otpRequestDto.getPassword());
+            customer=customerRepository.findByUsernameAndPassword(otpRequestDto.getTypeValue(),otpRequestDto.getPassword()).orElseThrow(()->new NullPointerException("Username not found"));
             if(customer!=null){
                 return generateEmailOtp(customer.getEmail(),otpRequestDto.getDeviceId());
             }

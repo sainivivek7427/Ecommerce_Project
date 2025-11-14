@@ -5,11 +5,13 @@ public class AuthRequest {
     private String typeFormat; //type "email" or "sms"
     private String typeValue; //value username or phoneno
     private String password;
+    private String guestId;
 
-    public AuthRequest(String typeFormat, String typeValue, String password) {
+    public AuthRequest(String typeFormat, String typeValue, String password,String guestId) {
         this.typeFormat = typeFormat;
         this.typeValue = typeValue;
         this.password = password;
+        this.guestId=guestId;
     }
 
     public AuthRequest() {
@@ -37,5 +39,13 @@ public class AuthRequest {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getGuestId() {
+        return guestId;
+    }
+
+    public void setGuestId(String guestId) {
+        this.guestId = guestId;
     }
 }
