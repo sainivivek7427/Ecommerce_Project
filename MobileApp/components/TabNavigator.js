@@ -76,6 +76,7 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {FontAwesome, Ionicons, MaterialIcons} from "@expo/vector-icons";
+// import WishlistItem from "../components/WishlistItem";
 import HomeScreen from "./HomeScreen";
 import CategoriesScreen from "./CategoriesScreen";
 import CartScreen from "./CartScreen";
@@ -111,11 +112,15 @@ export default function TabNavigator() {
         <Tab.Navigator
             screenOptions={({ route }) => ({
                 headerShown: false,
-                tabBarStyle: { backgroundColor: "#333" },
+                tabBarStyle: { backgroundColor: "lightgreen",paddingTop:10,borderRadius:10,marginBottom:12,marginHorizontal:7 },
                 tabBarIcon: ({ color, size }) => {
                     if (route.name === "Home") {
                         return <Ionicons name="home" size={size} color={color} />;
-                    } else if (route.name === "Categories") {
+                    }
+                    else if(route.name=="Wishlist"){
+                        return <MaterialIcons name="wishlist" size={size} color={color} />
+                    }
+                    else if (route.name === "Categories") {
                         return <MaterialIcons name="category" size={size} color={color} />;
                     } else if (route.name === "Cart") {
                         return <FontAwesome name="shopping-cart" size={size} color={color} />;
@@ -124,10 +129,20 @@ export default function TabNavigator() {
                     }
                 },
                 tabBarActiveTintColor: "white",
-                tabBarInactiveTintColor: "#aaa",
+                tabBarInactiveTintColor: "#F7F7F7",
             })}
         >
             <Tab.Screen name="Home" component={HomeScreen} />
+            {/*<Tab.Screen name="Wishlist" component={WishlistScreen} />*/}
+            <Tab.Screen
+                name="Wishlist"
+                component={WishlistScreen}
+                options={{
+                    tabBarIcon: ({ color, size }) => (
+                        <MaterialIcons name="favorite" size={size} color={color} />
+                    ),
+                }}
+            />
             {/*<Tab.Screen name="Categories" component={CategoriesScreen} />*/}
             <Tab.Screen name="Cart" component={CartStack} options={{
                 tabBarBadge:cartCount > 0 ? cartCount : null}}  />

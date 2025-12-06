@@ -399,31 +399,6 @@ const navigation=useNavigation();
         </View>
 
 
-        <View style={{ flexDirection: 'row', width: '100%', marginBottom: 10 }}>
-          <TouchableOpacity style={{ flex: 1, marginRight: 5 }} onPress={() => setModalVisible(true)}>
-            <Text style={{
-              backgroundColor: "skyblue",
-              padding: 10,
-              borderRadius: 30,
-              textAlign: "center",
-              color: "white",
-            }}>
-              Hello World
-            </Text>
-          </TouchableOpacity>
-          <Text style={{
-            backgroundColor: "lightgreen",
-            color: "white",
-            textAlign: "center",
-            padding: 10,
-            borderRadius: 20,
-            flex: 1,
-            marginLeft: 5
-          }}>
-            Success page
-          </Text>
-        </View>
-
           <View style={styles.headerContainer}>
               <Text style={styles.headerTitle}>Top Picks</Text>
               <TouchableOpacity onPress={onSeeAll}>
@@ -451,7 +426,7 @@ const navigation=useNavigation();
                       const qty = getQuantity(product.id);
                       return(
                           <View key={product.id} style={styles.productCardTopPicks}>
-                              <View style={styles.imageContainer}>
+                              <View style={styles.imageContainerTopPicks}>
                                   <Image source={{ uri: product.images}} style={styles.productImage1}  />
                                   {/* Overlay heart and cart quantity controls in top right */}
                                   {/* Icons over image */}
@@ -479,7 +454,7 @@ const navigation=useNavigation();
 
                               </View>
                               {/* Name and price below image */}
-                              <View style={{display: 'flex', flexDirection: 'column',justifyContent: 'space-between',marginVertical:2,paddingHorizontal:7}}>
+                              <View style={{display: 'flex', flexDirection: 'column',justifyContent: 'space-between',marginVertical:2,paddingHorizontal:7,}}>
                               <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
                                   <View>
                                       <Text style={styles.productNameDiscount} numberOfLines={1}>
@@ -861,7 +836,7 @@ const styles = StyleSheet.create({
     },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#F7F9F2',
   },
   header: {
     width: '100%',
@@ -890,14 +865,30 @@ const styles = StyleSheet.create({
   //     // borderColor:'2px solid blue',
   //
   // },
+  //   s,m
     productCardTopPicks: {
-        width: '10%',
-        backgroundColor: '#f2f2f2',
-        borderRadius: 20,
+        width: '11%',
+        backgroundColor: '#F7F9F2',
+        borderRadius: 10,
         // marginBottom: 15,
         marginHorizontal:4,
-        height:50
+        height:150,
+        // borderWidth:1,
+        // borderColor: 'gray',
+        shadowColor: '#121',
+        shadowOffset: { width: 9, height: 1 },
+        shadowOpacity: 0.1,
+        shadowRadius: 5,
 
+        // Optional elevation (Android)
+        elevation: 5,
+
+    },
+    imageContainerTopPicks:{
+        position: "relative",
+        width: "100%",
+        height: 100,
+        backgroundColor: "#f9f9f9",
 
     },
   // productImage: {
@@ -908,9 +899,9 @@ const styles = StyleSheet.create({
   // },
     productImage1: {
         width: "100%",
-        height: '80%',
+        height: '100%',
         objectFit:'fill',
-        borderRadius: 10,
+        borderRadius: 15,
 
     },
   // productName: {
@@ -1198,21 +1189,30 @@ ratingHeartRow: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        marginTop: 10,
         marginBottom: 15,
-        // backgroundColor:"#FF6363",
+        backgroundColor:"#FA7070",
         padding:5,
-        borderRadius:20,
+        borderRadius:10,
         paddingHorizontal:15,
-        paddingVertical:6,
-        borderBottomWidth:1,
-        borderBottomColor: '#000',
+        paddingVertical:10,
+        // borderBottomWidth:1,
+        // borderBottomColor: '#000',
+        shadowColor: '#F6F5F2',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.2,
+        shadowRadius: 2,
+
+        // Shadow for Android
+        elevation: 7,
     },
     headerTitle: {
         fontSize: 18,
         fontStyle:'normal',
         fontWeight:500,
         // fontWeight: 'bold',
-        color:'black'
+        // backgroundColor:"#",
+        color:'white'
     },
     seeAllText: {
         fontSize: 16,
