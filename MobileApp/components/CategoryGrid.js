@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
         shadowColor: '#121',
         shadowOffset: { width: 9, height: 1 },
         shadowOpacity: 0.1,
-        shadowRadius: 5,
+        // shadowRadius: 5,
 
         // Optional elevation (Android)
         elevation: 4,
@@ -199,29 +199,32 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 15,
-        backgroundColor:"#FF6363",
+        marginBottom: 10,
+        // backgroundColor:"#FF6363",
         padding:5,
-        borderRadius:20,
-        paddingHorizontal:15,
-        paddingVertical:15,
+        // borderRadius:20,
+        // paddingHorizontal:15,
+        paddingVertical:10,
         // Optional shadow (iOS)
-        shadowColor: '#121',
-        shadowOffset: { width: 9, height: 1 },
-        shadowOpacity: 0.1,
+        // shadowColor: '#121',
+        // shadowOffset: { width: 9, height: 1 },
+        // shadowOpacity: 0.1,
         shadowRadius: 5,
 
         // Optional elevation (Android)
-        elevation: 5,
+        // elevation: 5,
+        // borderW
     },
     headerTitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        color:'white'
+        fontSize: 20,
+        fontWeight: 600,
+        // color:'white'
     },
     seeAllText: {
-        fontSize: 16,
-        color: '#007bff',
+        fontSize: 15,
+        fontWeight:400,
+        // color: 'black',
+        textDecorationLine:'underline',
     },
 });
 

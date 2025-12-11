@@ -12,6 +12,9 @@ import CartScreen from "../components/CartScreen";
 import CheckoutScreen from "../components/CheckoutScreen";
 import AddressScreen from "../components/AddressScreen";
 import TabNavigator from "../components/TabNavigator";
+import ProductDetailsScreen from "../components/ProductDetailsScreen";
+import CustomHeader from "../components/CustomHeader";
+import HeaderWithArrow from "../components/HeaderWithArrow";
 
 const Stack = createStackNavigator();
 
@@ -19,9 +22,18 @@ export default function HomeStackNavigator() {
     return (
         <Stack.Navigator>
             <Stack.Screen name="HomeMain" component={TabNavigator} options={{ headerShown: false }} />
-            <Stack.Screen name="SeeAllProducts" component={SeeAllProductsScreen} options={{ title: 'All Products' }} />
+            <Stack.Screen name="SeeAllProducts" component={SeeAllProductsScreen} options={({ navigation }) => ({
+                header: () => (
+                    <CustomHeader navigation={navigation} title="AllProducts" />
+                ),
+            })} />
             <Stack.Screen name="CategoryDetail" component={CategoryDetail} />
             <Stack.Screen name="ProductDescription" component={ProductDescrption} options={{ title: 'Product' }} />
+            <Stack.Screen name="ProductDetails" component={ProductDetailsScreen} options={({ navigation }) => ({
+                header: () => (
+                    <HeaderWithArrow navigation={navigation} title="Product Detail" />
+                ),
+            })} />
             <Stack.Screen name="Wishlist" component={WishlistScreen} />
             <Stack.Screen name="CartPage" component={CartScreen} />
             <Stack.Screen name="AddressScreen" component={AddressScreen} options={{title:"Delivery Addresss",headerShown: false }} />

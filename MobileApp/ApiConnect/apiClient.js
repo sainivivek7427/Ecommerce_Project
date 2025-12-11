@@ -3,12 +3,12 @@ import TokenManager from "./tokenManager";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const API = axios.create({
-    baseURL: "https://api.example.com",
+    baseURL: "https://localhost:8000/",
 });
 
 // ---- Attach Access Token Automatically ----
 API.interceptors.request.use(async (config) => {
-    const token = await TokenManager.getAccess();
+    const token = await TokenManager.getAccessToken();
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }
@@ -23,7 +23,7 @@ API.interceptors.response.use(
         if (error.response?.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
 
-            const refresh = await TokenManager.getRefresh();
+            const refresh = await TokenManager.getRefreshToken();
 
             if (!refresh) {
                 console.log("No refresh token");
@@ -31,7 +31,7 @@ API.interceptors.response.use(
             }
 
             try {
-                const res = await axios.post("https://api.example.com/auth/refresh", {
+                const res = await axios.post("https://localhost:8080/auth/refresh", {
                     refreshToken: refresh,
                 });
 

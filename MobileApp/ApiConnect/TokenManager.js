@@ -1,11 +1,11 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 class TokenManager {
-    static async getAccess() {
+    static async getAccessToken() {
         return AsyncStorage.getItem("jwtToken");
     }
 
-    static async getRefresh() {
+    static async getRefreshToken() {
         return AsyncStorage.getItem("refreshToken");
     }
 

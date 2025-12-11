@@ -4,11 +4,13 @@ import {View, Text, FlatList, StyleSheet, ScrollView, TouchableOpacity, Image, D
 import {MaterialIcons} from "@expo/vector-icons";
 import products from "../JsonData/Products";
 import Slider from "@react-native-community/slider";
-
+import { useNavigation } from "@react-navigation/native";
 // const NUM_COLUMNS = 1;
 
 const SeeAllProductsScreen = ({ route }) => {
     const { productsdiscount } = route.params;
+    const navigation = useNavigation();
+    // const navigation = useNavigation();
     // const ITEM_MARGIN = 30;
     // const SCREEN_WIDTH = Dimensions.get('window').width*0.8;
     // const ITEM_WIDTH = (SCREEN_WIDTH- ITEM_MARGIN * (NUM_COLUMNS + 1)) / NUM_COLUMNS;
@@ -46,20 +48,27 @@ const SeeAllProductsScreen = ({ route }) => {
     const ITEM_WIDTH =
         (SCREEN_WIDTH - (NUM_COLUMNS + 1) * ITEM_MARGIN) / NUM_COLUMNS;
     const renderProductItem = ({ item }) => (
+        <TouchableOpacity
+            onPress={() => navigation.navigate("ProductDetails", { product: item })}
+        >
         <View style={[styles.productCardDiscount, { width: ITEM_WIDTH }]}>
-            <Image source={{ uri: item.image }} style={styles.productImageDiscount} />
+            <Image source={{ uri: item.imageurl }} style={styles.productImageDiscount} />
 
             <View style={styles.productRow}>
-                <Text style={styles.productNameDiscount} numberOfLines={1}>
-                    {item.name}
-                </Text>
+                <View>
+                    <Text style={styles.productNameDiscount} numberOfLines={1}>
+                        {item.name}
+                    </Text>
+                </View>
 
-                <View style={{ flexDirection: "row" }}>
+
+                <View style={{ flexDirection: "row",marginTop:4 }}>
                     <Text style={styles.originalPrice}>Rs.90</Text>
                     <Text style={styles.discountedPrice}>Rs.45</Text>
                 </View>
             </View>
         </View>
+        </TouchableOpacity>
     );
     const toppick = [
         { id: 1, name: 'Apple', images: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVnFoJGb5GxF6lyge8lahGyv_nlQrXameFLsgUJAHrwCS1hDR2WdGZ6Es&s',price:'90' },
@@ -128,6 +137,7 @@ const SeeAllProductsScreen = ({ route }) => {
             {/*    ))}*/}
             {/*</ScrollView>*/}
             {/* LEFT SIDE */}
+
             <ScrollView style={styles.leftSide}>
                 {leftItems.map((item) =>(
                     <TouchableOpacity
@@ -281,17 +291,17 @@ const styles = StyleSheet.create({
     },
 
     productRow: {
-        flexDirection: "row",
+        flexDirection: "column",
         justifyContent: "space-between",
         paddingHorizontal: 8,
         paddingVertical: 5,
     },
 
     productNameDiscount: {
-        fontSize: 14,
-        fontWeight: "600",
+        fontSize: 12,
+        fontWeight: "400",
         flex: 1,
-        marginRight: 5,
+        // marginRight: 5,
     },
 
     originalPrice: {

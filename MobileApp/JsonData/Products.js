@@ -2,7 +2,7 @@ const products=[
     {
         "id": "e6f7a8b9-c0d1-2345-6789-0abcdef45678",
         "name": "Classic White T-Shirt",
-        "imageurl": "https://images.pexels.com/photos/10398844/pexels-photo-10398844.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+        "imageurl": "https://i0.wp.com/post.healthline.com/wp-content/uploads/2020/10/carrot-juice-1296x728-header.jpg?w=1155&h=1528",
         "price": 2500,
         "discount_price": 1750,
         "quantity": 300,
@@ -13,7 +13,7 @@ const products=[
     {
         "id": "f7a8b9c0-d1e2-3456-7890-abcdef567890",
         "name": "Bluetooth Wireless Headphones",
-        "imageurl": "https://images.pexels.com/photos/3587478/pexels-photo-3587478.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+        "imageurl": "https://i0.wp.com/post.healthline.com/wp-content/uploads/2020/10/carrot-juice-1296x728-header.jpg?w=1155&h=1528",
         "price": 7999,
         "discount_price": 4799,
         "quantity": 150,
@@ -24,7 +24,7 @@ const products=[
     {
         "id": "a8b9c0d1-e2f3-4567-8901-234567abcdef1",
         "name": "Leather Crossbody Bag",
-        "imageurl": "https://images.pexels.com/photos/298863/pexels-photo-298863.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+        "imageurl": "https://i0.wp.com/post.healthline.com/wp-content/uploads/2020/10/carrot-juice-1296x728-header.jpg?w=1155&h=1528",
         "price": 4500,
         "discount_price": 2700,
         "quantity": 80,
