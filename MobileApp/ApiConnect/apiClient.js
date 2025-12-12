@@ -20,34 +20,142 @@ API.interceptors.response.use(
     async (error) => {
         const originalRequest = error.config;
 
-        if (error.response?.status === 401 && !originalRequest._retry) {
-            originalRequest._retry = true;
+            if (error.response?.status === 401 && !originalRequest._retry) {
+                originalRequest._retry = true;
 
-            const refresh = await TokenManager.getRefreshToken();
+                const refresh = await TokenManager.getRefreshToken();
 
-            if (!refresh) {
-                console.log("No refresh token");
-                return Promise.reject(error);
+                if (!refresh) {
+                    console.log("No refresh token");
+                    return Promise.reject(error);
+                }
+
+                try {
+                    const res = await axios.post("https://localhost:8080/auth/refresh", {
+                        refreshToken: refresh,
+                    });
+
+                    const newAccess = res.data.accessToken;
+
+                    await TokenManager.saveTokens(newAccess, refresh);
+
+                    API.defaults.headers.common["Authorization"] = `Bearer ${newAccess}`;
+                    originalRequest.headers["Authorization"] = `Bearer ${newAccess}`;
+
+                    return API(originalRequest);
+                } catch (refreshErr) {
+                    console.log("Refresh expired → Logout required.");
+                    await TokenManager.clearTokens();
+                }
             }
 
-            try {
-                const res = await axios.post("https://localhost:8080/auth/refresh", {
-                    refreshToken: refresh,
-                });
+            else if (error.response?.status === 400 && !originalRequest._retry) {
+                originalRequest._retry = true;
 
-                const newAccess = res.data.accessToken;
+                const refresh = await TokenManager.getRefreshToken();
 
-                await TokenManager.saveTokens(newAccess, refresh);
+                if (!refresh) {
+                    console.log("No refresh token");
+                    return Promise.reject(error);
+                }
 
-                API.defaults.headers.common["Authorization"] = `Bearer ${newAccess}`;
-                originalRequest.headers["Authorization"] = `Bearer ${newAccess}`;
+                try {
+                    const res = await axios.post("https://localhost:8080/auth/refresh-guest", {
+                        refreshToken: refresh,
+                    });
 
-                return API(originalRequest);
-            } catch (refreshErr) {
-                console.log("Refresh expired → Logout required.");
-                await TokenManager.clearTokens();
+                    const newAccess = res.data.accessToken;
+
+          const API = axios.create({
+    baseURL: "https://localhost:8000/",
+});
+
+// ---- Attach Access Token Automatically ----
+API.interceptors.request.use(async (config) => {
+    const token = await TokenManager.getAccessToken();
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+});
+API.interceptors.response.use(
+    (res) => res,
+
+    async (error) => {
+        const originalRequest = error.config;
+
+            if (error.response?.status === 401 && !originalRequest._retry) {
+                originalRequest._retry = true;
+
+                const refresh = await TokenManager.getRefreshToken();
+
+                if (!refresh) {
+                    console.log("No refresh token");
+                    return Promise.reject(error);
+                }
+
+                try {
+                    const res = await axios.post("https://localhost:8080/auth/refresh", {
+                        refreshToken: refresh,
+                    });
+
+                    const newAccess = res.data.accessToken;
+
+                    await TokenManager.saveTokens(newAccess, refresh);
+
+                    API.defaults.headers.common["Authorization"] = `Bearer ${newAccess}`;
+                    originalRequest.headers["Authorization"] = `Bearer ${newAccess}`;
+
+                    return API(originalRequest);
+                } catch (refreshErr) {
+                    console.log("Refresh expired → Logout required.");
+                    await TokenManager.clearTokens();
+                }
             }
-        }
+
+            else if (error.response?.status === 400 && !originalRequest._retry) {
+                originalRequest._retry = true;
+
+                const refresh = await TokenManager.getRefreshToken();
+
+                if (!refresh) {
+                    console.log("No refresh token");
+                    return Promise.reject(error);
+                }
+
+                try {
+                    const res = await axios.post("https://localhost:8080/auth/refresh-guest", {
+                        refreshToken: refresh,
+                    });
+
+                    const newAccess = res.data.accessToken;
+
+                    await TokenManager.saveTokens(newAccess, refresh);
+
+                    API.defaults.headers.common["Authorization"] = `Bearer ${newAccess}`;
+                    originalRequest.headers["Authorization"] = `Bearer ${newAccess}`;
+
+                    return API(originalRequest);
+                } catch (refreshErr) {
+                    console.log("Refresh expired → Logout required.");
+                    await TokenManager.clearTokens();
+                }
+            }
+
+        return Promise.reject(error);
+    }
+);
+          await TokenManager.saveTokens(newAccess, refresh);
+
+                    API.defaults.headers.common["Authorization"] = `Bearer ${newAccess}`;
+                    originalRequest.headers["Authorization"] = `Bearer ${newAccess}`;
+
+                    return API(originalRequest);
+                } catch (refreshErr) {
+                    console.log("Refresh expired → Logout required.");
+                    await TokenManager.clearTokens();
+                }
+            }
 
         return Promise.reject(error);
     }

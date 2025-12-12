@@ -10,7 +10,11 @@ import Toast from "react-native-toast-message";
 import { CartProvider } from './Context/CartProvider';
 import TabNavigator from './components/TabNavigator';
 import {WishlistProvider} from "./Context/WishlistContext";
-import HomeStackNavigator from "./Navigator/HomeStackNavigator"; // Assuming TabNavigator is exported from this file
+import HomeStackNavigator from "./Navigator/HomeStackNavigator";
+import guestManager from "./utils/guestManager";
+import TokenManager from "./ApiConnect/TokenManager";
+import axios from "axios";
+import API from "./ApiConnect/apiClient"; // Assuming TabNavigator is exported from this file
 // function BottomBar() {
 //   return (
 //     <View style={styles.bottomBar}>
@@ -37,7 +41,47 @@ import HomeStackNavigator from "./Navigator/HomeStackNavigator"; // Assuming Tab
 
 
 export default function App() {
- 
+    useEffect(() => {
+        const initializeUserId = async () => {
+            try {
+                // Check if user_id exists in AsyncStorage
+                const userid=await guestManager.setUserId();
+                console.log("set userid", userid);
+
+            } catch (error) {
+                console.error("Error initializing user ID:", error);
+            }
+        };
+        const checkAndFetchGuestToken = async () => {
+            // Check if a guest token already exists
+            const existingAccessToken = await TokenManager.getAccessToken();
+
+            if (!existingAccessToken) {
+                // No access token found, so we need to get a new guest token
+                const guestId = guestManager.getGuestId(); // You can generate this or use some persistent ID
+                try {
+                    const response = await API.post('/login-guest', {
+                        guestId,
+                    });
+
+                    const { token, refreshToken } = response.data;
+
+                    // Save the new guest tokens
+                    await TokenManager.saveTokens(token, refreshToken);
+
+                    console.log('Guest tokens saved successfully!');
+                } catch (error) {
+                    console.error('Failed to fetch guest token:', error);
+                }
+            } else {
+                console.log('Access token already exists, no need to fetch a new one.');
+            }
+        };
+
+        // Call the function on app load
+        initializeUserId();
+        checkAndFetchGuestToken();
+    }, []);
   return (
       <CartProvider>
           <WishlistProvider>
