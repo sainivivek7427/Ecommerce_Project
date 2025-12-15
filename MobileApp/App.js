@@ -58,11 +58,13 @@ export default function App() {
 
             if (!existingAccessToken) {
                 // No access token found, so we need to get a new guest token
-                const guestId = guestManager.getGuestId(); // You can generate this or use some persistent ID
+                const guestId = await guestManager.getGuestId(); // You can generate this or use some persistent ID
+                console.log('Fetching guest token for guest ID:', guestId);
                 try {
-                    const response = await API.post('/login-guest', {
-                        guestId,
-                    });
+                    const response = await API.post('/auth/login-guest', null, {
+    params: { guestId }
+},
+                  { skipAuth: true });
 
                     const { token, refreshToken } = response.data;
 
@@ -72,6 +74,8 @@ export default function App() {
                     console.log('Guest tokens saved successfully!');
                 } catch (error) {
                     console.error('Failed to fetch guest token:', error);
+                    console.error('Error details:', error.response ? error.response.data : error.message);
+
                 }
             } else {
                 console.log('Access token already exists, no need to fetch a new one.');
@@ -79,6 +83,7 @@ export default function App() {
         };
 
         // Call the function on app load
+        TokenManager.clearTokens();
         initializeUserId();
         checkAndFetchGuestToken();
     }, []);

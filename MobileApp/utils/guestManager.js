@@ -10,7 +10,7 @@ class GuestManager {
             guest_id = uuidv4();
             await AsyncStorage.setItem("guest_id", "guest-"+guest_id);
         }
-
+        console.log("guest id from storage:", guest_id);
         return guest_id;
     }
 
@@ -37,6 +37,7 @@ class GuestManager {
                 userId = "user-" + uuidv4();
                 await AsyncStorage.setItem("user_id", userId);
             }
+            
 
             // Return user id
             return userId;
