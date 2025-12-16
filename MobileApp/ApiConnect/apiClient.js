@@ -168,7 +168,7 @@ import axios from "axios";
 import TokenManager from "./TokenManager";
 
 const API = axios.create({
-    baseURL: "http://192.168.31.176:8080/",
+    baseURL: "http://192.168.29.35:8080/",
     timeout: 15000,
 });
 
@@ -201,12 +201,12 @@ const handleAuthError = async (error) => {
         let res;
         if (error.response?.status === 401) {
             // Token expired, try to refresh
-            res = await axios.post("https://localhost:8080/auth/refresh", {
+            res = await axios.post("https://192.168.29.35:8080/auth/refresh", {
                 refreshToken: refresh,
             });
         } else if (error.response?.status === 400) {
             // Handle the 400 case (for guests)
-            res = await axios.post("https://localhost:8080/auth/refresh-guest", {
+            res = await axios.post("https://192.168.29.35:8080/auth/refresh-guest", {
                 refreshToken: refresh,
             });
         }

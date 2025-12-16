@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
   header: {
     width: '100%',
     alignItems: 'center',
-    marginTop: 30,
+    // marginTop: 30,
     backgroundColor: "lightgreen",
     paddingLeft: 20,
       paddingTop:15,

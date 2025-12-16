@@ -6,7 +6,7 @@ import {
     TouchableOpacity,
     StyleSheet,
     Image,
-    SafeAreaView,
+
     ScrollView,
     Dimensions
 } from "react-native";
@@ -16,6 +16,7 @@ import {FontAwesome} from "@expo/vector-icons";
 import HomeScreen from "./HomeScreen";
 import {useNavigation, useRoute} from "@react-navigation/native";
 import TabNavigator from "./TabNavigator";
+import {SafeAreaView} from "react-native-safe-area-context";
 const screenWidth = Dimensions.get('window').width;
 const CartScreen = () => {
     const { getCartItemCount, removeFromCart, getCartTotal ,cart,addToCart,updateQuantity,getQuantity} = useCart();

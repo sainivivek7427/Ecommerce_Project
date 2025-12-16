@@ -1,5 +1,5 @@
 
-import {Animated, FlatList, SafeAreaView, Text, TouchableOpacity, View, Image, Alert,useNa} from "react-native";
+import {Animated, FlatList, Text, TouchableOpacity, View, Image, Alert,useNa} from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import {useWishlist} from "../Context/WishlistContext";
 import Header from "./Header";
@@ -7,6 +7,7 @@ import Header from "./Header";
 import { StyleSheet } from "react-native";
 import React from "react";
 import {useNavigation, useRoute} from "@react-navigation/native";
+import {SafeAreaView} from "react-native-safe-area-context";
 
 const WishlistScreen = () => {
     const {wishlist, removeFromWishlist} = useWishlist();

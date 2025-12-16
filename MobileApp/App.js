@@ -45,7 +45,7 @@ export default function App() {
         const initializeUserId = async () => {
             try {
                 // Check if user_id exists in AsyncStorage
-                const userid=await guestManager.setUserId();
+                const userid=await guestManager.getUserId();
                 console.log("set userid", userid);
 
             } catch (error) {
@@ -62,9 +62,9 @@ export default function App() {
                 console.log('Fetching guest token for guest ID:', guestId);
                 try {
                     const response = await API.post('/auth/login-guest', null, {
-    params: { guestId }
-},
-                  { skipAuth: true });
+                                                        params: { guestId }
+                                                        },
+                                                        { skipAuth: true });
 
                     const { token, refreshToken } = response.data;
 
@@ -83,6 +83,7 @@ export default function App() {
         };
 
         // Call the function on app load
+        guestManager.clearUserId();
         TokenManager.clearTokens();
         initializeUserId();
         checkAndFetchGuestToken();

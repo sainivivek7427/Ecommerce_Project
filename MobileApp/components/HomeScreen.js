@@ -1,9 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState ,useEffect, useRef,} from 'react';
 import {
-    SafeAreaView, StyleSheet, Text, View, Modal, TouchableOpacity, Dimensions,
+    StyleSheet, Text, View, Modal, TouchableOpacity, Dimensions,
     ScrollView, Image, Alert, FlatList, TextInput, Animated
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons, MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import CategoryGrid  from "./CategoryGrid";
 import Carousel from 'react-native-reanimated-carousel';
@@ -322,7 +323,7 @@ const screenWidth = Dimensions.get('window').width;
     // <SafeAreaView style={styles.screenContainer}>
     //   <Text style={styles.screenText}>Home Screen</Text>
     // </SafeAreaView>
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView edges={['top', 'bottom']} style={{ flex: 1 }}>
       <Header  title="Ecommerce App"/>
         <View style={styles.searchSection}>
 
