@@ -174,9 +174,20 @@ const API = axios.create({
 
 // ---- Attach Access Token Automatically ----
 API.interceptors.request.use(async (config) => {
-    if (config.skipAuth) return config; // ✅ allow public calls
+    // if (config.skipAuth) return config; // ✅ allow public calls
+    // const token = await TokenManager.getAccessToken();
+    // console.log("token "+token);
+    // if (token) {
+    //     config.headers.Authorization = `Bearer ${token}`;
+    // }
+    if (config.skipAuth === true) {
+        return config;
+    }
+
     const token = await TokenManager.getAccessToken();
+
     if (token) {
+        config.headers = config.headers || {};
         config.headers.Authorization = `Bearer ${token}`;
     }
     console.log("➡️ API CALL:", config.url);
@@ -204,7 +215,7 @@ const handleAuthError = async (error) => {
             res = await axios.post("https://192.168.29.35:8080/auth/refresh", {
                 refreshToken: refresh,
             });
-        } else if (error.response?.status === 400) {
+        } else if (error.response?.status === 406) {
             // Handle the 400 case (for guests)
             res = await axios.post("https://192.168.29.35:8080/auth/refresh-guest", {
                 refreshToken: refresh,

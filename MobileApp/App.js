@@ -12,6 +12,7 @@ import TabNavigator from './components/TabNavigator';
 import {WishlistProvider} from "./Context/WishlistContext";
 import HomeStackNavigator from "./Navigator/HomeStackNavigator";
 import guestManager from "./utils/guestManager";
+import AuthStorage from "./utils/AuthStorage";
 import TokenManager from "./ApiConnect/TokenManager";
 import axios from "axios";
 import API from "./ApiConnect/apiClient"; // Assuming TabNavigator is exported from this file
@@ -41,52 +42,106 @@ import API from "./ApiConnect/apiClient"; // Assuming TabNavigator is exported f
 
 
 export default function App() {
-    useEffect(() => {
-        const initializeUserId = async () => {
+    const checkAndFetchGuestToken = async () => {
+        // Check if a guest token already exists
+        const existingAccessToken = await TokenManager.getAccessToken();
+
+        if (!existingAccessToken) {
+            // No access token found, so we need to get a new guest token
+            const guestId = await guestManager.getGuestId(); // You can generate this or use some persistent ID
+            console.log('Fetching guest token for guest ID:', guestId);
             try {
-                // Check if user_id exists in AsyncStorage
-                const userid=await guestManager.getUserId();
-                console.log("set userid", userid);
+                const response = await API.post('/auth/login-guest', null, {
+                        params: { guestId }
+                    },
+                    { skipAuth: true });
 
+                const { token, refreshToken } = response.data;
+
+                // Save the new guest tokens
+                await TokenManager.saveTokens(token, refreshToken);
+
+                console.log('Guest tokens saved successfully!');
             } catch (error) {
-                console.error("Error initializing user ID:", error);
+                console.error('Failed to fetch guest token:', error);
+                console.error('Error details:', error.response ? error.response.data : error.message);
+
             }
-        };
-        const checkAndFetchGuestToken = async () => {
-            // Check if a guest token already exists
-            const existingAccessToken = await TokenManager.getAccessToken();
+        } else {
+            console.log('Access token '+existingAccessToken);
+            console.log("refresh token "+await  TokenManager.getRefreshToken());
+            console.log('Access token already exists, no need to fetch a new one.');
+        }
+    };
 
-            if (!existingAccessToken) {
-                // No access token found, so we need to get a new guest token
-                const guestId = await guestManager.getGuestId(); // You can generate this or use some persistent ID
-                console.log('Fetching guest token for guest ID:', guestId);
-                try {
-                    const response = await API.post('/auth/login-guest', null, {
-                                                        params: { guestId }
-                                                        },
-                                                        { skipAuth: true });
+    const createCart = async () => {
+        // Check if a guest token already exists
+        const existingAccessToken = await TokenManager.getAccessToken();
 
-                    const { token, refreshToken } = response.data;
 
-                    // Save the new guest tokens
-                    await TokenManager.saveTokens(token, refreshToken);
+            // No access token found, so we need to get a new guest token
+            const guestId = await guestManager.getOrCreateGuestId(); // You can generate this or use some persistent ID
+            console.log('Fetching guest token for guest ID:', guestId);
+            try {
+                const response = await API.post(
+                    '/cart/init',
+                    null,
+                    {
+                        headers: {
+                            'X-GUEST-ID': guestId
+                        },
+                        skipAuth: true
+                    }
+                );
+                const cartid=await guestManager.setcartId(response.data.id);
+                console.log('Guest cartid saved successfully!'+cartid);
+                console.log('Guest status!'+response.status);
+                // await AsyncStorage.setItem('cartId', response.data.id);
+                // Save the new guest tokens
+                // await TokenManager.saveTokens(token, refreshToken);
 
-                    console.log('Guest tokens saved successfully!');
-                } catch (error) {
-                    console.error('Failed to fetch guest token:', error);
-                    console.error('Error details:', error.response ? error.response.data : error.message);
+                // console.log('Guest tokens saved successfully!');
+            } catch (error) {
+                console.error('Failed to fetch guest token:', error);
+                console.error('Error details:', error.response ? error.response.data : error.message);
 
-                }
-            } else {
-                console.log('Access token already exists, no need to fetch a new one.');
             }
-        };
+
+    };
+    useEffect(() => {
+        // const initializeUserId = async () => {
+        //     try {
+        //         // Check if user_id exists in AsyncStorage
+        //         const userid=await guestManager.getUserId();
+        //         console.log("set userid", userid);
+        //
+        //     } catch (error) {
+        //         console.error("Error initializing user ID:", error);
+        //     }
+        // };
+
+        const initCart=async () =>{
+            const isLoggedIn = await AuthStorage.isLoggedIn();
+
+            if (isLoggedIn) {
+                console.log("User already logged in → skip guest flow");
+                return;
+            }
+
+            console.log("User not logged in → guest flow");
+
+            await checkAndFetchGuestToken();
+            await createCart();
+
+
+        }
 
         // Call the function on app load
-        guestManager.clearUserId();
-        TokenManager.clearTokens();
-        initializeUserId();
-        checkAndFetchGuestToken();
+        // guestManager.clearUserId();
+        // TokenManager.clearTokens();
+        // initializeUserId();
+        // checkAndFetchGuestToken();
+        initCart();
     }, []);
   return (
       <CartProvider>

@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext } from 'react';
-
+import guestManager from "../utils/guestManager";
 // Create Cart Context
 const CartContext = createContext();
 
@@ -62,7 +62,17 @@ export const CartProvider = ({ children }) => {
     // const removeFromCart = (productId) => {
     //     setCart((prevCart) => prevCart.filter(item => item.id !== productId));
     // };
+    const guestUserId=guestManager.getUserId() ||guestManager.getOrCreateGuestId();
+    const addToCarts = async (productId, quantity) => {
+        const payload = {
+            productId,
+            quantity,
+            guestUserId,
+        };
 
+        // await addToCartApi(cartId, payload);
+        // await loadCartItems();
+    };
     const addToCart = (product, quantity, totalPrice) => {
 
         console.log("add cart "+product, quantity, totalPrice);
