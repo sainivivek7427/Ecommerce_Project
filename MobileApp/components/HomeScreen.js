@@ -72,7 +72,7 @@ const screenWidth = Dimensions.get('window').width;
  const  HomeScreen=()=> {
     const navigation=useNavigation();
     const { addToWishlist, removeFromWishlist, isInWishlist,wishlist } = useWishlist();
-    const { addToCart ,cart,updateQuantity,removeFromCart,getWishlist,getQuantity} = useCart();
+    const { addToCart ,cart,updateQuantity,removeFromCart,getWishlist,getQuantity,addToCarts} = useCart();
     const [modalVisible, setModalVisible] = useState(false);
     // const [wishlist, setWishlist] = useState([]);
     const [quantities, setQuantities] = useState({});
@@ -146,12 +146,12 @@ const screenWidth = Dimensions.get('window').width;
 
 
      const handlequantity = (product, action) => {
-         const qty = getQuantity(product.id);
+         const qty = getQuantity("050a8909-cc49-47e3-ae3e-2ea1faf8ad8f");
          let newQty = qty;
-
-         if (action === "add") {
+         console.log("new qty "+newQty)
+         if   (action === "add") {
              newQty = qty + 1;
-             addToCart(product, newQty, product.price * newQty);
+             addToCarts("050a8909-cc49-47e3-ae3e-2ea1faf8ad8f", 2);
          } else if (action === "minus") {
              if (qty > 1) {
                  updateQuantity(product, "minus");
@@ -255,7 +255,7 @@ const screenWidth = Dimensions.get('window').width;
      const data = ['A', 'B', 'C'];
      const renderItem = ({ item }) => {
          // let item;
-         const qty = getQuantity(item.id);
+         const qty = getQuantity("050a8909-cc49-47e3-ae3e-2ea1faf8ad8f");
 
          return (
              <View style={styles.productCard}>
@@ -400,7 +400,7 @@ const screenWidth = Dimensions.get('window').width;
                   {/*))}*/}
                   {toppick.map((product) => {
                       // const quantity = productQuantities[product.id];
-                      const qty = getQuantity(product.id);
+                      const qty = getQuantity("050a8909-cc49-47e3-ae3e-2ea1faf8ad8f");
                       return(
                           <View key={product.id} style={styles.productCardTopPicks}>
                               <View style={styles.imageContainerTopPicks}>
@@ -543,7 +543,7 @@ const screenWidth = Dimensions.get('window').width;
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
 
                 {products.map((product) => {
-                    const qty = getQuantity(product.id);
+                    const qty = getQuantity("050a8909-cc49-47e3-ae3e-2ea1faf8ad8f");
 
                     return (
                         <View key={product.id} style={styles.productCard}>

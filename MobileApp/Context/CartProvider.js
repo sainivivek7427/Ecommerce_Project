@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext } from 'react';
 import guestManager from "../utils/guestManager";
+import API from "../ApiConnect/apiClient";
 // Create Cart Context
 const CartContext = createContext();
 
@@ -62,13 +63,78 @@ export const CartProvider = ({ children }) => {
     // const removeFromCart = (productId) => {
     //     setCart((prevCart) => prevCart.filter(item => item.id !== productId));
     // };
-    const guestUserId=guestManager.getUserId() ||guestManager.getOrCreateGuestId();
+    const [cartCount, setCartCount] = useState(0);
+    const [cartItems, setCartItems] = useState([]);
+
+
+    const updateCartFromResponse = (cartItem) => {
+        setCartItems(prev => {
+
+            //manage the cartItems state
+            // to find the index if response item is already in cartitem
+            const index = prev.findIndex(
+                i => i.productId === cartItem.productId
+            );
+
+            let updated;
+            //if already in cartitem array
+            if (index !== -1) {
+                updated = [...prev];
+                //update the new response cartitem
+                updated[index] = cartItem;
+            }
+            //else not having response cartitem in cartitem array
+            else {
+
+                updated = [...prev, cartItem];
+            }
+
+            // total quantity (sum of quantities)
+            const totalQuantity = updated.reduce(
+                (sum, item) => sum + item.quantity,
+                0
+            );
+
+            // number of unique products
+            const uniqueItems = updated.length;
+
+            console.log("🛒 Updated cart items:", updated);
+            console.log("📦 Unique products:", uniqueItems);
+            console.log("🔢 Total quantity:", totalQuantity);
+
+            setCartCount(totalQuantity);
+            return updated;
+        });
+        // console.log(cartItem[0])
+    };
     const addToCarts = async (productId, quantity) => {
+        const guestId= await guestManager.getOrCreateGuestId();
+        const cartId = await guestManager.getCartId()|| null;
+
         const payload = {
             productId,
             quantity,
-            guestUserId,
+            guestUserId: guestId
         };
+        console.log("payload "+payload.guestUserId+" - "+productId+"--- "+quantity);
+        console.log("cart id "+cartId);
+
+        const response = await API.post(
+            '/cart/add',
+            payload,
+            {
+                params:{cartId}
+                // skipAuth: true   // ✅ REQUIRED
+            }
+        );
+        console.log(response.status);
+        // console.log(response.da);
+        updateCartFromResponse(response.data)
+
+        // console.log(cartItems.find(i => i.productId ));
+
+
+
 
         // await addToCartApi(cartId, payload);
         // await loadCartItems();
@@ -166,7 +232,7 @@ export const CartProvider = ({ children }) => {
     };
     // Get cart item count
     const getCartItemCount = () => {
-        const value=cart.reduce((total, item) => total + item.quantity, 0);
+        const value=cartItems.reduce((total, item) => total + item.quantity, 0);
         console.log("Value "+value)
         return value;
     };
@@ -179,13 +245,26 @@ export const CartProvider = ({ children }) => {
         return cartitem;
     }
     const getQuantity = (productId) => {
-        const item = cart.find(i => i.id === productId);
+        // console.log("productId "+productId);
+        // console.log("cartitems ")
+        // console.log(cartItems)
+        if(cartItems.length <= 0){
+            return 0;
+        }
+        const item = cartItems.find(i => i.productId === productId);
+        // console.log("item",item);
+        // console.log("get qty "+item.productId);
+        // console.log(
+        //     "get qty for productId =", productId,
+        //     "item =", item
+        // );
         return item ? item.quantity : 0;
+
 
     };
 
     return (
-        <CartContext.Provider value={{ cart, addToCart, removeFromCart, getCartItemCount ,getCartTotal,updateQuantity,getQuantity}}>
+        <CartContext.Provider value={{ cart, addToCart,addToCarts, removeFromCart, getCartItemCount ,getCartTotal,updateQuantity,getQuantity}}>
             {children}
         </CartContext.Provider>
     );
